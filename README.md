@@ -1,17 +1,19 @@
-# Wireframes site
+# PMW Design Ops
 
 A free, static gallery of lo-fi wireframes. No server, no API, no cost beyond
 your Claude subscription. The lo-fis are generated in Cowork and hosted here on
 GitHub Pages.
 
+Live site: https://malik-1995-ab.github.io/pmw-design/
+
 ## What's in here
 
 ```
-index.html            The gallery (lists everything in /lofis)
-lofis/manifest.json   The list of wireframes the gallery reads
-lofis/example.html    A placeholder lo-fi (delete once you add real ones)
-README.md             This file
-WORKFLOW.md           How to add/update wireframes via Cowork
+index.html      The gallery (reads manifest.json)
+manifest.json   The list of wireframes the gallery shows
+*.html          Each wireframe lo-fi (e.g. my-stuff.html)
+README.md       This file
+WORKFLOW.md     How to add/update wireframes via Cowork
 ```
 
 ---
