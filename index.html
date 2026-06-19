@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
 <title>PMW Design Ops</title>
+<script src="auth.js?v=2"></script>
+<script>window.addEventListener('DOMContentLoaded',function(){ if(window.PMWAuth&&PMWAuth.requireLogin) PMWAuth.requireLogin(); });</script>
 <style>
   :root {
     --bg: #f5f6f8;
@@ -13,90 +15,82 @@
     --muted: #6b7280;
     --line: #e5e7eb;
     --accent: #2f6df6;
-    --radius: 12px;
+    --radius: 14px;
     --font: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
-  }
-  header {
-    padding: 28px 32px 20px;
-    border-bottom: 1px solid var(--line);
-    background: var(--card);
-  }
+  body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  header { padding: 28px 32px 20px; border-bottom: 1px solid var(--line); background: var(--card); }
   header h1 { margin: 0; font-size: 22px; font-weight: 700; }
   header p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
   .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 32px 64px; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    transition: box-shadow .15s ease, transform .15s ease;
-  }
+  h2 { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: none; margin: 28px 0 12px; letter-spacing: .01em; }
+  h2:first-child { margin-top: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .15s ease, transform .15s ease; }
   .card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); transform: translateY(-2px); }
-  .thumb {
-    aspect-ratio: 16 / 10;
-    background: #eef1f5;
-    border-bottom: 1px solid var(--line);
-    overflow: hidden;
-  }
-  .thumb iframe { width: 200%; height: 200%; border: 0; transform: scale(.5); transform-origin: top left; pointer-events: none; }
-  .meta { padding: 14px 16px; }
-  .meta h3 { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+  .card.main { border-color: var(--ink); }
+  .thumb { aspect-ratio: 16 / 10; background: #eef1f5; border-bottom: 1px solid var(--line); overflow: hidden; position: relative; }
+  .thumb iframe { width: 285%; height: 285%; border: 0; transform: scale(.35); transform-origin: top left; pointer-events: none; }
+  .meta { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+  .meta .t { flex: 1; min-width: 0; }
+  .meta h3 { margin: 0 0 2px; font-size: 15px; font-weight: 600; }
   .meta span { font-size: 12px; color: var(--muted); }
-  .empty {
-    text-align: center; color: var(--muted); padding: 80px 20px;
-    border: 1px dashed var(--line); border-radius: var(--radius); background: var(--card);
-  }
+  .badge { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px; white-space: nowrap; flex-shrink: 0; }
+  .badge.main { background: var(--ink); color: #fff; }
+  .badge.open { background: #FFF4E5; color: #B25E09; }
+  .badge.ready { background: #E7F7EE; color: #137333; }
+  .badge.loading { color: transparent; min-width: 64px; background: linear-gradient(90deg, #ececf0 25%, #f5f6f8 50%, #ececf0 75%); background-size: 200% 100%; animation: pv-shimmer 1.2s ease-in-out infinite; }
+  @keyframes pv-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  .empty { text-align: center; color: var(--muted); padding: 60px 20px; border: 1px dashed var(--line); border-radius: var(--radius); background: var(--card); font-size: 14px; }
 </style>
 </head>
 <body>
 <header>
   <h1>PMW Design Ops</h1>
-  <p>Lo-fi prototypes — generated in Cowork, hosted here.</p>
+  <p>My Stuff New Home — branch, review, and merge your mockups.</p>
 </header>
 <div class="wrap">
-  <div id="grid" class="grid"></div>
+  <h2>Main</h2>
+  <div id="main-wrap" class="grid"></div>
+  <div id="branch-h" style="display:none;height:8px;"></div>
+  <div id="branch-grid" class="grid"></div>
 </div>
 <script>
-  // Loads the list of lo-fis from lofis/manifest.json and renders a gallery.
-  // To add a new lo-fi: drop its .html into /lofis and add an entry to manifest.json.
-  fetch('manifest.json', { cache: 'no-store' })
-    .then(r => r.json())
-    .then(items => {
-      const grid = document.getElementById('grid');
-      if (!items || !items.length) {
-        grid.outerHTML = '<div class="empty">No wireframes yet. Add your first one through Cowork.</div>';
-        return;
-      }
-      grid.innerHTML = items.map(it => `
-        <a class="card" href="${it.file}">
-          <div class="thumb"><iframe src="${it.file}" loading="lazy" tabindex="-1"></iframe></div>
-          <div class="meta">
-            <h3>${it.title}</h3>
-            <span>${it.updated || ''}</span>
-          </div>
-        </a>`).join('');
-    })
-    .catch(() => {
-      document.getElementById('grid').outerHTML =
-        '<div class="empty">Could not load manifest.json. (This works once hosted on GitHub Pages.)</div>';
-    });
+  var SB_URL="https://oglajrkysripzcyahlux.supabase.co";
+  var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbGFqcmt5c3JpcHpjeWFobHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NjUyMDUsImV4cCI6MjA5NzM0MTIwNX0.2Fjx1ugopkUP_QaHGFVIH49vQi5ck0k93oUsSPOMWoo";
+  var H={apikey:SB_KEY,Authorization:"Bearer "+SB_KEY};
+  var namesMap={};
+  function fmt(iso){try{var d=new Date(iso),s=Math.max(0,(Date.now()-d.getTime())/1000);if(s<10)return 'now';if(s<60)return Math.floor(s)+'s';var m=Math.floor(s/60);if(m<60)return m+'m';var h=Math.floor(m/60);if(h<24)return h+'h';var dd=Math.floor(h/24);if(dd<7)return dd+'d';var w=Math.floor(dd/7);if(w<5)return w+'w';return d.toLocaleDateString([],{month:'short',day:'numeric'});}catch(e){return '';}}
+  function mid(file){return file.replace('.html','');}
+  function card(it){
+    var isMain=it.n===1;
+    var nm=namesMap[mid(it.file)];var label=isMain?(nm||it.name||'PosterMyWall Lofi'):(nm||it.name||'New Lofi');
+    return '<a class="card'+(isMain?' main':'')+'" href="'+it.file+'">'
+      +'<div class="thumb"><iframe src="'+it.file+'" loading="lazy" tabindex="-1"></iframe></div>'
+      +'<div class="meta"><div class="t"><h3>'+label+'</h3><span>'+fmt(it.created)+'</span></div>'
+      +'<span class="badge loading" data-badge="'+mid(it.file)+'" data-main="'+(isMain?1:0)+'">…</span></div></a>';
+  }
+  function setBadge(file,isMain){
+    var el=document.querySelector('[data-badge="'+mid(file)+'"]');if(!el)return;
+    fetch(SB_URL+"/rest/v1/annotations?select=id&mockup=eq."+mid(file)+"&resolved=eq.false",{headers:H})
+      .then(function(r){return r.json();}).then(function(rows){
+        var n=Array.isArray(rows)?rows.length:0;
+        if(isMain){el.className='badge main';el.textContent='Main';return;}
+        if(n>0){el.className='badge open';el.textContent=n+' open';}
+        else{el.className='badge ready';el.textContent='Ready to merge';}
+      }).catch(function(){el.className='badge';el.textContent='';});
+  }
+  Promise.all([fetch('iterations.json?b='+Date.now()).then(function(r){return r.json();}),fetch(SB_URL+'/rest/v1/iteration_names?select=mockup,name',{headers:H}).then(function(r){return r.json();}).catch(function(){return [];})]).then(function(_res){
+    var list=_res[0],_names=_res[1];if(Array.isArray(_names))_names.forEach(function(x){namesMap[x.mockup]=x.name;});
+    if(!Array.isArray(list)||!list.length){document.getElementById('main-wrap').outerHTML='<div class="empty">No mockups yet. Create one through Cowork.</div>';return;}
+    list.sort(function(a,b){return a.n-b.n;});
+    var main=list.filter(function(it){return it.n===1;})[0]||list[0];
+    var branches=list.filter(function(it){return it!==main;});
+    document.getElementById('main-wrap').innerHTML=card(main);
+    if(branches.length){document.getElementById('branch-h').style.display='';document.getElementById('branch-grid').innerHTML=branches.map(card).join('');}
+    list.forEach(function(it){setBadge(it.file,it.n===1);});
+  }).catch(function(){document.getElementById('main-wrap').outerHTML='<div class="empty">Could not load iterations.json. (Works once hosted.)</div>';});
 </script>
 </body>
 </html>

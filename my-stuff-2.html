@@ -1420,7 +1420,7 @@ body:not(.nav-iconly) #diff-btn[data-tip]:hover::after, body:not(.nav-iconly) #m
 
       <!-- Hero (shared across designs view) -->
       <div class="hero" id="hero">
-        <h1>Create with <span class="spark">AI</span> <span class="spark">✦</span></h1>
+        <h1>Create something new with <span class="spark">AI</span> <span class="spark">✦</span></h1>
         <div class="prompt-bar">
           <input type="text" placeholder="Describe what you want to create...">
           <div class="prompt-actions">
@@ -2541,7 +2541,7 @@ body.anno-open{padding-right:340px;}
 (function(){
   var SB_URL="https://oglajrkysripzcyahlux.supabase.co";
   var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbGFqcmt5c3JpcHpjeWFobHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NjUyMDUsImV4cCI6MjA5NzM0MTIwNX0.2Fjx1ugopkUP_QaHGFVIH49vQi5ck0k93oUsSPOMWoo";
-  var MOCKUP="my-stuff";
+  var MOCKUP="my-stuff-2";
   var H={apikey:SB_KEY,Authorization:"Bearer "+SB_KEY};
   var JH=Object.assign({'Content-Type':'application/json'},H);
   var MINE="#2F6DF6",OTHER="#E5484D",GREY="#9AA0AB";
@@ -2911,11 +2911,10 @@ body:not([data-role]) .iter-back,body[data-role="view"] .iter-back{display:none!
       if(current&&current.n===1){
         isMain=true;
         btn.innerHTML='<span class="icon">'+GLOBE+'</span><span>PosterMyWall Lofi</span><span class="chev">'+CHEV+'</span>';
-        var _isView=(window.PMWAuth&&PMWAuth.role&&PMWAuth.role()==='view');
         var cb=document.getElementById('anno-comments-btn');if(cb)cb.style.display='none';
-        var sb=document.getElementById('anno-share-btn');if(sb)sb.style.display='';
+        var sb=document.getElementById('anno-share-btn');if(sb)sb.style.display='none';
         var right=document.querySelector('.preview-bar .pv-right');
-        if(!_isView&&right&&!document.getElementById('new-branch-btn')){
+        if(right&&!document.getElementById('new-branch-btn')){
           var nb=document.createElement('button');nb.id='new-branch-btn';nb.className='merge-btn';nb.innerHTML='<span class="icon" style="display:inline-flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg></span><span>New Lofi</span>';
           right.appendChild(nb);
           nb.addEventListener('click',function(){copyPrompt('Create a new iteration off Main (my-stuff.html) for the "'+SCREEN+'" branch — a fresh copy of Main. Register it in iterations.json and open it.');});
@@ -3161,9 +3160,8 @@ body.diff-open{padding-left:400px;transition:padding-left .22s ease;}
 <style id="merge-styles">
 .merge-btn{height:38px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-12);background:var(--bg-neutral-primary-default);color:var(--ct-neutral-primary);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .12s,border-color .12s;}
 .merge-btn:not(.disabled):hover{background:var(--bg-neutral-secondary-default);border-color:var(--br-neutral-primary-hover);}
-/* Main (PosterMyWall Lofi) view: Share is outline for all seats */
-#anno-share-btn{background:var(--bg-neutral-primary-default);color:var(--ct-neutral-primary);border-color:var(--br-neutral-primary);}
-#anno-share-btn:hover{background:var(--bg-neutral-secondary-default);border-color:var(--br-neutral-primary-hover);opacity:1;}
+#anno-share-btn{background:var(--ct-neutral-primary);color:var(--ct-neutral-primary-on-dark);border-color:var(--ct-neutral-primary);}
+#anno-share-btn:hover{background:var(--ct-neutral-primary);border-color:var(--ct-neutral-primary);opacity:.9;}
 #new-branch-btn{background:var(--ct-neutral-primary);color:var(--ct-neutral-primary-on-dark);border-color:var(--ct-neutral-primary);}
 #new-branch-btn:hover{background:var(--ct-neutral-primary);border-color:var(--ct-neutral-primary);opacity:.9;}
 .merge-btn.disabled{background:var(--bg-neutral-secondary-default);color:var(--ct-neutral-tertiary);border-color:var(--br-neutral-primary);cursor:not-allowed;}
