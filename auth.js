@@ -115,9 +115,26 @@
     });
   }
 
+  /* ===== Role capability model =====
+     admin — can change Main directly; full control (edit/rename/delete Main, merge, branch, manage members)
+     edit  — CANNOT change Main directly; must create a branch ("New Lofi") and Merge to main; can comment
+     view  — comment only
+     guest — anonymous viewer (treated as view for UI); must log in to comment
+  */
+  function can(action){
+    switch(action){
+      case 'editMainDirect': return role==='admin';                 // rename/delete/edit the Main iteration
+      case 'branch':         return role==='admin'||role==='edit';  // create a branch (New Lofi)
+      case 'merge':          return role==='admin'||role==='edit';  // merge a branch into main
+      case 'comment':        return !!profile;                      // any logged-in user
+      case 'manageMembers':  return role==='admin';
+      default:               return role==='admin';
+    }
+  }
   window.PMWAuth={
     require:function(cb){ if(profile){if(cb)cb(profile,role);} else if(resolved){ if(cb)cb(null,role); } else { if(cb)cbs.push(cb); boot(); } },
     isAuthed:function(){return !!profile;},
+    can:can,
     openAuth:function(){ boot(); gate(true); },        // dismissible login modal, on demand
     requireLogin:function(){ forceGate=true; if(resolved){ if(!profile)gate(false); } else boot(); },
     profile:function(){return profile;},
