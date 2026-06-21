@@ -884,7 +884,21 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     setTimeout(function(){el.classList.remove('diff-flash-orange');},1500);
   }
   function revertToast(){var t=document.createElement('div');t.className='merge-toast';t.textContent='Revert prompt copied — paste it into Cowork.';document.body.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove();},2800);}
+  function escTxt(s){return (''+(s==null?'':s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   function renderDetails(container,mainFile){
+    // Frozen (read-only) list: once a branch is merged, its recorded changes are
+    // snapshotted into window.PMW_FROZEN_CHANGES so they stay visible instead of
+    // recomputing to "No changes" (branch shell == Main after merge).
+    var frozen=window.PMW_FROZEN_CHANGES;
+    if(Array.isArray(frozen)&&frozen.length){
+      container.innerHTML='<div class="diff-frozen-note">Merged — this list is frozen (read-only).</div>';
+      frozen.forEach(function(desc,i){
+        var card=document.createElement('div');card.className='diff-detail diff-detail-frozen';
+        card.innerHTML='<div class="diff-d-text"><span class="diff-d-num">'+(i+1)+'</span><span>'+escTxt(desc)+'</span></div>';
+        container.appendChild(card);
+      });
+      return;
+    }
     container.innerHTML='<div class="diff-d-loading">Analyzing changes…</div>';
     var cur=(location.pathname.split('/').pop())||'';
     computeChanged(mainFile,function(){
@@ -926,6 +940,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       +'<div class="diff-sec-title">List of exact changes</div><div class="diff-details" id="diff-details"></div></div>';
     document.body.appendChild(d);
     d.querySelector('#diff-drawer-x').addEventListener('click',function(){var b=document.getElementById('diff-btn');if(b)b.click();});
+    // Frozen (merged) branches are read-only: hide the Summary editor.
+    var FROZEN=Array.isArray(window.PMW_FROZEN_CHANGES)&&window.PMW_FROZEN_CHANGES.length;
+    if(FROZEN){var _eb=d.querySelector('#diff-sum-edit');if(_eb)_eb.style.display='none';}
     var curMd=OVERVIEW_MD;
     var sumEl=d.querySelector('#diff-summary'),moreBtn=d.querySelector('#diff-showmore');
     function applyClamp(){sumEl.classList.remove('clamped');moreBtn.style.display='none';if(sumEl.scrollHeight>252){sumEl.classList.add('clamped');moreBtn.style.display='';moreBtn.textContent='Show more';}}
@@ -989,6 +1006,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
   }
   function resolvePath(root,path){var n=root;for(var i=0;i<path.length;i++){var k=kids(n);if(!k[path[i]])return null;n=k[path[i]];}return n;}
   function runDiff(mainFile){
+    // Merged/frozen branches have no live diff vs Main — skip the empty-state toast.
+    if(Array.isArray(window.PMW_FROZEN_CHANGES)&&window.PMW_FROZEN_CHANGES.length)return;
     var cur=(location.pathname.split('/').pop())||'';
     Promise.all([fetch(mainFile+'?b='+Date.now()).then(function(r){return r.text();}),fetch(cur+'?b='+Date.now()).then(function(r){return r.text();})]).then(function(t){
       var md=new DOMParser().parseFromString(t[0],'text/html');
@@ -1067,7 +1086,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     bg.querySelector('[data-ok]').onclick=function(){bg.remove();
       var who=(window.PMWAuth&&PMWAuth.profile&&PMWAuth.profile());var byName=(who&&(who.name||who.email))||'Someone';
       fetch(SB_URL+"/rest/v1/merges",{method:'POST',headers:Object.assign({'Content-Type':'application/json',Prefer:'return=minimal'},H),body:JSON.stringify({branch:bname,file:me.file,merged_by:byName})}).catch(function(){});
-      var p='Merge the branch "'+bname+'" ('+me.file+') into Main ('+mainFile+') — apply this branch\'s design changes to Main, then mark the branch as merged in iterations.json (set its "status" to "merged" and add "merged_at"). KEEP the branch file and its entry — never delete a branch; we keep full history.';
+      var p='Merge the branch "'+bname+'" ('+me.file+') into Main ('+mainFile+') — apply this branch\'s design changes to Main, then mark the branch as merged in iterations.json (set its "status" to "merged" and add "merged_at"). KEEP the branch file and its entry — never delete a branch; we keep full history. Before applying, FREEZE this branch\'s change record: capture the current "List of exact changes" and write it into the branch file as an inline window.PMW_FROZEN_CHANGES = [ ... ] array (one short string per change), so the merged branch keeps showing its changes read-only instead of recomputing to "No changes from Main".';
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(p).then(function(){toast('Merge prompt copied — paste it into Cowork to run it.');},function(){toast(p);});}else{toast(p);}};
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();

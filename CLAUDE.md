@@ -57,6 +57,14 @@ Per-file identity is derived dynamically in `app.js`, NOT hardcoded:
 
 **Editing the harness** (platform, Admin only) = edit `app.css`/`app.js` once, then bump the `?v=N` cache-buster in every mockup file. Never copy harness code back into a mockup file.
 
+## Frozen change record on merge (IMPORTANT)
+
+After a branch is merged its `.shell` equals Main, so the live diff finds nothing and the "List of exact changes" would read "No changes from Main." To preserve the record, **merging FREEZES the branch's change list**: write an inline `window.PMW_FROZEN_CHANGES = [ ... ]` array (one short string per change) into the branch file. When present:
+- The "List of exact changes" renders that frozen list **read-only** (no Revert buttons) with a "Merged — this list is frozen" note, instead of recomputing.
+- The Summary becomes **read-only** (Edit hidden) and the empty-diff toast is suppressed.
+
+So the merge prompt must capture the change list into `window.PMW_FROZEN_CHANGES` before applying. Keep these snapshots forever (same spirit as "never delete branches").
+
 ## Data model
 
 `iterations.json` groups iterations under branches:
