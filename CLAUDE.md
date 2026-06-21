@@ -90,4 +90,14 @@ The dashboard shows a **Change log** of merges, read from the Supabase `merges` 
 
 ## Deploy
 
-Static site → push commits to `main` (GitHub Pages). Bundle local changes; push only when the user asks.
+Static site → push commits to `main` (GitHub Pages). Bundle local changes; push only when the user asks. Push mechanism: the sandbox git can't write to the mounted `.git`, so deploy via GitHub's web upload UI (Add file → Upload files → commit to `main`). Bump `?v=N` on `app.css`/`app.js` in the mockup files whenever the harness changes, so browsers fetch the new version after deploy.
+
+## Decisions & current state (handoff log — updated 2026-06)
+
+Context that lives only in chat history, recorded so a fresh session doesn't repeat it:
+
+- **Architecture = shared harness, file-per-branch.** We considered "branches as DB patches" (a branch = a ~1KB row holding a JSON patch, rendered by one generic viewer) and **rejected it** as too fragile for arbitrary design edits. Instead we extracted the harness into `app.css` + `app.js` so each mockup file is a thin ~70KB shell. If repo size ever becomes a real problem at scale, revisit patches — but don't reach for them lightly.
+- **Design system: stay with the current PMW look.** We tried plugging in a shadcn "Neutral" design system (Inter font, neutral palette, light/dark toggle) across the platform chrome. The owner preferred the original UI and we **fully reverted it**. Do NOT reintroduce shadcn/Inter/dark-mode unless explicitly asked. The original look = Figtree, the PMW tokens in `app.css` `:root`, light only.
+- **React: deferred.** Considered moving the platform (dashboard + harness) to React/Next. Decided **not worth it now** — it would break the "static HTML mockups that Cowork authors and GitHub Pages serves with no build step" model, which is the app's core strength. Revisit only if the chrome's interactivity grows a lot (then: Next for the platform only, mockups still static in iframes).
+- **Dashboard scale:** `index.html` lazy-loads branch thumbnails (IntersectionObserver) and paginates 18 at a time ("Load more") to stay fast at 1000+ branches.
+- **Everything through commit `aa2fac9` is pushed to prod.** Repo and the live site are in sync.
