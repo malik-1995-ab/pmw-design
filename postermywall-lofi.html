@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PMW Lo-fi — My Stuff</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+<script src="auth.js?v=3"></script>
+<link rel="stylesheet" href="app.css?v=1">
+</head>
+<body>
+<div class="preview-bar">
+  <div class="pv-left">
+    <div class="pv-dd pv-dd-left" id="screen-dd" style="display:none;">
+      <button class="pv-dd-btn" id="screen-dd-btn"><i class="ti ti-globe"></i><span id="screen-dd-label">My Stuff</span><i class="ti ti-chevron-down chev"></i></button>
+      <div class="pv-dd-menu">
+        <div class="pv-dd-item active" data-screen="my-stuff"><span class="pv-dd-name">My Stuff</span><i class="ti ti-check pv-dd-check"></i></div>
+        <div class="pv-dd-item disabled" data-screen="design-editor"><span class="pv-dd-name">Design Editor</span></div>
+        <div class="pv-dd-item disabled" data-screen="gallery"><span class="pv-dd-name">Gallery</span></div>
+        <div class="pv-dd-item disabled" data-screen="events-wizard"><span class="pv-dd-name">Events Wizard</span></div>
+        <div class="pv-dd-item disabled" data-screen="email-wizard"><span class="pv-dd-name">Email Wizard</span></div>
+        <div class="pv-dd-item disabled" data-screen="social-wizard"><span class="pv-dd-name">Social Wizard</span></div>
+      </div>
+    </div>
+    <div class="pv-fid" id="fidelity-toggle" style="display:none;">
+      <button data-fid="lofi" class="active"><i class="ti ti-pencil"></i>Lofi</button>
+      <button data-fid="hifi" disabled><i class="ti ti-click"></i>Hifi</button>
+    </div>
+  </div>
+  <div class="pv-center">
+    <div class="pv-seg" id="device-toggle">
+      <button data-device="full" aria-label="Full width"><i class="ti ti-maximize"></i></button>
+      <button data-device="desktop" class="active" aria-label="Desktop (1366 &#215; 756px)"><i class="ti ti-device-desktop"></i></button>
+      <button data-device="tablet" aria-label="Tablet (768 &#215; 1024px)"><i class="ti ti-device-tablet"></i></button>
+      <button data-device="mobile" aria-label="Mobile (360 &#215; 672px)"><i class="ti ti-device-mobile"></i></button>
+    </div>
+    <div class="pv-dd" id="user-dd">
+      <button class="pv-dd-btn" id="user-dd-btn"><i class="ti ti-user"></i><span id="user-dd-label">PAYG</span><i class="ti ti-chevron-down chev"></i></button>
+      <div class="pv-dd-menu">
+        <div class="pv-dd-item active" data-user="payg" data-icon="user" data-label="PAYG"><i class="ti ti-user"></i><span class="pv-dd-name">PAYG</span><i class="ti ti-check pv-dd-check"></i></div>
+        <div class="pv-dd-item" data-user="premium" data-icon="crown" data-label="Premium"><i class="ti ti-crown"></i><span class="pv-dd-name">Premium</span><i class="ti ti-check pv-dd-check"></i></div>
+        <div class="pv-dd-item" data-user="premium-plus" data-icon="crown-plus" data-label="Premium+"><i class="ti ti-crown-plus"></i><span class="pv-dd-name">Premium+</span><i class="ti ti-check pv-dd-check"></i></div>
+        <div class="pv-dd-item" data-user="anon" data-icon="logout" data-label="Anon"><i class="ti ti-logout"></i><span class="pv-dd-name">Anon</span><i class="ti ti-check pv-dd-check"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="pv-right">
+    <div class="pv-skel" aria-hidden="true"><span class="pv-skel-pill" style="width:84px;"></span><span class="pv-skel-pill" style="width:104px;"></span></div>
+    <button class="anno-cbtn" id="anno-comments-btn"><svg class="cbtn-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H4V12C4 7.58172 7.58172 4 12 4Z" stroke="currentColor" stroke-width="2"/></svg><span class="btn-label">Comment</span> <span class="anno-count" id="anno-count">0</span></button>
+    <button class="pv-share" id="anno-share-btn"><i class="ti ti-share"></i>Share</button>
+  </div>
+</div>
+<div class="stage">
+<div class="viewport-frame" id="vframe" data-device="desktop">
+<div class="rz rz-w" data-rz="x" data-dir="-1"></div>
+<div class="rz rz-e" data-rz="x" data-dir="1"></div>
+<div class="rz rz-n" data-rz="y" data-dir="-1"></div>
+<div class="rz rz-s" data-rz="y" data-dir="1"></div>
+<div class="frame-clip">
+<div class="shell" data-user="payg">
+
+  <div class="nav-zone">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo">
+        <span class="logo-icon"><i class="ti ti-layout-grid"></i></span>
+        postermywall
+      </div>
+      <nav class="top-nav">
+        <button class="top-nav-item" data-mega="ai">AI</button>
+        <button class="top-nav-item" data-mega="designs">Designs</button>
+        <button class="top-nav-item" data-mega="events">Events</button>
+        <button class="top-nav-item" data-mega="social">Social Media</button>
+        <button class="top-nav-item" data-mega="emails">Emails</button>
+        <button class="top-nav-item" data-mega="resources">Resources</button>
+        <button class="top-nav-item" data-mega="pricing">Pricing</button>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-ctrl">
+        <button class="icon-btn" id="tb-bell"><i class="ti ti-bell"></i></button>
+        <div class="tb-pop" id="pop-bell">
+          <div class="tb-notif-head">Notifications</div>
+          <div class="tb-notif-empty">
+            <div class="bigicon"><i class="ti ti-bell"></i></div>
+            <div class="t1">You have no new notifications</div>
+            <div class="t2">We'll keep you updated.</div>
+          </div>
+          <div class="tb-notif-foot"><button class="btn-outline"><i class="ti ti-settings"></i>Notification settings</button></div>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <span class="icon"><i class="ti ti-search"></i></span>
+        <input type="text" placeholder="Search designs and more...">
+        <div class="tb-pop" id="pop-search">
+          <div class="tb-search-pills">
+            <button class="tb-search-pill active"><i class="ti ti-layout-grid"></i>Templates</button>
+            <button class="tb-search-pill"><i class="ti ti-folder"></i>My designs</button>
+            <button class="tb-search-pill"><i class="ti ti-sparkles"></i>Create with AI</button>
+          </div>
+          <div class="tb-skel w1"></div>
+          <div class="tb-skel w2"></div>
+          <div class="tb-skel w3"></div>
+        </div>
+      </div>
+
+      <div class="tb-ctrl">
+        <button class="btn-solid" id="tb-create">Create</button>
+        <div class="tb-pop" id="pop-create">
+          <div class="tb-create-item"><div class="tb-create-thumb"><i class="ti ti-sparkles"></i></div><div class="tb-create-txt"><div class="tb-create-title">Create with AI<span class="dot"></span></div><div class="tb-create-sub">Make designs, copy and marketing ideas.</div></div></div>
+          <div class="tb-create-item"><div class="tb-create-thumb"><i class="ti ti-photo"></i></div><div class="tb-create-txt"><div class="tb-create-title">Design templates</div><div class="tb-create-sub">Customize flyers, videos, and more.</div></div></div>
+          <div class="tb-create-item"><div class="tb-create-thumb"><i class="ti ti-share"></i></div><div class="tb-create-txt"><div class="tb-create-title">Social media post</div><div class="tb-create-sub">Publish engaging posts across platforms.</div></div></div>
+          <div class="tb-create-item"><div class="tb-create-thumb"><i class="ti ti-calendar-event"></i></div><div class="tb-create-txt"><div class="tb-create-title">Promote your events</div><div class="tb-create-sub">Draw crowds to your events.</div></div></div>
+          <div class="tb-create-item"><div class="tb-create-thumb"><i class="ti ti-mail"></i></div><div class="tb-create-txt"><div class="tb-create-title">Email</div><div class="tb-create-sub">Send email campaigns and newsletters.</div></div></div>
+        </div>
+      </div>
+
+      <div class="tb-ctrl">
+        <div class="avatar" id="tb-avatar"><i class="ti ti-user"></i></div>
+        <div class="tb-pop" id="pop-account">
+          <div class="tb-acct-head">
+            <div class="tb-acct-av"><i class="ti ti-user"></i></div>
+            <div class="tb-acct-info"><div class="tb-acct-name">Account name</div><div class="tb-acct-email">name@example.com</div></div>
+            <button class="tb-acct-edit"><i class="ti ti-pencil"></i></button>
+          </div>
+          <div class="tb-sep"></div>
+          <div class="tb-item"><i class="ti ti-home"></i>My Stuff</div>
+          <div class="tb-item"><i class="ti ti-clock"></i>Order History</div>
+          <div class="tb-item"><i class="ti ti-help-circle"></i>Help Center</div>
+          <div class="tb-item accent"><i class="ti ti-crown-filled"></i>Unlimited Downloads</div>
+          <div class="tb-sep"></div>
+          <div class="tb-item"><i class="ti ti-logout"></i>Log out</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Header mega-menus ===== -->
+  <div class="mega" id="mega-ai">
+    <div class="mega-top">
+      <div class="mm-col">
+        <div class="mm-head">Features</div>
+        <div class="mm-link"><i class="ti ti-sparkles"></i>Create with AI</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>AI Background Remover</div>
+        <div class="mm-link"><i class="ti ti-message"></i>AI Subtitles</div>
+        <div class="mm-link"><i class="ti ti-microphone"></i>AI Voice</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>AI Images</div>
+        <div class="mm-link"><i class="ti ti-message"></i>AI Writer</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>AI Email Redesign</div>
+      </div>
+      <div class="mm-promo">
+        <div class="mm-promo-thumb"><i class="ti ti-photo"></i></div>
+        <div class="mm-promo-title">AI that does it all! ✦</div>
+        <div class="mm-promo-desc">Create designs, dream up campaigns, change colors, and so much more.</div>
+      </div>
+    </div>
+    <div class="mm-foot">
+      <div class="mm-foot-text"><strong>Create with AI</strong><span>Use simple prompts to create awesome designs.</span></div>
+      <button class="mm-foot-btn"><i class="ti ti-sparkles"></i>Create with AI</button>
+    </div>
+  </div>
+
+  <div class="mega" id="mega-designs">
+    <div class="mega-top">
+      <div class="mm-col">
+        <div class="mm-head">Themes</div>
+        <div class="mm-link"><i class="ti ti-calendar-event"></i>4th of july</div>
+        <div class="mm-link"><i class="ti ti-calendar-event"></i>Events</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Church</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Small business</div>
+        <div class="mm-link"><i class="ti ti-users"></i>Bands</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Album covers</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Restaurant</div>
+        <div class="mm-link"><i class="ti ti-heart"></i>Party</div>
+        <div class="mm-link"><i class="ti ti-heart"></i>Birthday</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Sizes</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Poster</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Flyer</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Banner</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Menu</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Invitation</div>
+        <div class="mm-link"><i class="ti ti-user"></i>Business card</div>
+        <div class="mm-link"><i class="ti ti-palette"></i>Logo</div>
+        <div class="mm-link"><i class="ti ti-folder"></i>Certificate</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Videos</div>
+        <div class="mm-link"><i class="ti ti-player-play"></i>Video templates</div>
+        <div class="mm-link"><i class="ti ti-layout-grid"></i>Digital signage</div>
+        <div class="mm-link"><i class="ti ti-player-play"></i>Video editor</div>
+        <div class="mm-link"><i class="ti ti-player-play"></i>Video recorder</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Background remover</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Tools</div>
+        <div class="mm-link"><i class="ti ti-layout-grid"></i>QR code generator</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Menu maker</div>
+        <div class="mm-link"><i class="ti ti-sparkles"></i>Animations</div>
+        <div class="mm-link"><i class="ti ti-heart"></i>Stickers</div>
+        <div class="mm-link"><i class="ti ti-layout-grid"></i>Resize</div>
+        <div class="mm-link"><i class="ti ti-palette"></i>Styles</div>
+        <div class="mm-link"><i class="ti ti-palette"></i>Brand Kits</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Powered by AI</div>
+        <div class="mm-link"><i class="ti ti-sparkles"></i>Create with AI</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>AI Background Remover</div>
+        <div class="mm-link"><i class="ti ti-message"></i>AI Subtitles</div>
+        <div class="mm-link"><i class="ti ti-microphone"></i>AI Voice</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>AI Images</div>
+        <div class="mm-link"><i class="ti ti-message"></i>AI Writer</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>AI Email Redesign</div>
+      </div>
+      <div class="mm-promo">
+        <div class="mm-promo-thumb"><i class="ti ti-photo"></i></div>
+        <div class="mm-promo-title">Design with AI in seconds.</div>
+        <div class="mm-promo-desc">Got an idea? Make your design with AI. Describe, enter, done! Try it out.</div>
+      </div>
+    </div>
+    <div class="mm-foot">
+      <div class="mm-foot-text"><strong>Free design templates</strong><span>Customize flyers, videos, social posts, and more.</span></div>
+      <button class="mm-foot-btn"><i class="ti ti-plus"></i>Create a design</button>
+    </div>
+  </div>
+
+  <div class="mega" id="mega-events">
+    <div class="mega-top">
+      <div class="mm-col">
+        <div class="mm-head">Industries</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Restaurant</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Churches &amp; Nonprofits</div>
+        <div class="mm-link"><i class="ti ti-users"></i>Band</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Small businesses &amp; Retail</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Event tools</div>
+        <div class="mm-link"><i class="ti ti-layout-grid"></i>Landing pages</div>
+        <div class="mm-link"><i class="ti ti-calendar"></i>Embeddable calendar</div>
+        <div class="mm-link"><i class="ti ti-share"></i>One-click promotion</div>
+        <div class="mm-link"><i class="ti ti-users"></i>Manage RSVPs</div>
+      </div>
+      <div class="mm-promo">
+        <div class="mm-promo-thumb"><i class="ti ti-calendar-event"></i></div>
+        <div class="mm-promo-title">Spotlight your event calendar</div>
+        <div class="mm-promo-desc">Simple, quick, and embeddable. Keep your guests in the loop!</div>
+      </div>
+    </div>
+    <div class="mm-foot">
+      <div class="mm-foot-text"><strong>Hosting an event?</strong><span>Easily invite your lists with shareable pages.</span></div>
+      <button class="mm-foot-btn"><i class="ti ti-plus"></i>Create an event page</button>
+    </div>
+  </div>
+
+  <div class="mega" id="mega-social">
+    <div class="mega-top">
+      <div class="mm-col">
+        <div class="mm-head">Templates</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Instagram post</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Facebook post</div>
+        <div class="mm-link"><i class="ti ti-player-play"></i>YouTube thumbnail</div>
+        <div class="mm-link"><i class="ti ti-player-play"></i>Instagram reel</div>
+        <div class="mm-link"><i class="ti ti-player-play"></i>Tiktok video</div>
+        <div class="mm-link"><i class="ti ti-message"></i>LinkedIn post</div>
+        <div class="mm-link"><i class="ti ti-message"></i>Whatsapp status</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Pinterest graphic</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Tools</div>
+        <div class="mm-link"><i class="ti ti-calendar"></i>Content Planner</div>
+        <div class="mm-link"><i class="ti ti-calendar"></i>Social media scheduling</div>
+        <div class="mm-link"><i class="ti ti-message"></i>AI Caption Writer</div>
+        <div class="mm-link"><i class="ti ti-message"></i>AI Subtitles</div>
+        <div class="mm-link"><i class="ti ti-microphone"></i>AI Voice</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>AI Images</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>AI Background Remover</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Integrations</div>
+        <div class="mm-link"><i class="ti ti-share"></i>Facebook</div>
+        <div class="mm-link"><i class="ti ti-share"></i>Instagram</div>
+        <div class="mm-link"><i class="ti ti-share"></i>TikTok</div>
+        <div class="mm-link"><i class="ti ti-share"></i>YouTube</div>
+        <div class="mm-link"><i class="ti ti-share"></i>LinkedIn</div>
+        <div class="mm-link"><i class="ti ti-share"></i>X</div>
+        <div class="mm-link"><i class="ti ti-share"></i>Pinterest</div>
+        <div class="mm-link"><i class="ti ti-share"></i>Google Business</div>
+        <div class="mm-link"><i class="ti ti-share"></i>Threads</div>
+      </div>
+      <div class="mm-promo">
+        <div class="mm-promo-thumb"><i class="ti ti-calendar"></i></div>
+        <div class="mm-promo-title">All-in-one social media scheduler</div>
+        <div class="mm-promo-desc">Your social posts go live on time, every time.</div>
+      </div>
+    </div>
+    <div class="mm-foot">
+      <div class="mm-foot-text"><strong>Make your socials pop</strong><span>Create and publish content across your favorite platforms.</span></div>
+      <button class="mm-foot-btn"><i class="ti ti-plus"></i>Create a post</button>
+    </div>
+  </div>
+
+  <div class="mega" id="mega-emails">
+    <div class="mega-top">
+      <div class="mm-col">
+        <div class="mm-head">Themes</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Small business</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Church</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Corporate</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Food</div>
+        <div class="mm-link"><i class="ti ti-heart"></i>Charity</div>
+        <div class="mm-link"><i class="ti ti-heart"></i>Party</div>
+        <div class="mm-link"><i class="ti ti-microphone"></i>Speaker</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Retail</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Types</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Newsletter</div>
+        <div class="mm-link"><i class="ti ti-wallet"></i>Sale</div>
+        <div class="mm-link"><i class="ti ti-calendar-event"></i>Event promotion</div>
+        <div class="mm-link"><i class="ti ti-photo"></i>Product showcase</div>
+        <div class="mm-link"><i class="ti ti-wallet"></i>Price list</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Menus</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Invitation</div>
+        <div class="mm-link"><i class="ti ti-heart"></i>Thank you</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Tools</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Email campaigns</div>
+        <div class="mm-link"><i class="ti ti-folder-plus"></i>Signup forms</div>
+        <div class="mm-link"><i class="ti ti-mail"></i>Email templates</div>
+        <div class="mm-link"><i class="ti ti-sparkles"></i>AI Email Redesign</div>
+        <div class="mm-link"><i class="ti ti-message"></i>AI Writer</div>
+      </div>
+      <div class="mm-promo">
+        <div class="mm-promo-thumb"><i class="ti ti-mail"></i></div>
+        <div class="mm-promo-title">Redesign with AI</div>
+        <div class="mm-promo-desc">Spruce up your emails in seconds. Describe the changes you're looking for, and voila!</div>
+      </div>
+    </div>
+    <div class="mm-foot">
+      <div class="mm-foot-text"><strong>Send emails that convert</strong><span>Publish, measure performance, and score more clicks!</span></div>
+      <button class="mm-foot-btn"><i class="ti ti-plus"></i>Create an email</button>
+    </div>
+  </div>
+
+  <div class="mega" id="mega-resources">
+    <div class="mega-top">
+      <div class="mm-col">
+        <div class="mm-head">Industries</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Small business</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Bar</div>
+        <div class="mm-link"><i class="ti ti-users"></i>Bands</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Retail</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Church</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Restaurant</div>
+        <div class="mm-link"><i class="ti ti-building"></i>Real estate</div>
+        <div class="mm-link"><i class="ti ti-heart"></i>Nonprofit</div>
+        <div class="mm-link"><i class="ti ti-building"></i>School</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Learn</div>
+        <div class="mm-link"><i class="ti ti-message"></i>Blog</div>
+        <div class="mm-link"><i class="ti ti-search"></i>Discover</div>
+        <div class="mm-link"><i class="ti ti-player-play"></i>Video tutorials</div>
+        <div class="mm-link"><i class="ti ti-users"></i>About us</div>
+        <div class="mm-link"><i class="ti ti-bell"></i>Newsroom</div>
+      </div>
+      <div class="mm-col">
+        <div class="mm-head">Connect</div>
+        <div class="mm-link"><i class="ti ti-message"></i>Help center</div>
+        <div class="mm-link"><i class="ti ti-message"></i>Support</div>
+        <div class="mm-head" style="margin-top:16px;">Follow us</div>
+        <div class="mm-social-row">
+          <i class="ti ti-share"></i>
+          <i class="ti ti-share"></i>
+          <i class="ti ti-share"></i>
+          <i class="ti ti-share"></i>
+          <i class="ti ti-share"></i>
+        </div>
+      </div>
+      <div class="mm-promo">
+        <div class="mm-promo-stack">
+          <div>
+            <div class="mm-promo-thumb sm"><i class="ti ti-photo"></i></div>
+            <div class="mm-promo-title">Getting Started</div>
+            <div class="mm-promo-desc">Tips and tricks on creating with PosterMyWall.</div>
+          </div>
+          <div>
+            <div class="mm-promo-thumb sm"><i class="ti ti-photo"></i></div>
+            <div class="mm-promo-title">Featured | The INKwell Club</div>
+            <div class="mm-promo-desc">Learn how an entertainment house cut down on marketing apps, and grew event footfall by 15%.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mm-foot">
+      <div class="mm-foot-text"><strong>Download app</strong><span>Available for Android and iOS.</span></div>
+      <button class="mm-foot-btn"><i class="ti ti-arrow-right"></i>Get the app</button>
+    </div>
+  </div>
+
+  <div class="mega" id="mega-pricing">
+    <div class="mega-top">
+      <div class="mm-col">
+        <div class="mm-head">Pricing</div>
+        <div class="mm-link"><i class="ti ti-user"></i>Individuals</div>
+        <div class="mm-link"><i class="ti ti-users"></i>Teams</div>
+      </div>
+      <div class="mm-promo">
+        <div class="mm-promo-thumb"><i class="ti ti-wallet"></i></div>
+        <div class="mm-promo-title">Save over PKR 32,000 on monthly marketing costs</div>
+        <div class="mm-promo-desc">Wondering how? <a>See more.</a></div>
+      </div>
+    </div>
+    <div class="mm-foot">
+      <div class="mm-foot-text"><strong>Download app</strong><span>Available for Android and iOS.</span></div>
+      <button class="mm-foot-btn"><i class="ti ti-arrow-right"></i>Get the app</button>
+    </div>
+  </div>
+  </div><!-- /nav-zone -->
+
+  <div class="body-layout">
+
+    <aside class="sidebar">
+      <div class="nav-group">
+        <button class="nav-item active" data-view="designs"><i class="ti ti-layout-grid"></i>Designs</button>
+        <button class="nav-item nav-ai" data-view="ai"><i class="ti ti-sparkles"></i>Create with AI</button>
+        <button class="nav-item" data-view="events"><i class="ti ti-calendar-event"></i>Events</button>
+        <button class="nav-item" data-view="social"><i class="ti ti-share"></i>Social Media Posts</button>
+        <button class="nav-item" data-view="emails"><i class="ti ti-mail"></i>Emails<i class="ti ti-crown-filled crown-icon"></i></button>
+        <button class="nav-item" data-view="planner"><i class="ti ti-calendar"></i>Content Planner<i class="ti ti-crown-filled crown-icon"></i></button>
+        <button class="nav-item" data-view="business"><i class="ti ti-building"></i>My Business</button>
+        <button class="nav-item" data-view="audience"><i class="ti ti-user-circle"></i>Audience<i class="ti ti-crown-filled crown-icon"></i></button>
+        <button class="nav-item" data-view="brand"><i class="ti ti-palette"></i>Brand Kits<i class="ti ti-crown-filled crown-icon"></i></button>
+        <button class="nav-item" data-view="team"><i class="ti ti-users"></i>Team<i class="ti ti-crown-filled crown-icon"></i></button>
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-group">
+        <button class="nav-item" data-view="orders"><i class="ti ti-wallet"></i>Order history</button>
+        <button class="nav-item" data-view="trash"><i class="ti ti-trash"></i>Trash</button>
+      </div>
+      <div class="sidebar-upsell">
+        <div class="upsell-title">Get unlimited downloads for less</div>
+        <div class="upsell-body">
+          Upgrade to <strong>PosterMyWall Premium</strong> to get unlimited high quality downloads and more.
+        </div>
+        <div class="upsell-actions">
+          <button class="upsell-btn">Upgrade</button>
+          <button class="icon-btn-sm"><i class="ti ti-message"></i></button>
+          <button class="icon-btn-sm"><i class="ti ti-dots"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <!-- Hero (shared across designs view) -->
+      <div class="hero" id="hero">
+        <h1>Create with <span class="spark">AI</span> <span class="spark">✦</span></h1>
+        <div class="prompt-bar">
+          <input type="text" placeholder="Describe what you want to create...">
+          <div class="prompt-actions">
+            <button class="prompt-btn"><i class="ti ti-microphone"></i></button>
+            <button class="prompt-btn send"><i class="ti ti-arrow-right"></i></button>
+          </div>
+        </div>
+        <div class="prompt-chips">
+          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-layout-grid"></i></span>Create design</button>
+          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-sparkles"></i></span>Marketing ideas</button>
+          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-photo"></i></span>Make images</button>
+          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-message"></i></span>Write a caption</button>
+        </div>
+      </div>
+
+      <!-- Designs view (default) -->
+      <div class="content" id="view-designs">
+        <div class="tabs-row">
+          <div class="tab-group" id="ms-tabs">
+            <button class="tab-item active" data-mstab="my">My designs</button>
+            <button class="tab-item" data-mstab="shared">Shared with me</button>
+            <button class="tab-item" data-mstab="recommended">Recommended<span class="tab-dot"></span></button>
+            <button class="tab-item" data-mstab="favorites"><i class="ti ti-heart"></i>Favorites</button>
+          </div>
+          <div class="actions" id="acts-my">
+            <button class="icon-btn-sm"><i class="ti ti-search"></i></button>
+            <button class="btn-outline" id="btn-new-folder"><i class="ti ti-folder-plus"></i>New folder</button>
+            <button class="btn-outline solid" id="btn-new-design"><i class="ti ti-plus"></i>New design</button>
+          </div>
+          <div class="actions" id="acts-shared" hidden>
+            <button class="icon-btn-sm"><i class="ti ti-search"></i></button>
+            <button class="btn-outline"><i class="ti ti-filter"></i>Filter</button>
+          </div>
+        </div>
+
+        <!-- ===== My designs ===== -->
+        <div class="tabpanel" id="mstab-my">
+          <div id="ms-grid-view">
+            <div class="section-label">Folders</div>
+            <div class="folder-grid" id="folder-grid">
+              <div class="folder add-new" id="folder-add"><i class="ti ti-plus"></i></div>
+              <div class="folder" data-folder="Apple folder"><i class="ti ti-folder"></i><span>Apple folder</span></div>
+            </div>
+
+            <div class="section-label">Designs</div>
+            <div class="design-grid">
+              <div class="design-add" id="design-add"><i class="ti ti-plus"></i></div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">White Joyful 4th of July Sale Instag...</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">Copy of Copy of Revival</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">Copy of Restaurant Social Media Vi...</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">Copy of BRIDAL SHOWER</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i><div class="play-overlay"><i class="ti ti-player-play"></i></div>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">Copy of Save the date instagram vi...</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">https://google.com</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">Copy of Revival</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+              <div class="design-card">
+                <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i><div class="play-overlay"><i class="ti ti-player-play"></i></div>
+                  <div class="dc-check"></div>
+                  <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+                </div>
+                <div class="design-card-body"><div class="dc-titlerow"><div class="design-card-title">Copy of Online Live Session Post</div><button class="dc-kebab" data-kebab><i class="ti ti-dots"></i></button></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Folder detail (opens when a folder is clicked) -->
+          <div id="ms-folder-view" hidden>
+            <div class="crumb">
+              <a id="crumb-back">Designs</a>
+              <span class="sep"><i class="ti ti-chevron-right"></i></span>
+              <span class="cur" id="crumb-name">Apple folder</span>
+              <span style="margin-left:auto;display:flex;gap:8px">
+                <button class="btn-outline"><i class="ti ti-trash"></i>Delete</button>
+                <button class="btn-outline solid"><i class="ti ti-folder-share"></i>Share folder</button>
+              </span>
+            </div>
+            <div class="empty-ms">
+              <div class="empty-illus"><i class="ti ti-photo"></i></div>
+              <p>This folder is empty. Move designs into it to keep your work organized.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Shared with me ===== -->
+        <div class="tabpanel" id="mstab-shared" hidden>
+          <div class="section-label">Folders</div>
+          <div class="folder-grid">
+            <div class="folder" data-folder="grape"><i class="ti ti-folder-share"></i><span>grape</span></div>
+          </div>
+          <div class="section-label">Designs</div>
+          <div class="design-grid">
+            <div class="design-card">
+              <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                <div class="dc-check"></div>
+                <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+              </div>
+              <div class="design-card-body"><div class="design-card-title">test design shahrukh</div><div class="shared-by"><span class="av"></span>shared by Muhammad</div></div>
+            </div>
+            <div class="design-card">
+              <div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i>
+                <div class="dc-check"></div>
+                <div class="dc-toolbar"><i class="ti ti-eye"></i><i class="ti ti-download"></i><i class="ti ti-info-circle"></i></div>
+              </div>
+              <div class="design-card-body"><div class="design-card-title">bible study</div><div class="shared-by"><span class="av"></span>shared by Ahmad Khan Niazi</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Recommended ===== -->
+        <div class="tabpanel" id="mstab-recommended" hidden>
+          <div class="section-label">Recommended templates for you</div>
+          <div class="rec-grid">
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+            <div class="rec-card"><div class="rec-thumb"><i class="ti ti-photo thumb-icon"></i></div></div>
+          </div>
+        </div>
+
+        <!-- ===== Favorites ===== -->
+        <div class="tabpanel" id="mstab-favorites" hidden>
+          <div class="empty-ms">
+            <div class="empty-illus"><i class="ti ti-heart"></i></div>
+            <p>You have no favorites at the moment. Pick a design from the <a>Gallery</a> and mark it as favorite.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placeholder views -->
+      <div class="content" id="view-ai" style="display:none;">
+        <div class="ai-hero">
+          <h1 class="ai-h1">Create with AI <span class="spark">&#10022;</span></h1>
+          <p class="ai-sub">Create designs, brainstorm ideas, write marketing text and more</p>
+          <div class="ai-prompt">
+            <div class="ph">Describe what you want to create...</div>
+            <div class="ai-prompt-row">
+              <button class="ai-plus"><i class="ti ti-plus"></i></button>
+              <span class="ai-chip"><i class="ti ti-layout-grid"></i>Templates</span>
+              <span class="ai-spacer"></span>
+              <button class="ai-mic"><i class="ti ti-microphone"></i></button>
+              <button class="ai-send"><i class="ti ti-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="section-label" style="margin-top:32px;">See what you can create &#10022;</div>
+        <div class="ai-grid">
+          <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-layout-grid"></i>Design</span></div><div class="ai-desc">Make a bold commercial sale design. Large central text saying &ldquo;MEGA SALE&rdquo;. Add smaller text: &ldquo;UP TO 80%&rdquo; and &ldquo;LIMITED TIME OFFER&rdquo;. Theme bright yellow and purple.</div></div>
+          <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-photo"></i>Images</span></div><div class="ai-desc">Image of a juicy gourmet burger on a wooden board with dripping cheese and fresh toppings, dramatic lighting.</div></div>
+          <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-pencil"></i>Redesign</span></div><div class="ai-desc">Change the theme of this design to a light green tone and update the copy for my church called &ldquo;Texas Main Church&rdquo;.</div></div>
+          <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-photo"></i>Change background</span></div><div class="ai-desc">Change the background to place the glass bottle on a white shelf in a luxurious retail setting with warm lighting.</div></div>
+          <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-message"></i>Write a caption</span></div><div class="ai-desc">Write a punchy Instagram caption for a weekend music venue promotion with a call to action and hashtags.</div></div>
+          <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-sparkles"></i>Marketing ideas</span></div><div class="ai-desc">Give me five marketing campaign ideas to promote a summer sale for a small clothing boutique.</div></div>
+        </div>
+      </div>
+      <div class="content" id="view-events" style="display:none;">
+        <div class="pg-title">Free Event Flyer Templates</div>
+        <div class="pg-sub">Promote your events in style with easy-to-customize flyers, videos and social media graphics.</div>
+        <div class="gal-toolbar">
+          <div class="gal-toggle"><button class="active">Designs</button><button>Emails</button></div>
+          <div class="gal-search"><input type="text" placeholder="Search designs and more..."><i class="ti ti-search"></i></div>
+          <button class="btn-outline"><i class="ti ti-filter"></i>Filters</button>
+        </div>
+        <div class="gal-body">
+          <div class="gal-side">
+            <div class="gal-side-h"><i class="ti ti-layout-grid"></i>Sizes</div>
+            <div class="gal-side-item active">All<i class="ti ti-check"></i></div>
+            <div class="gal-side-item">Flyers</div>
+            <div class="gal-side-item">Social Media Graphics<i class="ti ti-chevron-right"></i></div>
+            <div class="gal-side-item">Posters</div>
+            <div class="gal-side-item">Web Banners &amp; Backgrounds<i class="ti ti-chevron-right"></i></div>
+            <div class="gal-side-item">Print Banners<i class="ti ti-chevron-right"></i></div>
+            <div class="gal-side-item">Branding<i class="ti ti-chevron-right"></i></div>
+            <div class="gal-side-item">Marketing<i class="ti ti-chevron-right"></i></div>
+            <div class="gal-side-item">Covers<i class="ti ti-chevron-right"></i></div>
+            <div class="gal-side-item">Menus</div>
+          </div>
+          <div class="gal-main">
+            <div class="gal-cats">
+              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Concert</div></div>
+              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Conference</div></div>
+              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Fundraiser</div></div>
+              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Workshop</div></div>
+              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Church</div></div>
+              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Party</div></div>
+              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Competition</div></div>
+            </div>
+            <div class="gal-grid">
+              <div class="gal-tile add"><i class="ti ti-sparkles"></i><span>Create with AI</span></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content" id="view-social" style="display:none;">
+        <div class="pg-title">Social media posts</div>
+        <div class="tabs-row">
+          <div class="tab-group">
+            <button class="tab-item active">My posts</button>
+            <button class="tab-item">Shared with me</button>
+            <button class="tab-item">Accounts</button>
+          </div>
+          <div class="actions">
+            <button class="btn-outline"><i class="ti ti-filter"></i>Status</button>
+            <button class="btn-outline"><i class="ti ti-dots"></i>Sort</button>
+            <button class="btn-outline solid"><i class="ti ti-plus"></i>New post</button>
+          </div>
+        </div>
+        <div class="smp-table-head"><span>Post</span><span>Status</span><span>Performance</span><span></span></div>
+        <div class="smp-row">
+          <div class="smp-postcell"><div class="smp-thumb add"><i class="ti ti-plus"></i></div><span class="smp-posttitle">Create a new post...</span></div>
+          <span></span><span></span><span></span>
+        </div>
+        <div class="smp-row">
+          <div class="smp-postcell"><div class="smp-thumb"><i class="ti ti-photo thumb-icon"></i></div><span class="smp-posttitle">No caption...</span></div>
+          <span><span class="smp-badge">Draft</span></span>
+          <span class="smp-perf">&mdash;</span>
+          <span class="smp-kebab"><i class="ti ti-dots"></i></span>
+        </div>
+      </div>
+      <div class="content" id="view-emails" style="display:none;">
+        <div class="pg-title">Free Email Templates</div>
+        <div class="pg-sub">Email templates for every industry and occasion. Browse newsletters, promotions, holidays, events, and more.</div>
+        <div class="gal-toolbar">
+          <div class="gal-toggle"><button>Designs</button><button class="active">Emails</button></div>
+          <div class="gal-search"><input type="text" placeholder="Search for an email template"><i class="ti ti-search"></i></div>
+        </div>
+        <div class="gal-body">
+          <div class="gal-side">
+            <div class="gal-side-item">Types<i class="ti ti-chevron-down"></i></div>
+            <div class="gal-side-item">Seasons<i class="ti ti-chevron-down"></i></div>
+            <div class="gal-side-h" style="padding-top:12px;"><i class="ti ti-layout-grid"></i>Themes</div>
+            <div class="gal-side-item active">All<i class="ti ti-check"></i></div>
+            <div class="gal-side-item">Band</div>
+            <div class="gal-side-item">Charity</div>
+            <div class="gal-side-item">Church</div>
+            <div class="gal-side-item">Corporate</div>
+            <div class="gal-side-item">Environment</div>
+            <div class="gal-side-item">Fitness</div>
+            <div class="gal-side-item">Food and Beverage</div>
+            <div class="gal-side-item">Healthcare</div>
+          </div>
+          <div class="gal-main">
+            <div class="gal-grid">
+              <div class="gal-tile add"><i class="ti ti-plus"></i><span>Blank email</span></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content" id="view-planner" style="display:none;">
+        <div class="plp">
+          <div class="plp-l">
+            <div class="plp-h">Ace your marketing plan with Content Planner</div>
+            <div class="plp-sub">Never miss a key marketing opportunity! Schedule, publish, and track social media posts and email campaigns &mdash; all on one simple calendar.</div>
+            <button class="plp-btn"><i class="ti ti-arrow-right"></i>View plans</button>
+          </div>
+          <div class="plp-art"><i class="ti ti-calendar"></i></div>
+        </div>
+      </div>
+      <div class="content" id="view-business" style="display:none;">
+        <div class="pg-title">My Business</div>
+        <div class="tabs-row">
+          <div class="tab-group">
+            <button class="tab-item active">Profile</button>
+            <button class="tab-item">Brand Kits<i class="ti ti-crown-filled crown-icon"></i></button>
+          </div>
+        </div>
+        <div class="biz-card">
+          <div class="biz-art"><i class="ti ti-building"></i></div>
+          <div class="biz-txt">
+            <div class="biz-h">Spotlight your business!</div>
+            <div class="biz-sub">Build your business profile with key details like business hours, website links, brand colors and more. Add to your designs, social posts, and emails in a click!</div>
+            <div class="biz-actions">
+              <button class="btn-outline"><i class="ti ti-share"></i>Import from Google</button>
+              <button class="btn-outline solid"><i class="ti ti-plus"></i>Create a new profile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content" id="view-audience" style="display:none;">
+        <div class="plp">
+          <div class="plp-l">
+            <div class="plp-h">Grow your business with branded email marketing</div>
+            <div class="plp-sub">Enjoy a seamless email marketing experience with Premium.</div>
+            <div class="plp-checks">
+              <div class="plp-check"><i class="ti ti-check"></i><span><strong>Create with AI.</strong> Generate designs, ideas, and text with simple prompts.</span></div>
+              <div class="plp-check"><i class="ti ti-check"></i><span><strong>Send emails directly</strong> from PosterMyWall.</span></div>
+              <div class="plp-check"><i class="ti ti-check"></i><span>Enjoy up to <strong>10,000 free email sends</strong> every month.</span></div>
+              <div class="plp-check"><i class="ti ti-check"></i><span>Measure campaign success with <strong>performance reports</strong>.</span></div>
+              <div class="plp-check"><i class="ti ti-check"></i><span>Use a <strong>custom email address</strong> to send emails.</span></div>
+            </div>
+            <button class="plp-btn"><i class="ti ti-arrow-right"></i>View plans</button>
+          </div>
+          <div class="plp-art"><i class="ti ti-mail"></i></div>
+        </div>
+      </div>
+      <div class="content" id="view-brand" style="display:none;">
+        <div class="plp">
+          <div class="plp-l">
+            <div class="plp-h">Wow customers with beautiful branded content</div>
+            <div class="plp-sub">Design faster with your brand colors, fonts, and logos at your fingertips. Brand Kits make it easy to keep your marketing consistent.</div>
+            <button class="plp-btn"><i class="ti ti-arrow-right"></i>View plans</button>
+          </div>
+          <div class="plp-art"><i class="ti ti-palette"></i></div>
+        </div>
+      </div>
+      <div class="content" id="view-team" style="display:none;">
+        <div class="pg-title" style="text-align:center;">Find your perfect plan</div>
+        <div class="pg-sub" style="text-align:center;">From first steps to big wins, power your growth with Premium.</div>
+        <div class="plan-toggle"><div class="seg"><button class="active">Monthly</button><button>Yearly &middot; Save 16%</button></div></div>
+        <div class="plan-grid">
+          <div class="plan-card">
+            <div class="plan-name">Free <span class="plan-badge">Current plan</span></div>
+            <div class="plan-desc">Get free downloads and try out cool design features &mdash; no strings attached.</div>
+            <div class="plan-price">PKR 0<span>/month</span></div>
+            <button class="plan-btn outline">Current plan</button>
+            <div class="plan-feat"><i class="ti ti-check"></i>Publish on one social media account</div>
+            <div class="plan-feat"><i class="ti ti-check"></i>Create easy animations and videos</div>
+            <div class="plan-feat"><i class="ti ti-check"></i>Resize designs in one click</div>
+          </div>
+          <div class="plan-card popular">
+            <div class="plan-name">Premium <span class="plan-badge">Popular</span></div>
+            <div class="plan-desc">Get powerful AI design and marketing tools to promote your brand like a pro.</div>
+            <div class="plan-price">PKR 950<span>/month</span></div>
+            <button class="plan-btn solid">Upgrade now</button>
+            <div class="plan-feat"><i class="ti ti-check"></i>Create with AI</div>
+            <div class="plan-feat"><i class="ti ti-check"></i>Unlimited downloads &mdash; no watermark</div>
+            <div class="plan-feat"><i class="ti ti-check"></i>Schedule social media posts</div>
+          </div>
+          <div class="plan-card">
+            <div class="plan-name">Premium Plus</div>
+            <div class="plan-desc">All about growth. Take your marketing and branding to new heights.</div>
+            <div class="plan-price">PKR 1,990<span>/month</span></div>
+            <button class="plan-btn outline">Upgrade now</button>
+            <div class="plan-feat"><i class="ti ti-check"></i>More email sends and social accounts</div>
+            <div class="plan-feat"><i class="ti ti-check"></i>Brand Kits and team sharing</div>
+            <div class="plan-feat"><i class="ti ti-check"></i>Priority support</div>
+          </div>
+        </div>
+      </div>
+      <div class="content" id="view-orders" style="display:none;">
+        <div class="crumb"><a class="crumb-link">My Stuff</a><span class="sep"><i class="ti ti-chevron-right"></i></span><span class="cur">Order history</span></div>
+        <div class="pg-title">Order History</div>
+        <div class="ord-banner">
+          <div class="ord-art"><i class="ti ti-photo"></i></div>
+          <div class="ord-txt">
+            <div class="ord-t1">Get unlimited downloads for less</div>
+            <div class="ord-t2">Why spend more on downloads when Premium is only PKR 950/month. Ready to save?</div>
+          </div>
+          <button class="btn-outline solid">Get Premium</button>
+        </div>
+        <div class="empty-ms">
+          <div class="empty-illus"><i class="ti ti-clock"></i></div>
+          <p style="font-size:16px;font-weight:600;color:var(--ct-neutral-primary);">You haven't placed any orders yet.</p>
+          <p>If you just placed an order, it will appear on this page once your payment has been processed.</p>
+        </div>
+      </div>
+      <div class="content" id="view-trash" style="display:none;">
+        <div class="pg-title">Trash</div>
+        <div class="empty-ms">
+          <div class="empty-illus"><i class="ti ti-trash"></i></div>
+          <p style="font-size:16px;font-weight:600;color:var(--ct-neutral-primary);">Nothing in trash</p>
+          <p>Deleted designs appear here for 30 days before they're permanently removed.</p>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+</div>
+
+<div class="shell-mobile">
+  <div class="m-appbar">
+    <div class="m-title">Designs</div>
+    <div class="m-acts">
+      <button class="m-icbtn"><i class="ti ti-bell"></i></button>
+      <button class="m-icbtn"><i class="ti ti-search"></i></button>
+      <button class="m-icbtn"><i class="ti ti-menu"></i></button>
+    </div>
+  </div>
+  <div class="m-body">
+    <div class="m-select">My designs<i class="ti ti-chevron-down"></i></div>
+    <div class="m-tabs">
+      <div class="m-tab active">Designs</div>
+      <div class="m-tab">Folders</div>
+    </div>
+    <div class="m-search">
+      <input type="text" placeholder="Search your designs">
+      <i class="ti ti-search"></i>
+    </div>
+    <div class="m-btnrow">
+      <button class="m-btn solid"><i class="ti ti-plus"></i>New design</button>
+      <button class="m-btn outline"><i class="ti ti-sparkles"></i>Create with AI</button>
+    </div>
+    <div class="m-section">Designs</div>
+    <div class="m-grid">
+      <div class="m-card"><div class="m-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="m-t">White Joyful 4th of Ju...</div></div>
+      <div class="m-card"><div class="m-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="m-t">Copy of Copy of Revi...</div></div>
+      <div class="m-card"><div class="m-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="m-t">Copy of Restaurant S...</div></div>
+      <div class="m-card"><div class="m-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="m-t">Copy of BRIDAL SHO...</div></div>
+      <div class="m-card"><div class="m-thumb"><i class="ti ti-photo thumb-icon"></i><div class="m-play"><i class="ti ti-player-play"></i></div></div><div class="m-t">Copy of Save the date...</div></div>
+      <div class="m-card"><div class="m-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="m-t">https://google.com</div></div>
+    </div>
+  </div>
+  <div class="m-tabbar">
+    <div class="m-nav active"><i class="ti ti-layout-grid"></i>Designs</div>
+    <div class="m-nav"><i class="ti ti-sparkles"></i>Create</div>
+    <div class="m-fab"><i class="ti ti-plus"></i></div>
+    <div class="m-nav"><i class="ti ti-calendar-event"></i>Events</div>
+    <div class="m-nav"><i class="ti ti-dots"></i>More</div>
+  </div>
+</div>
+
+<div class="shell-tablet">
+  <div class="t-topbar">
+    <div class="t-logo"><span class="logo-icon"><i class="ti ti-layout-grid"></i></span>postermywall</div>
+    <div class="t-spacer"></div>
+    <div class="t-search"><span class="t-ph">Search designs and more...</span><i class="ti ti-search"></i></div>
+    <button class="t-ic"><i class="ti ti-bell"></i></button>
+    <button class="t-create">Create</button>
+    <div class="t-avatar"><i class="ti ti-user"></i></div>
+    <button class="t-ic"><i class="ti ti-menu"></i></button>
+  </div>
+  <div class="t-body">
+    <aside class="t-rail">
+      <div class="t-rail-item active"><i class="ti ti-layout-grid"></i></div>
+      <div class="t-rail-item"><i class="ti ti-sparkles"></i></div>
+      <div class="t-rail-item"><i class="ti ti-calendar-event"></i></div>
+      <div class="t-rail-item"><i class="ti ti-share"></i></div>
+      <div class="t-rail-item"><i class="ti ti-mail"></i><span class="t-crown"><i class="ti ti-crown-filled"></i></span></div>
+      <div class="t-rail-item"><i class="ti ti-calendar"></i><span class="t-crown"><i class="ti ti-crown-filled"></i></span></div>
+      <div class="t-rail-item"><i class="ti ti-building"></i></div>
+      <div class="t-rail-item"><i class="ti ti-user-circle"></i><span class="t-crown"><i class="ti ti-crown-filled"></i></span></div>
+      <div class="t-rail-item"><i class="ti ti-palette"></i><span class="t-crown"><i class="ti ti-crown-filled"></i></span></div>
+      <div class="t-rail-item"><i class="ti ti-users"></i><span class="t-crown"><i class="ti ti-crown-filled"></i></span></div>
+      <div class="t-rail-item"><i class="ti ti-dots"></i></div>
+      <div class="t-rail-sp"></div>
+      <div class="t-rail-item"><i class="ti ti-info-circle"></i></div>
+      <div class="t-rail-item"><i class="ti ti-crown-filled"></i></div>
+    </aside>
+    <main class="t-main">
+      <div class="hero">
+        <h1>Create with <span class="spark">AI</span> <span class="spark">&#10022;</span></h1>
+        <div class="prompt-bar">
+          <input type="text" placeholder="Describe what you want to create...">
+          <div class="prompt-actions">
+            <button class="prompt-btn"><i class="ti ti-microphone"></i></button>
+            <button class="prompt-btn send"><i class="ti ti-arrow-right"></i></button>
+          </div>
+        </div>
+        <div class="prompt-chips">
+          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-layout-grid"></i></span>Create design</button>
+          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-sparkles"></i></span>Marketing ideas</button>
+          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-photo"></i></span>Make images</button>
+        </div>
+      </div>
+
+      <div class="tab-group">
+        <button class="tab-item active">My designs</button>
+        <button class="tab-item">Shared with me</button>
+        <button class="tab-item">Recommended<span class="tab-dot"></span></button>
+        <button class="tab-item"><i class="ti ti-heart"></i>Favorites</button>
+      </div>
+      <div class="t-actbar">
+        <button class="icon-btn-sm"><i class="ti ti-search"></i></button>
+        <button class="btn-outline"><i class="ti ti-folder-plus"></i>New folder</button>
+        <button class="btn-outline solid"><i class="ti ti-plus"></i>New design</button>
+      </div>
+
+      <div class="section-label">Folders</div>
+      <div class="folder-grid">
+        <div class="folder add-new"><i class="ti ti-plus"></i></div>
+        <div class="folder"><i class="ti ti-folder"></i><span>Apple folder</span></div>
+        <div class="folder"><i class="ti ti-folder"></i><span>Untitled folder</span></div>
+      </div>
+
+      <div class="section-label">Designs</div>
+      <div class="t-grid">
+        <div class="design-add"><i class="ti ti-plus"></i></div>
+        <div class="design-card"><div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="design-card-body"><div class="design-card-title">White Joyful 4th of July...</div></div></div>
+        <div class="design-card"><div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="design-card-body"><div class="design-card-title">Copy of Copy of Revival</div></div></div>
+        <div class="design-card"><div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="design-card-body"><div class="design-card-title">Copy of Restaurant Soc...</div></div></div>
+        <div class="design-card"><div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="design-card-body"><div class="design-card-title">Copy of BRIDAL SHOWER</div></div></div>
+        <div class="design-card"><div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i><div class="play-overlay"><i class="ti ti-player-play"></i></div></div><div class="design-card-body"><div class="design-card-title">Copy of Save the date in...</div></div></div>
+        <div class="design-card"><div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="design-card-body"><div class="design-card-title">https://google.com</div></div></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+</div><!-- /frame-clip -->
+</div><!-- /viewport-frame -->
+</div><!-- /stage -->
+
+<!-- ===== Design card context menu (shared) ===== -->
+<div class="ctx-menu" id="ctx-menu">
+  <div class="ctx-item"><i class="ti ti-pencil"></i>Edit</div>
+  <div class="ctx-item"><i class="ti ti-copy"></i>Duplicate</div>
+  <div class="ctx-item"><i class="ti ti-download"></i>Download</div>
+  <div class="ctx-item"><i class="ti ti-player-play"></i>Publish</div>
+  <div class="ctx-item"><i class="ti ti-calendar-event"></i>Promote as event</div>
+  <div class="ctx-item"><i class="ti ti-users"></i>Share in team<span class="ctx-crown"><i class="ti ti-crown-filled"></i></span><span class="ctx-toggle"></span></div>
+  <div class="ctx-item"><i class="ti ti-share"></i>Share</div>
+  <div class="ctx-item"><i class="ti ti-pencil"></i>Rename</div>
+  <div class="ctx-item"><i class="ti ti-folder"></i>Move to folder</div>
+  <div class="ctx-item"><i class="ti ti-info-circle"></i>Details</div>
+  <div class="ctx-item"><i class="ti ti-trash"></i>Delete</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-foot"><i class="ti ti-layout-grid"></i>Size &middot; Instagram Story</div>
+</div>
+
+<!-- ===== Create a design modal ===== -->
+<div class="modal-overlay" id="create-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Create a design</div>
+      <button class="modal-close" id="create-close"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-toolbar">
+      <div class="modal-search"><i class="ti ti-search"></i><input type="text" placeholder="Search designs and more..."></div>
+      <button class="modal-browse">Browse by theme<i class="ti ti-chevron-down"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-side">
+        <div class="ms-item active"><i class="ti ti-layout-grid"></i>All</div>
+        <div class="ms-item">Flyers</div>
+        <div class="ms-item">Social Media Graphics<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Posters</div>
+        <div class="ms-item">Web Banners &amp; Backgrounds<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Print Banners<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Branding<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Marketing<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Covers<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Digital Signage<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Menus</div>
+        <div class="ms-item">Personal<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Certificates</div>
+        <div class="ms-item">Teaching Aids<i class="ti ti-chevron-right chev"></i></div>
+        <div class="ms-item">Resumes</div>
+      </div>
+      <div class="modal-grid-wrap">
+        <div class="create-grid">
+          <div class="create-dashed"><i class="ti ti-plus"></i><span>Blank Design</span></div>
+          <div class="create-dashed"><i class="ti ti-sparkles"></i><span>Create with AI</span></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Recommended for you</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Events</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Church</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Restaurant</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Bar</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Retail</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Concerts and Bands</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Small Business</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Party</div></div>
+          <div class="create-card"><div class="create-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="create-label">Menus</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== New Task dialog ===== -->
+<div class="dlg-overlay" id="task-modal">
+  <div class="dlg">
+    <div class="dlg-head">
+      <div class="dlg-title">New branch</div>
+      <button class="modal-close" id="task-close"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="dlg-body">
+      <div class="field">
+        <label>Project name</label>
+        <input type="text" placeholder="Untitled project">
+      </div>
+      <div class="field">
+        <label>Vertical / Screen</label>
+        <div class="dlg-select" id="task-vertical">
+          <button class="dlg-select-btn"><span class="lhs"><i class="ti ti-globe"></i><span id="task-vertical-label">My Stuff</span></span><i class="ti ti-chevron-down chev"></i></button>
+          <div class="dlg-select-menu">
+            <div class="dlg-opt active" data-label="My Stuff">My Stuff<i class="ti ti-check dlg-check"></i></div>
+            <div class="dlg-opt" data-label="Design Editor">Design Editor<i class="ti ti-check dlg-check"></i></div>
+            <div class="dlg-opt" data-label="Gallery">Gallery<i class="ti ti-check dlg-check"></i></div>
+            <div class="dlg-opt" data-label="Events Wizard">Events Wizard<i class="ti ti-check dlg-check"></i></div>
+            <div class="dlg-opt" data-label="Email Wizard">Email Wizard<i class="ti ti-check dlg-check"></i></div>
+            <div class="dlg-opt" data-label="Social Wizard">Social Wizard<i class="ti ti-check dlg-check"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Fidelity</label>
+        <div class="pv-fid" id="task-fid" style="margin-top:4px;align-self:flex-start;">
+          <button data-fid="lofi" class="active"><i class="ti ti-pencil"></i>Lofi</button>
+          <button data-fid="hifi"><i class="ti ti-click"></i>Hifi</button>
+        </div>
+      </div>
+    </div>
+    <div class="dlg-foot">
+      <button class="dlg-btn-ghost" id="task-cancel">Cancel</button>
+      <button class="dlg-btn-primary"><i class="ti ti-plus"></i>Create branch</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js?v=1" defer></script>
+</body>
+</html>

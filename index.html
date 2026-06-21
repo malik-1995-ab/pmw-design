@@ -15,21 +15,20 @@
     --muted: #6b7280;
     --line: #e5e7eb;
     --accent: #2f6df6;
-    --radius: 14px;
+    --radius: 16px;
     --font: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
-  header { padding: 28px 32px 20px; border-bottom: 1px solid var(--line); background: var(--card); }
-  header h1 { margin: 0; font-size: 22px; font-weight: 700; }
-  header p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
-  .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 32px 64px; }
-  h2 { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: none; margin: 28px 0 12px; letter-spacing: .01em; }
-  h2:first-child { margin-top: 0; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .15s ease, transform .15s ease; }
-  .card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); transform: translateY(-2px); }
-  .card.main { border-color: var(--ink); }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 56px 32px 80px; }
+  .page-head { margin-bottom: 4px; }
+  .page-head h1 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -.02em; }
+  .page-head p { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+  h2 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 44px 0 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(20,19,37,.04); transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease; }
+  .card:hover { box-shadow: 0 12px 32px rgba(20,19,37,.10); transform: translateY(-3px); border-color: #d8dbe2; }
+  .card.main { border-color: var(--line); }
   .thumb { aspect-ratio: 16 / 10; background: #eef1f5; border-bottom: 1px solid var(--line); overflow: hidden; position: relative; }
   .thumb iframe { width: 285%; height: 285%; border: 0; transform: scale(.35); transform-origin: top left; pointer-events: none; }
   .meta { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
@@ -40,22 +39,77 @@
   .badge.main { background: var(--ink); color: #fff; }
   .badge.open { background: #FFF4E5; color: #B25E09; }
   .badge.ready { background: #E7F7EE; color: #137333; }
+  .badge.merged { background: #EDEBFF; color: #5B4DBE; }
+  .more-btn { height: 40px; padding: 0 18px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; font-family: inherit; transition: border-color .15s ease; }
+  .more-btn:hover { border-color: #d8dbe2; }
   .badge.loading { color: transparent; min-width: 64px; background: linear-gradient(90deg, #ececf0 25%, #f5f6f8 50%, #ececf0 75%); background-size: 200% 100%; animation: pv-shimmer 1.2s ease-in-out infinite; }
   @keyframes pv-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
   .empty { text-align: center; color: var(--muted); padding: 60px 20px; border: 1px dashed var(--line); border-radius: var(--radius); background: var(--card); font-size: 14px; }
+  .create-card { border: 2px dashed var(--line); background: var(--card); box-shadow: none; align-items: center; justify-content: center; min-height: 220px; cursor: pointer; }
+  .create-card:hover { border-color: var(--accent); background: var(--card); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+  .create-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--muted); }
+  .create-card:hover .create-inner { color: var(--accent); }
+  .create-plus { width: 44px; height: 44px; border-radius: 99px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 26px; line-height: 1; }
+  .create-card:hover .create-plus { background: rgba(47,109,246,.12); }
+  .create-label { font-size: 14px; font-weight: 600; }
+  body[data-role="view"] .create-card { display: none; }
+  .branch-empty { grid-column: 1 / -1; color: var(--muted); font-size: 13px; padding: 4px 2px; }
+  .cl-card { cursor: pointer; padding: 18px 18px 14px; min-height: 220px; }
+  .cl-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .cl-card-ico { width: 34px; height: 34px; border-radius: 99px; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .cl-card-ico svg { width: 18px; height: 18px; color: var(--ink); }
+  .cl-card-top h3 { margin: 0; font-size: 15px; font-weight: 600; }
+  .cl-card-prev { flex: 1; display: flex; flex-direction: column; }
+  .cl-prev-row { padding: 10px 0; border-top: 1px solid var(--line); }
+  .cl-prev-row:first-child { border-top: none; }
+  .cl-prev-branch { font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cl-prev-meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .cl-card-empty { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; text-align: center; }
+  .cl-card-foot { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--accent); font-size: 13px; font-weight: 600; }
+  .cl-overlay { position: fixed; inset: 0; background: rgba(20,19,37,.45); display: none; align-items: center; justify-content: center; z-index: 1100; padding: 24px; }
+  .cl-overlay.show { display: flex; }
+  .cl-modal { width: 560px; max-width: 94vw; max-height: 80vh; background: var(--card); border-radius: 16px; box-shadow: 0 20px 60px rgba(20,19,37,.2); display: flex; flex-direction: column; overflow: hidden; }
+  .cl-modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+  .cl-modal-head h3 { margin: 0; font-size: 17px; font-weight: 700; }
+  .cl-modal-x { width: 32px; height: 32px; border: none; background: none; font-size: 22px; line-height: 1; color: var(--muted); cursor: pointer; border-radius: 8px; }
+  .cl-modal-x:hover { background: var(--bg); color: var(--ink); }
+  .cl-modal-body { overflow: auto; padding: 6px 8px 12px; }
+  .cl-row { display: flex; align-items: baseline; gap: 10px; padding: 12px 14px; border-radius: 10px; text-decoration: none; color: inherit; flex-wrap: wrap; }
+  .cl-row:hover { background: var(--bg); }
+  .cl-branch { font-weight: 600; color: var(--ink); }
+  .cl-meta { color: var(--muted); font-size: 13px; }
+  .cl-go { margin-left: auto; color: var(--accent); font-size: 13px; font-weight: 600; }
+  .cl-empty { color: var(--muted); font-size: 14px; padding: 24px 14px; text-align: center; }
+  .dash-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 14px; z-index: 1000; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .dash-toast.show { opacity: 1; }
+  .np-overlay { position: fixed; inset: 0; background: rgba(20,19,37,.45); display: none; align-items: center; justify-content: center; z-index: 1100; }
+  .np-overlay.show { display: flex; }
+  .np-card { width: 380px; max-width: 92vw; background: var(--card); border-radius: 16px; padding: 24px; box-shadow: 0 20px 60px rgba(20,19,37,.2); }
+  .np-card h3 { margin: 0 0 6px; font-size: 18px; }
+  .np-card p { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+  .np-card input { width: 100%; height: 42px; border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; font-size: 14px; font-family: inherit; color: var(--ink); outline: none; box-sizing: border-box; }
+  .np-card input:focus { border-color: var(--accent); }
+  .np-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  .np-btn { height: 40px; padding: 0 16px; border-radius: 12px; font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; }
+  .np-ghost { background: transparent; color: var(--muted); }
+  .np-primary { background: var(--ink); color: #fff; }
 </style>
 </head>
 <body>
-<header>
-  <h1>PMW Design Ops</h1>
-  <p>My Stuff New Home — branch, review, and merge your mockups.</p>
-</header>
 <div class="wrap">
+  <div class="page-head">
+    <h1>Design Ops</h1>
+    <p>Branch, review, and merge your PosterMyWall mockups.</p>
+  </div>
   <h2>Main</h2>
   <div id="main-wrap" class="grid"></div>
-  <div id="branch-h" style="display:none;height:8px;"></div>
+  <h2 style="margin-top:36px;">Branches</h2>
   <div id="branch-grid" class="grid"></div>
+  <div style="margin-top:18px;"><button id="branch-more" class="more-btn" style="display:none;"></button></div>
 </div>
+<div class="cl-overlay" id="cl-overlay"><div class="cl-modal"><div class="cl-modal-head"><h3>Change log</h3><button class="cl-modal-x" id="cl-close">&times;</button></div><div class="cl-modal-body" id="cl-list"></div></div></div>
+<div id="dash-toast" class="dash-toast"></div>
+<div class="np-overlay" id="np-overlay"><div class="np-card"><h3>Create new lo-fi</h3><p>Give your new lo-fi (branch) a name.</p><input id="np-input" type="text" placeholder="e.g. Checkout redesign" maxlength="60"><div class="np-actions"><button class="np-btn np-ghost" id="np-cancel">Cancel</button><button class="np-btn np-primary" id="np-ok">Create</button></div></div></div>
 <script>
   var SB_URL="https://oglajrkysripzcyahlux.supabase.co";
   var SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbGFqcmt5c3JpcHpjeWFobHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NjUyMDUsImV4cCI6MjA5NzM0MTIwNX0.2Fjx1ugopkUP_QaHGFVIH49vQi5ck0k93oUsSPOMWoo";
@@ -64,12 +118,63 @@
   function fmt(iso){try{var d=new Date(iso),s=Math.max(0,(Date.now()-d.getTime())/1000);if(s<10)return 'now';if(s<60)return Math.floor(s)+'s';var m=Math.floor(s/60);if(m<60)return m+'m';var h=Math.floor(m/60);if(h<24)return h+'h';var dd=Math.floor(h/24);if(dd<7)return dd+'d';var w=Math.floor(dd/7);if(w<5)return w+'w';return d.toLocaleDateString([],{month:'short',day:'numeric'});}catch(e){return '';}}
   function mid(file){return file.replace('.html','');}
   function card(it){
-    var isMain=it.n===1;
-    var nm=namesMap[mid(it.file)];var label=isMain?(nm||it.name||'PosterMyWall Lofi'):(nm||it.name||'New Lofi');
+    var isMain=!!it.main;
+    var nm=namesMap[mid(it.file)];var label=isMain?(nm||'PosterMyWall Lofi'):(nm||it.name||'New Lofi');
+    var badge=(!isMain&&it.status==='merged')?'<span class="badge merged">Merged</span>':'<span class="badge loading" data-badge="'+mid(it.file)+'" data-main="'+(isMain?1:0)+'">…</span>';
     return '<a class="card'+(isMain?' main':'')+'" href="'+it.file+'">'
-      +'<div class="thumb"><iframe src="'+it.file+'" loading="lazy" tabindex="-1"></iframe></div>'
+      +'<div class="thumb"><iframe data-src="'+it.file+'" loading="lazy" tabindex="-1"></iframe></div>'
       +'<div class="meta"><div class="t"><h3>'+label+'</h3><span>'+fmt(it.created)+'</span></div>'
-      +'<span class="badge loading" data-badge="'+mid(it.file)+'" data-main="'+(isMain?1:0)+'">…</span></div></a>';
+      +badge+'</div></a>';
+  }
+  function createCard(){return '<a class="card create-card" id="create-branch" href="#" role="button"><div class="create-inner"><div class="create-plus">+</div><div class="create-label">Create new lo-fi</div></div></a>';}
+  function dashToast(m){var t=document.getElementById('dash-toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2800);}
+  function namePrompt(onok){
+    var ov=document.getElementById('np-overlay'),inp=document.getElementById('np-input');
+    inp.value='';ov.classList.add('show');setTimeout(function(){inp.focus();},50);
+    function close(){ov.classList.remove('show');}
+    function submit(){var v=inp.value.trim();if(!v){inp.focus();return;}close();onok(v);}
+    document.getElementById('np-cancel').onclick=close;
+    document.getElementById('np-ok').onclick=submit;
+    inp.onkeydown=function(e){if(e.key==='Enter')submit();else if(e.key==='Escape')close();};
+    ov.onclick=function(e){if(e.target===ov)close();};
+  }
+  function wireCreate(){
+    var c=document.getElementById('create-branch');if(!c)return;
+    c.addEventListener('click',function(e){e.preventDefault();
+      namePrompt(function(name){
+        var p='Create a new lo-fi (branch) named "'+name+'" off Main in PMW Design Ops — duplicate the Main mockup as a new branch called "'+name+'", register it in iterations.json, and open it.';
+        if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(p).catch(function(){});}
+        dashToast('Prompt for “'+name+'” copied — paste it into Cowork.');
+      });
+    });
+  }
+  function esc(s){return (''+(s==null?'':s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function lazyThumbs(){
+    if(!('IntersectionObserver' in window)){document.querySelectorAll('iframe[data-src]').forEach(function(f){f.src=f.getAttribute('data-src');f.removeAttribute('data-src');});return;}
+    var io=window.__thumbIO||(window.__thumbIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var f=e.target;if(f.getAttribute('data-src')){f.src=f.getAttribute('data-src');f.removeAttribute('data-src');}window.__thumbIO.unobserve(f);}});},{rootMargin:'250px'}));
+    document.querySelectorAll('iframe[data-src]').forEach(function(f){io.observe(f);});
+  }
+  function changelogCard(){return '<div class="card cl-card" id="cl-card"><div class="cl-card-top"><span class="cl-card-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/></svg></span><h3>Change log</h3></div><div class="cl-card-prev" id="cl-card-prev"><div class="cl-card-empty">Loading…</div></div><div class="cl-card-foot" id="cl-card-foot" style="display:none;"></div></div>';}
+  function wireChangelog(){
+    var card=document.getElementById('cl-card'),ov=document.getElementById('cl-overlay');
+    if(card)card.addEventListener('click',function(){ov.classList.add('show');});
+    var x=document.getElementById('cl-close');if(x)x.onclick=function(){ov.classList.remove('show');};
+    if(ov)ov.addEventListener('click',function(e){if(e.target===ov)ov.classList.remove('show');});
+  }
+  function loadChangelog(){
+    var list=document.getElementById('cl-list'),prev=document.getElementById('cl-card-prev'),foot=document.getElementById('cl-card-foot');
+    fetch(SB_URL+'/rest/v1/merges?select=branch,file,merged_by,merged_at&order=merged_at.desc&limit=100',{headers:H})
+      .then(function(r){return r.ok?r.json():[];}).then(function(rows){
+        if(!Array.isArray(rows)||!rows.length){
+          if(prev)prev.innerHTML='<div class="cl-card-empty">No merges yet — merged branches appear here.</div>';
+          if(foot)foot.style.display='none';
+          if(list)list.innerHTML='<div class="cl-empty">No merges yet — merged branches will show up here.</div>';
+          return;
+        }
+        if(prev)prev.innerHTML=rows.slice(0,3).map(function(m){return '<div class="cl-prev-row"><div class="cl-prev-branch">'+esc(m.branch||'Branch')+'</div><div class="cl-prev-meta">'+esc(m.merged_by||'Someone')+' · '+fmt(m.merged_at)+'</div></div>';}).join('');
+        if(foot){foot.style.display='';foot.textContent='View all '+rows.length+' →';}
+        if(list)list.innerHTML=rows.map(function(m){return '<a class="cl-row" href="'+esc(m.file||'#')+'"><span class="cl-branch">'+esc(m.branch||'Branch')+'</span><span class="cl-meta">merged by '+esc(m.merged_by||'Someone')+' · '+fmt(m.merged_at)+'</span><span class="cl-go">Open ›</span></a>';}).join('');
+      }).catch(function(){if(prev)prev.innerHTML='<div class="cl-card-empty">No merges yet — merged branches appear here.</div>';if(foot)foot.style.display='none';});
   }
   function setBadge(file,isMain){
     var el=document.querySelector('[data-badge="'+mid(file)+'"]');if(!el)return;
@@ -84,12 +189,29 @@
   Promise.all([fetch('iterations.json?b='+Date.now()).then(function(r){return r.json();}),fetch(SB_URL+'/rest/v1/iteration_names?select=mockup,name',{headers:H}).then(function(r){return r.json();}).catch(function(){return [];})]).then(function(_res){
     var list=_res[0],_names=_res[1];if(Array.isArray(_names))_names.forEach(function(x){namesMap[x.mockup]=x.name;});
     if(!Array.isArray(list)||!list.length){document.getElementById('main-wrap').outerHTML='<div class="empty">No mockups yet. Create one through Cowork.</div>';return;}
-    list.sort(function(a,b){return a.n-b.n;});
-    var main=list.filter(function(it){return it.n===1;})[0]||list[0];
-    var branches=list.filter(function(it){return it!==main;});
-    document.getElementById('main-wrap').innerHTML=card(main);
-    if(branches.length){document.getElementById('branch-h').style.display='';document.getElementById('branch-grid').innerHTML=branches.map(card).join('');}
-    list.forEach(function(it){setBadge(it.file,it.n===1);});
+    var main=list.filter(function(it){return it.main;})[0]||list[0];
+    var seen={},branchReps=[];
+    list.forEach(function(it){if(it.branch&&!seen[it.branch]){seen[it.branch]=1;var grp=list.filter(function(x){return x.branch===it.branch;}).sort(function(a,b){return (a.n||0)-(b.n||0);});branchReps.push(grp[grp.length-1]);}});
+    document.getElementById('main-wrap').innerHTML=card(main)+changelogCard();
+    var bg=document.getElementById('branch-grid');bg.innerHTML=createCard();
+    wireCreate();
+    wireChangelog();
+    var BRANCH_PAGE=18,shownB=0;
+    function appendBranchPage(){
+      var next=branchReps.slice(shownB,shownB+BRANCH_PAGE);
+      bg.insertAdjacentHTML('beforeend',next.map(card).join(''));
+      next.forEach(function(it){if(it.status!=='merged')setBadge(it.file,false);});
+      shownB+=next.length;
+      var more=document.getElementById('branch-more');
+      more.style.display=(shownB<branchReps.length)?'':'none';
+      if(shownB<branchReps.length)more.textContent='Load more ('+(branchReps.length-shownB)+')';
+      lazyThumbs();
+    }
+    appendBranchPage();
+    document.getElementById('branch-more').onclick=appendBranchPage;
+    setBadge(main.file,true);
+    lazyThumbs();
+    loadChangelog();
   }).catch(function(){document.getElementById('main-wrap').outerHTML='<div class="empty">Could not load iterations.json. (Works once hosted.)</div>';});
 </script>
 </body>
