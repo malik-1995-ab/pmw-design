@@ -163,8 +163,17 @@
   }
   function loadChangelog(){
     var list=document.getElementById('cl-list'),prev=document.getElementById('cl-card-prev'),foot=document.getElementById('cl-card-foot');
-    fetch(SB_URL+'/rest/v1/merges?select=branch,file,merged_by,merged_at&order=merged_at.desc&limit=100',{headers:H})
-      .then(function(r){return r.ok?r.json():[];}).then(function(rows){
+    Promise.all([
+      fetch(SB_URL+'/rest/v1/merges?select=branch,file,merged_by,merged_at&order=merged_at.desc&limit=100',{headers:H}).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}),
+      fetch('iterations.json?b='+Date.now()).then(function(r){return r.json();}).catch(function(){return [];})
+    ]).then(function(res){
+        var rows=Array.isArray(res[0])?res[0]:[],iters=Array.isArray(res[1])?res[1]:[];
+        // A merge is only real if the branch is actually marked merged in iterations.json.
+        // This hides stray rows (e.g. from merely copying the merge prompt) and de-dupes per branch.
+        var mergedFiles={};iters.forEach(function(it){if(it&&it.status==='merged'&&it.file)mergedFiles[it.file]=true;});
+        var seen={},filtered=[];
+        rows.forEach(function(m){if(m&&m.file&&mergedFiles[m.file]&&!seen[m.file]){seen[m.file]=true;filtered.push(m);}});
+        rows=filtered;
         if(!Array.isArray(rows)||!rows.length){
           if(prev)prev.innerHTML='<div class="cl-card-empty">No merges yet — merged branches appear here.</div>';
           if(foot)foot.style.display='none';

@@ -63,7 +63,7 @@
   <header class="topbar">
     <div class="topbar-left">
       <div class="logo">
-        <span class="logo-icon"><i class="ti ti-layout-grid"></i></span>
+        <span class="logo-icon"><svg class="pmw-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3 2.95 11.25c-.83.37-.77 1.57.1 1.85l4.7 1.5 1.5 4.7c.28.87 1.48.93 1.85.1L21.6 3z" opacity=".5"/><path d="M21.6 3 8.6 16.1l1.15 3.6c.28.87 1.48.93 1.85.1L21.6 3z"/></svg></span>
         postermywall
       </div>
       <nav class="top-nav">
@@ -663,50 +663,43 @@
         </div>
       </div>
       <div class="content" id="view-events" style="display:none;">
-        <div class="pg-title">Free Event Flyer Templates</div>
-        <div class="pg-sub">Promote your events in style with easy-to-customize flyers, videos and social media graphics.</div>
-        <div class="gal-toolbar">
-          <div class="gal-toggle"><button class="active">Designs</button><button>Emails</button></div>
-          <div class="gal-search"><input type="text" placeholder="Search designs and more..."><i class="ti ti-search"></i></div>
-          <button class="btn-outline"><i class="ti ti-filter"></i>Filters</button>
+        <div class="pg-title">Event pages &amp; calendar</div>
+        <div class="tabs-row">
+          <div class="tab-group">
+            <button class="tab-item active">My events</button>
+            <button class="tab-item">Shared with me</button>
+            <button class="tab-item"><i class="ti ti-calendar"></i>Events calendar</button>
+          </div>
+          <div class="actions">
+            <button class="icon-btn-sm"><i class="ti ti-search"></i></button>
+            <div class="pv-seg ev-viewtoggle"><button class="active"><i class="ti ti-menu"></i></button><button><i class="ti ti-calendar"></i></button></div>
+            <button class="btn-outline"><i class="ti ti-arrows-sort"></i>Sort</button>
+            <button class="btn-outline"><i class="ti ti-filter"></i>Status</button>
+            <button class="btn-outline solid"><i class="ti ti-plus"></i>New event</button>
+          </div>
         </div>
-        <div class="gal-body">
-          <div class="gal-side">
-            <div class="gal-side-h"><i class="ti ti-layout-grid"></i>Sizes</div>
-            <div class="gal-side-item active">All<i class="ti ti-check"></i></div>
-            <div class="gal-side-item">Flyers</div>
-            <div class="gal-side-item">Social Media Graphics<i class="ti ti-chevron-right"></i></div>
-            <div class="gal-side-item">Posters</div>
-            <div class="gal-side-item">Web Banners &amp; Backgrounds<i class="ti ti-chevron-right"></i></div>
-            <div class="gal-side-item">Print Banners<i class="ti ti-chevron-right"></i></div>
-            <div class="gal-side-item">Branding<i class="ti ti-chevron-right"></i></div>
-            <div class="gal-side-item">Marketing<i class="ti ti-chevron-right"></i></div>
-            <div class="gal-side-item">Covers<i class="ti ti-chevron-right"></i></div>
-            <div class="gal-side-item">Menus</div>
+        <div class="section-label">Events calendar</div>
+        <div class="ev-cal-row">
+          <div class="ev-cal-card">
+            <div class="ev-art"><i class="ti ti-photo"></i></div>
+            <div style="flex:1"><div class="ev-cal-h">Upcoming Events</div><div class="ev-cal-sub"><i class="ti ti-calendar"></i>0 upcoming events this week</div></div>
+            <i class="ti ti-chevron-right" style="color:var(--ct-neutral-tertiary)"></i>
           </div>
-          <div class="gal-main">
-            <div class="gal-cats">
-              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Concert</div></div>
-              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Conference</div></div>
-              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Fundraiser</div></div>
-              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Workshop</div></div>
-              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Church</div></div>
-              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Party</div></div>
-              <div class="gal-cat"><div class="gal-cat-thumb"></div><div class="gal-cat-label">Competition</div></div>
-            </div>
-            <div class="gal-grid">
-              <div class="gal-tile add"><i class="ti ti-sparkles"></i><span>Create with AI</span></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i><span class="rec-badge"><i class="ti ti-player-play"></i></span></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-            </div>
+          <div class="ev-cal-card">
+            <div class="ev-art"><i class="ti ti-calendar-event"></i></div>
+            <div style="flex:1"><div class="ev-cal-h">Create an instant graphic for upcoming events</div><div class="ev-cal-sub">It's ready to share on Facebook!</div><button class="btn-outline solid" style="margin-top:8px"><i class="ti ti-sparkles"></i>Create<i class="ti ti-crown-filled crown-icon"></i></button></div>
           </div>
+        </div>
+        <div class="ev-head"><span class="c1">Event</span><span class="c2">Details</span><span class="c3">Performance</span><span class="c4"></span></div>
+        <div class="ev-row" id="ev-new">
+          <div class="c1 ev-eventcell"><div class="ev-create"><i class="ti ti-plus"></i></div><span class="ev-name">Create a new event</span></div>
+          <div class="c2"></div><div class="c3"></div><div class="c4"></div>
+        </div>
+        <div class="ev-row">
+          <div class="c1 ev-eventcell"><div class="ev-thumb"></div><div><div class="ev-name">sdfsefqewf sdergwerg</div><div class="ev-cal-sub">cwefjhwef wefwefw efwefwe ...</div></div></div>
+          <div class="c2 ev-details"><div><i class="ti ti-calendar"></i>1 year ago</div><div><i class="ti ti-clock"></i>11:00am - 12:00pm (GMT+5)</div><div><i class="ti ti-player-play"></i>Online</div></div>
+          <div class="c3 ev-perf"><div><strong>0</strong> Registrations</div><div><strong>0</strong> Reach</div></div>
+          <div class="c4 ev-acts"><button class="btn-outline"><i class="ti ti-copy"></i>Duplicate</button><button class="icon-btn-sm"><i class="ti ti-dots"></i></button></div>
         </div>
       </div>
       <div class="content" id="view-social" style="display:none;">
@@ -736,41 +729,38 @@
         </div>
       </div>
       <div class="content" id="view-emails" style="display:none;">
-        <div class="pg-title">Free Email Templates</div>
-        <div class="pg-sub">Email templates for every industry and occasion. Browse newsletters, promotions, holidays, events, and more.</div>
-        <div class="gal-toolbar">
-          <div class="gal-toggle"><button>Designs</button><button class="active">Emails</button></div>
-          <div class="gal-search"><input type="text" placeholder="Search for an email template"><i class="ti ti-search"></i></div>
+        <div class="pg-title">Emails</div>
+        <div class="tabs-row">
+          <div class="tab-group">
+            <button class="tab-item active">My campaigns</button>
+            <button class="tab-item">Shared with me<i class="ti ti-crown-filled crown-icon"></i></button>
+            <button class="tab-item">Mailing lists<i class="ti ti-crown-filled crown-icon"></i></button>
+            <button class="tab-item">Performance<i class="ti ti-crown-filled crown-icon"></i></button>
+            <button class="tab-item">Settings<i class="ti ti-crown-filled crown-icon"></i></button>
+          </div>
+          <div class="actions">
+            <button class="icon-btn-sm"><i class="ti ti-search"></i></button>
+            <button class="btn-outline"><i class="ti ti-filter"></i>Filter</button>
+            <button class="btn-outline"><i class="ti ti-arrows-sort"></i>Sort</button>
+            <button class="btn-outline solid"><i class="ti ti-plus"></i>New campaign</button>
+          </div>
         </div>
-        <div class="gal-body">
-          <div class="gal-side">
-            <div class="gal-side-item">Types<i class="ti ti-chevron-down"></i></div>
-            <div class="gal-side-item">Seasons<i class="ti ti-chevron-down"></i></div>
-            <div class="gal-side-h" style="padding-top:12px;"><i class="ti ti-layout-grid"></i>Themes</div>
-            <div class="gal-side-item active">All<i class="ti ti-check"></i></div>
-            <div class="gal-side-item">Band</div>
-            <div class="gal-side-item">Charity</div>
-            <div class="gal-side-item">Church</div>
-            <div class="gal-side-item">Corporate</div>
-            <div class="gal-side-item">Environment</div>
-            <div class="gal-side-item">Fitness</div>
-            <div class="gal-side-item">Food and Beverage</div>
-            <div class="gal-side-item">Healthcare</div>
-          </div>
-          <div class="gal-main">
-            <div class="gal-grid">
-              <div class="gal-tile add"><i class="ti ti-plus"></i><span>Blank email</span></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-              <div class="gal-tile"><i class="ti ti-photo thumb-icon"></i></div>
-            </div>
-          </div>
+        <div class="ev-head"><span class="c1">Campaign</span><span class="c2">Status</span><span class="c3">Sending date</span><span class="c4e">Sending to</span></div>
+        <div class="ev-row" id="email-new">
+          <div class="c1 ev-eventcell"><div class="ev-create"><i class="ti ti-plus"></i></div><span class="ev-name">Create a new email campaign...</span></div>
+          <div class="c2"></div><div class="c3"></div><div class="c4e"></div>
+        </div>
+        <div class="ev-row">
+          <div class="c1 ev-eventcell"><div class="ev-thumb"></div><div><div class="ev-name">Special Offer Email Templa...</div><div class="ev-cal-sub">No subject</div></div></div>
+          <div class="c2"><span class="smp-badge">Draft</span></div>
+          <div class="c3 ev-mut">&mdash;</div>
+          <div class="c4e ev-mut">&mdash;<button class="icon-btn-sm" style="margin-left:auto"><i class="ti ti-dots"></i></button></div>
+        </div>
+        <div class="ev-row">
+          <div class="c1 ev-eventcell"><div class="ev-thumb"></div><div><div class="ev-name">No Title...</div><div class="ev-cal-sub">wefwfw</div></div></div>
+          <div class="c2"><span class="smp-badge">Draft</span></div>
+          <div class="c3 ev-mut">&mdash;</div>
+          <div class="c4e ev-mut">&mdash;<button class="icon-btn-sm" style="margin-left:auto"><i class="ti ti-dots"></i></button></div>
         </div>
       </div>
       <div class="content" id="view-planner" style="display:none;">
@@ -939,7 +929,7 @@
 
 <div class="shell-tablet">
   <div class="t-topbar">
-    <div class="t-logo"><span class="logo-icon"><i class="ti ti-layout-grid"></i></span>postermywall</div>
+    <div class="t-logo"><span class="logo-icon"><svg class="pmw-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3 2.95 11.25c-.83.37-.77 1.57.1 1.85l4.7 1.5 1.5 4.7c.28.87 1.48.93 1.85.1L21.6 3z" opacity=".5"/><path d="M21.6 3 8.6 16.1l1.15 3.6c.28.87 1.48.93 1.85.1L21.6 3z"/></svg></span>postermywall</div>
     <div class="t-spacer"></div>
     <div class="t-search"><span class="t-ph">Search designs and more...</span><i class="ti ti-search"></i></div>
     <button class="t-ic"><i class="ti ti-bell"></i></button>
@@ -1011,6 +1001,444 @@
         <div class="design-card"><div class="design-card-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="design-card-body"><div class="design-card-title">https://google.com</div></div></div>
       </div>
     </main>
+  </div>
+</div>
+
+<!-- ===== Branch additions: scoped styles for new destinations ===== -->
+<style>
+.frame-clip{position:relative;}
+.ed-overlay,.help-overlay{position:absolute;inset:0;z-index:1000;background:var(--bg-neutral-primary-default);display:none;flex-direction:column;}
+.ed-overlay.open{display:flex;}
+.help-overlay.open{display:block;overflow-y:auto;}
+.ed-topbar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:var(--gray-70);flex-shrink:0;gap:16px;}
+.ed-tb-left,.ed-tb-right{display:flex;align-items:center;gap:10px;}
+.ed-tb-left .logo{margin-right:6px;}
+.ed-back,.ed-tb-ic{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-8);color:var(--ct-neutral-primary-on-dark);}
+.ed-back:hover,.ed-tb-ic:hover{background:rgba(255,255,255,.16);}
+.ed-tb-link{color:var(--ct-neutral-primary-on-dark);font-size:14px;font-weight:600;padding:6px 8px;border-radius:var(--radius-8);}
+.ed-tb-link:hover{background:rgba(255,255,255,.16);}
+.ed-saved{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);font-size:13px;}
+.ed-upgrade{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:var(--radius-12);background:#F4C150;color:var(--gray-80);font-size:14px;font-weight:600;}
+.ed-tb-right .btn-outline{height:36px;background:transparent;color:var(--ct-neutral-primary-on-dark);border-color:rgba(255,255,255,.45);}
+.ed-tb-right .btn-outline:hover{background:rgba(255,255,255,.16);}
+.ed-tb-right .btn-outline.solid{background:#fff;color:var(--gray-80);border-color:#fff;}
+.ed-body{flex:1;display:flex;min-height:0;}
+.ed-rail{width:84px;flex-shrink:0;background:var(--bg-neutral-primary-default);border-right:1px solid var(--br-neutral-primary);display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;overflow-y:auto;}
+.ed-rail-item{width:72px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:4px;border-radius:var(--radius-12);color:var(--ct-neutral-secondary);font-size:12px;cursor:pointer;transition:background .12s,color .12s;}
+.ed-rail-item .icon{font-size:22px;}
+.ed-rail-item:hover{background:var(--bg-neutral-secondary-default);color:var(--ct-neutral-primary);}
+.ed-rail-item.active{background:var(--bg-neutral-secondary-default);color:var(--ct-neutral-primary);font-weight:600;}
+.ed-canvas-wrap{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg-neutral-secondary-default);min-width:0;padding:24px;}
+.ed-canvas{width:280px;max-width:55%;aspect-ratio:9/16;border-radius:var(--radius-8);background:repeating-linear-gradient(45deg,var(--gray-7),var(--gray-7) 10px,#E9E9EF 10px,#E9E9EF 20px);box-shadow:var(--shadow-floating-md);display:flex;align-items:center;justify-content:center;}
+.ed-canvas .thumb-icon{font-size:40px;color:var(--ct-neutral-tertiary);opacity:.5;}
+.ed-addpage{margin-top:16px;display:flex;gap:2px;}
+.ed-addpage .btn-outline{height:36px;}
+.ed-zoom{position:absolute;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;}
+.ed-zoom button{width:36px;height:36px;border-radius:var(--radius-full);background:var(--bg-neutral-primary-default);border:1px solid var(--br-neutral-primary);display:flex;align-items:center;justify-content:center;color:var(--ct-neutral-secondary);box-shadow:var(--shadow-floating-md);}
+.ed-panel{width:320px;flex-shrink:0;background:var(--bg-neutral-primary-default);border-left:1px solid var(--br-neutral-primary);padding:16px 20px;overflow-y:auto;}
+.ed-panel-h{text-align:center;font-size:16px;font-weight:600;color:var(--ct-neutral-primary);padding-bottom:16px;border-bottom:1px solid var(--br-neutral-primary);margin:0 -20px 16px;}
+.ed-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;}
+.ed-row-label{font-size:14px;color:var(--ct-neutral-secondary);}
+.ed-pill{display:inline-flex;flex-direction:column;align-items:flex-end;padding:6px 12px;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-12);font-size:14px;font-weight:600;color:var(--ct-neutral-primary);background:var(--bg-neutral-primary-default);cursor:pointer;}
+.ed-pill .sub{font-size:12px;font-weight:400;color:var(--ct-neutral-tertiary);}
+.ed-pill.row{flex-direction:row;align-items:center;gap:8px;font-weight:400;}
+.ed-swatch{width:36px;height:36px;border-radius:var(--radius-8);border:1px solid var(--br-neutral-primary);background:#fff;cursor:pointer;}
+.ed-styles{display:flex;gap:4px;align-items:center;}
+.ed-styles .sw{width:16px;height:24px;border-radius:3px;}
+.ed-styles .add{width:28px;height:28px;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-8);display:flex;align-items:center;justify-content:center;color:var(--ct-neutral-secondary);cursor:pointer;}
+.ed-input{width:100%;height:40px;padding:0 12px;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-12);font-size:14px;color:var(--ct-neutral-primary);font-family:inherit;outline:none;box-sizing:border-box;}
+.ed-sec-label{font-size:14px;font-weight:600;color:var(--ct-neutral-primary);margin:8px 0 12px;}
+.ed-switch{width:40px;height:22px;border-radius:var(--radius-full);background:var(--gray-30);position:relative;cursor:pointer;transition:background .15s;flex-shrink:0;}
+.ed-switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s;}
+.ed-switch.on{background:var(--ct-neutral-primary);}
+.ed-switch.on::after{left:20px;}
+.ed-foot{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ct-neutral-tertiary);padding-top:16px;border-top:1px solid var(--br-neutral-primary);margin-top:8px;}
+.ed-foot .av{width:20px;height:20px;border-radius:50%;background:var(--bg-neutral-secondary-default);}
+.help-bar{height:56px;display:flex;align-items:center;gap:12px;padding:0 24px;background:var(--gray-70);position:sticky;top:0;}
+.help-bar .logo{color:var(--ct-neutral-primary-on-dark);}
+.help-back{color:var(--ct-neutral-primary-on-dark);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-8);}
+.help-back:hover{background:rgba(255,255,255,.16);}
+.help-hero{padding:48px 24px;text-align:center;background:var(--bg-neutral-secondary-default);}
+.help-hero h1{font-size:24px;font-weight:600;color:var(--ct-neutral-primary);margin:0 0 16px;}
+.help-search{max-width:520px;margin:0 auto;display:flex;align-items:center;gap:8px;height:48px;padding:0 16px;background:#fff;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-full);color:var(--ct-neutral-tertiary);}
+.help-search input{border:none;outline:none;flex:1;font-size:14px;font-family:inherit;background:none;color:var(--ct-neutral-primary);}
+.help-grid{max-width:880px;margin:32px auto;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 24px;}
+.help-card{border:1px solid var(--br-neutral-primary);border-radius:var(--radius-16);padding:20px;cursor:pointer;transition:box-shadow .12s;}
+.help-card:hover{box-shadow:var(--shadow-floating-md);}
+.help-card .icon{font-size:24px;color:var(--ct-neutral-secondary);}
+.help-card .ht{font-size:16px;font-weight:600;color:var(--ct-neutral-primary);margin:8px 0 4px;}
+.help-card .hd{font-size:14px;color:var(--ct-neutral-tertiary);}
+.design-card-thumb{cursor:pointer;}
+/* PMW logo mark — recognizable brand arrow instead of the generic grid box */
+.logo-icon{background:transparent !important;width:24px;height:24px;}
+.logo-icon svg.pmw-mark,.ai-rail-logo svg.pmw-mark,.t-logo .logo-icon svg.pmw-mark{width:24px;height:24px;stroke:none !important;fill:currentColor;}
+.t-logo .logo-icon{background:transparent !important;width:24px;height:24px;}
+.ai-rail-logo{font-size:0;}
+/* Create with AI — full-page takeover */
+.ai-overlay{position:absolute;inset:0;z-index:1000;background:var(--bg-neutral-primary-default);display:none;}
+.ai-overlay.open{display:block;}
+.ai-rail{position:absolute;left:0;top:0;bottom:0;width:64px;border-right:1px solid var(--br-neutral-primary);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:14px 0;background:var(--bg-neutral-primary-default);z-index:2;}
+.ai-rail-top,.ai-rail-bot{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.ai-rail-logo{width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:var(--ct-neutral-secondary);font-size:20px;margin-bottom:6px;}
+.ai-rail-ic{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-8);color:var(--ct-neutral-secondary);font-size:20px;}
+.ai-rail-ic:hover{background:var(--bg-neutral-secondary-default);color:var(--ct-neutral-primary);}
+.ai-upgrade{position:absolute;top:16px;right:20px;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:var(--radius-12);background:#F4C150;color:var(--gray-80);font-size:14px;font-weight:600;z-index:2;}
+.ai-page-scroll{position:absolute;inset:0 0 0 64px;overflow-y:auto;padding:64px 24px 40px;}
+.ai-page-scroll .ai-hero,.ai-page-scroll .ai-grid,.ai-page-scroll .section-label{max-width:1040px;margin-left:auto;margin-right:auto;}
+/* Events page (in-app view) */
+.ev-cal-row{display:flex;gap:16px;margin:8px 0 24px;}
+.ev-cal-card{flex:1;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-16);padding:16px;display:flex;align-items:center;gap:16px;}
+.ev-art{width:64px;height:64px;border-radius:var(--radius-12);background:var(--bg-neutral-secondary-default);display:flex;align-items:center;justify-content:center;color:var(--ct-neutral-tertiary);flex-shrink:0;font-size:22px;}
+.ev-cal-h{font-size:15px;font-weight:600;color:var(--ct-neutral-primary);}
+.ev-cal-sub{font-size:13px;color:var(--ct-neutral-tertiary);display:flex;align-items:center;gap:6px;}
+.ev-head,.ev-row{display:flex;align-items:center;gap:16px;}
+.ev-head{font-size:13px;font-weight:600;color:var(--ct-neutral-tertiary);padding-bottom:8px;border-bottom:1px solid var(--br-neutral-primary);}
+.ev-row{padding:16px 0;border-bottom:1px solid var(--br-neutral-primary);cursor:default;}
+.ev-head .c1,.ev-row .c1{flex:2;}.ev-head .c2,.ev-row .c2{flex:2;}.ev-head .c3,.ev-row .c3{flex:1.2;}
+.ev-head .c4,.ev-row .c4{flex:1.4;display:flex;justify-content:flex-end;align-items:center;gap:8px;}
+.ev-head .c4e,.ev-row .c4e{flex:1.4;display:flex;align-items:center;gap:8px;}
+.ev-mut{color:var(--ct-neutral-tertiary);font-size:13px;}
+.ev-eventcell{display:flex;align-items:center;gap:12px;}
+.ev-thumb{width:56px;height:56px;border-radius:var(--radius-8);background:var(--bg-neutral-secondary-default);flex-shrink:0;}
+.ev-create{width:56px;height:56px;border:1px dashed var(--br-neutral-primary);border-radius:var(--radius-8);display:flex;align-items:center;justify-content:center;color:var(--ct-neutral-secondary);flex-shrink:0;}
+#ev-new{cursor:pointer;}
+.ev-name{font-size:14px;font-weight:600;color:var(--ct-neutral-primary);}
+.ev-details div,.ev-perf div{font-size:13px;color:var(--ct-neutral-secondary);display:flex;align-items:center;gap:6px;margin:2px 0;}
+.ev-perf strong{color:var(--ct-neutral-primary);}
+.ev-viewtoggle button{width:30px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-8);color:var(--ct-neutral-secondary);}
+.ev-viewtoggle button.active{background:#fff;color:var(--ct-neutral-primary);box-shadow:var(--shadow-floating-md);}
+/* Discover templates — standalone gallery page */
+.gallery-overlay{position:absolute;inset:0;z-index:1000;background:var(--bg-neutral-primary-default);display:none;flex-direction:column;}
+.gallery-overlay.open{display:flex;}
+.gtop{display:flex;align-items:center;gap:24px;height:56px;padding:0 24px;background:var(--gray-70);flex-shrink:0;}
+.gtop .logo{cursor:pointer;}
+.gnav{display:flex;gap:18px;}
+.gnav a{color:rgba(255,255,255,.85);font-size:14px;font-weight:600;cursor:pointer;}
+.gnav a:hover{color:#fff;}
+.gright{margin-left:auto;display:flex;align-items:center;gap:14px;}
+.gright .gic{color:rgba(255,255,255,.9);font-size:20px;}
+.gsearch{height:34px;width:240px;border-radius:var(--radius-full);background:rgba(255,255,255,.16);}
+.gcreate{height:34px;padding:0 16px;border-radius:var(--radius-12);background:#fff;color:var(--gray-80);font-weight:600;font-size:14px;display:inline-flex;align-items:center;}
+.gavatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.25);}
+.ghero{padding:24px 24px 16px;border-bottom:1px solid var(--br-neutral-primary);}
+.ghero h1{font-size:24px;font-weight:600;color:var(--ct-neutral-primary);margin:0 0 4px;}
+.ghero .sub{font-size:14px;color:var(--ct-neutral-tertiary);margin-bottom:16px;}
+.ghero .row{display:flex;align-items:center;gap:12px;}
+.gtoggle{display:flex;background:var(--bg-neutral-secondary-default);border-radius:var(--radius-12);padding:3px;}
+.gtoggle button{padding:6px 18px;border-radius:var(--radius-8);font-size:14px;font-weight:600;color:var(--ct-neutral-secondary);}
+.gtoggle button.active{background:#fff;color:var(--ct-neutral-primary);box-shadow:var(--shadow-floating-md);}
+.gsearch2{flex:1;display:flex;align-items:center;gap:8px;height:44px;padding:0 16px;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-12);color:var(--ct-neutral-tertiary);}
+.gsearch2 input{flex:1;border:none;outline:none;background:none;font-family:inherit;font-size:14px;color:var(--ct-neutral-primary);}
+.gbody{flex:1;display:flex;gap:24px;overflow-y:auto;padding:16px 24px 32px;}
+.gcatgrid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:16px;align-content:start;}
+.gcat{cursor:pointer;}
+.gcat-thumb{height:200px;border-radius:var(--radius-12);background:var(--bg-neutral-secondary-default);display:flex;align-items:center;justify-content:center;}
+.gcat-thumb .thumb-icon{font-size:30px;color:var(--ct-neutral-tertiary);opacity:.5;}
+.gcat-lbl{text-align:center;font-size:14px;font-weight:600;color:var(--ct-neutral-primary);margin-top:8px;}
+.gcat-dashed{height:200px;border:1px dashed var(--br-neutral-primary);border-radius:var(--radius-12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ct-neutral-secondary);font-size:14px;font-weight:600;cursor:pointer;}
+.gcat-dashed .bigplus{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;}
+/* Pricing standalone page */
+.pr-scroll{flex:1;overflow-y:auto;padding:40px 24px 48px;}
+.pr-hero{text-align:center;font-size:40px;font-weight:600;color:var(--ct-neutral-primary);letter-spacing:-.02em;}
+.pr-sub{text-align:center;font-size:15px;color:var(--ct-neutral-tertiary);margin:8px 0 28px;}
+.pr-grid{max-width:1080px;margin:0 auto;}
+.pr-seats-label{font-size:13px;font-weight:600;color:var(--ct-neutral-secondary);margin:4px 0 8px;}
+.pr-seats{display:flex;gap:8px;margin-bottom:12px;}
+.pr-seats button{flex:1;height:38px;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-8);font-size:13px;font-weight:600;color:var(--ct-neutral-secondary);background:var(--bg-neutral-primary-default);}
+.pr-seats button.active{border-color:var(--ct-neutral-primary);color:var(--ct-neutral-primary);box-shadow:0 0 0 1px var(--ct-neutral-primary) inset;}
+.pr-save{background:var(--bg-neutral-secondary-default);border-radius:var(--radius-8);padding:8px;text-align:center;font-size:13px;color:var(--ct-neutral-secondary);margin-bottom:12px;}
+/* Premium upsell modal (Content Planner / Audience / Brand Kits) */
+.upsell-overlay{position:absolute;inset:0;z-index:1100;background:rgba(20,19,37,.45);display:none;align-items:center;justify-content:center;padding:24px;}
+.upsell-overlay.open{display:flex;}
+.upsell-dialog{position:relative;width:840px;max-width:100%;height:440px;max-height:92%;background:#fff;border-radius:var(--radius-24);overflow:hidden;display:flex;box-shadow:0 24px 64px rgba(20,19,37,.24);}
+.upsell-x{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:var(--radius-8);background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;color:var(--ct-neutral-secondary);z-index:2;}
+.upsell-x:hover{background:#fff;}
+.upsell-overlay .upsell-left{flex:1;background:var(--bg-neutral-secondary-default);padding:32px;display:flex;flex-direction:column;justify-content:center;}
+.upsell-overlay .upsell-title{font-size:22px;font-weight:600;color:var(--ct-neutral-primary);margin-bottom:8px;line-height:1.25;}
+.upsell-overlay .upsell-sub{font-size:14px;color:var(--ct-neutral-secondary);margin-bottom:20px;}
+.upsell-overlay .upsell-checks{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.upsell-overlay .upsell-check{display:flex;gap:10px;font-size:13px;color:var(--ct-neutral-secondary);line-height:1.35;}
+.upsell-overlay .upsell-check .ic{width:20px;height:20px;border-radius:50%;background:var(--ct-neutral-primary);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700;}
+.upsell-overlay .upsell-check strong{color:var(--ct-neutral-primary);}
+.upsell-overlay .upsell-viewplans{align-self:flex-start;height:40px;padding:0 20px;border-radius:var(--radius-12);background:#fff;border:1px solid var(--br-neutral-primary);font-size:14px;font-weight:600;color:var(--ct-neutral-primary);cursor:pointer;}
+.upsell-overlay .upsell-viewplans:hover{background:var(--bg-neutral-secondary-default);}
+.upsell-overlay .upsell-right{width:46%;background:#fff;display:flex;align-items:center;justify-content:center;padding:24px;}
+.upsell-overlay .upsell-preview{width:100%;height:72%;border-radius:var(--radius-12);background:var(--bg-neutral-secondary-default);display:flex;align-items:center;justify-content:center;}
+.upsell-overlay .upsell-preview .thumb-icon{font-size:40px;color:var(--ct-neutral-tertiary);opacity:.5;}
+</style>
+
+<!-- ===== Design Editor (opens when a design / blank / template is clicked) ===== -->
+<div class="ed-overlay" id="editor-overlay">
+  <header class="ed-topbar">
+    <div class="ed-tb-left">
+      <button class="ed-back" id="ed-back" aria-label="Back to My Stuff"><i class="ti ti-arrow-left"></i></button>
+      <div class="logo"><span class="logo-icon"><svg class="pmw-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3 2.95 11.25c-.83.37-.77 1.57.1 1.85l4.7 1.5 1.5 4.7c.28.87 1.48.93 1.85.1L21.6 3z" opacity=".5"/><path d="M21.6 3 8.6 16.1l1.15 3.6c.28.87 1.48.93 1.85.1L21.6 3z"/></svg></span>postermywall</div>
+      <button class="ed-tb-link">File</button>
+      <button class="ed-tb-link">Resize</button>
+      <button class="ed-tb-ic"><i class="ti ti-arrow-back-up"></i></button>
+      <button class="ed-tb-ic"><i class="ti ti-arrow-forward-up"></i></button>
+    </div>
+    <div class="ed-tb-right">
+      <button class="ed-tb-ic"><i class="ti ti-help-circle"></i></button>
+      <span class="ed-saved"><i class="ti ti-cloud-check"></i>All changes saved</span>
+      <button class="ed-upgrade" data-goto="team"><i class="ti ti-crown-filled"></i>Upgrade</button>
+      <button class="btn-outline"><i class="ti ti-share"></i>Share</button>
+      <button class="btn-outline"><i class="ti ti-download"></i>Download</button>
+      <button class="btn-outline solid"><i class="ti ti-send"></i>Publish</button>
+    </div>
+  </header>
+  <div class="ed-body">
+    <aside class="ed-rail">
+      <div class="ed-rail-item"><i class="ti ti-upload"></i>Uploads</div>
+      <div class="ed-rail-item active"><i class="ti ti-layout-grid"></i>Templates</div>
+      <div class="ed-rail-item"><i class="ti ti-photo"></i>Media</div>
+      <div class="ed-rail-item"><i class="ti ti-text"></i>Text</div>
+      <div class="ed-rail-item"><i class="ti ti-sparkles"></i>AI</div>
+      <div class="ed-rail-item"><i class="ti ti-photo"></i>Background</div>
+      <div class="ed-rail-item"><i class="ti ti-folder"></i>My designs</div>
+      <div class="ed-rail-item"><i class="ti ti-layout"></i>Layout</div>
+      <div class="ed-rail-item"><i class="ti ti-microphone"></i>Record</div>
+      <div class="ed-rail-item"><i class="ti ti-pencil"></i>Draw</div>
+    </aside>
+    <div class="ed-canvas-wrap">
+      <div class="ed-canvas"><i class="ti ti-photo thumb-icon"></i></div>
+      <div class="ed-addpage">
+        <button class="btn-outline"><i class="ti ti-plus"></i>Add page</button>
+        <button class="btn-outline"><i class="ti ti-chevron-down"></i></button>
+      </div>
+      <div class="ed-zoom">
+        <button><i class="ti ti-plus"></i></button>
+        <button><i class="ti ti-minus"></i></button>
+      </div>
+    </div>
+    <aside class="ed-panel">
+      <div class="ed-panel-h">Design</div>
+      <div class="ed-row"><span class="ed-row-label">Size</span><button class="ed-pill">Instagram Story<span class="sub">1080px &#215; 1920px</span></button></div>
+      <div class="ed-row"><span class="ed-row-label">Background</span><button class="ed-pill row"><i class="ti ti-droplet"></i>Solid Color<i class="ti ti-chevron-down"></i></button></div>
+      <div class="ed-row"><span class="ed-row-label">Color</span><button class="ed-swatch"></button></div>
+      <div class="ed-row"><span class="ed-row-label">Styles</span>
+        <div class="ed-styles">
+          <span class="sw" style="background:#3d3d3d"></span><span class="sw" style="background:#9b6a6a"></span><span class="sw" style="background:#c0504d"></span><span class="sw" style="background:#5b6bd6"></span><span class="sw" style="background:#e8d48a"></span>
+          <button class="ed-styles-add add"><i class="ti ti-plus"></i></button>
+        </div>
+      </div>
+      <div class="ed-row"><span class="ed-row-label">Animation</span><button class="ed-pill row"><i class="ti ti-bolt"></i>Animate</button></div>
+      <div class="ed-sec-label">Title</div>
+      <input class="ed-input" type="text" value="White Joyful 4th of July Sale Instagram Story">
+      <div class="ed-sec-label" style="margin-top:20px;">Layout</div>
+      <div class="ed-row"><span class="ed-row-label">Grid</span><div class="ed-switch" data-switch></div></div>
+      <div class="ed-row"><span class="ed-row-label">Folds</span><button class="ed-pill row"><i class="ti ti-ban"></i>None<i class="ti ti-chevron-down"></i></button></div>
+      <div class="ed-row"><span class="ed-row-label">Bleed</span><div class="ed-switch" data-switch></div></div>
+      <div class="ed-row"><span class="ed-row-label">Alignment Guides</span><div class="ed-switch on" data-switch></div></div>
+      <div class="ed-foot"><span class="av"></span>Designed by ACEY Designs</div>
+    </aside>
+  </div>
+</div>
+
+<!-- ===== Help Center (opens from account menu / mega "Help") ===== -->
+<div class="help-overlay" id="help-overlay">
+  <div class="help-bar">
+    <button class="help-back" id="help-back" aria-label="Back"><i class="ti ti-arrow-left"></i></button>
+    <div class="logo"><span class="logo-icon"><svg class="pmw-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3 2.95 11.25c-.83.37-.77 1.57.1 1.85l4.7 1.5 1.5 4.7c.28.87 1.48.93 1.85.1L21.6 3z" opacity=".5"/><path d="M21.6 3 8.6 16.1l1.15 3.6c.28.87 1.48.93 1.85.1L21.6 3z"/></svg></span>postermywall</div>
+  </div>
+  <div class="help-hero">
+    <h1>How can we help?</h1>
+    <div class="help-search"><i class="ti ti-search"></i><input type="text" placeholder="Search for help articles..."></div>
+  </div>
+  <div class="help-grid">
+    <div class="help-card"><i class="ti ti-sparkles icon"></i><div class="ht">Getting started</div><div class="hd">Set up your account and create your first design.</div></div>
+    <div class="help-card"><i class="ti ti-layout-grid icon"></i><div class="ht">Designs &amp; templates</div><div class="hd">Customizing, resizing, downloading and sharing.</div></div>
+    <div class="help-card"><i class="ti ti-share icon"></i><div class="ht">Social media</div><div class="hd">Connect accounts, schedule and publish posts.</div></div>
+    <div class="help-card"><i class="ti ti-mail icon"></i><div class="ht">Emails &amp; campaigns</div><div class="hd">Send newsletters and track performance.</div></div>
+    <div class="help-card"><i class="ti ti-wallet icon"></i><div class="ht">Billing &amp; plans</div><div class="hd">Subscriptions, invoices and refunds.</div></div>
+    <div class="help-card"><i class="ti ti-users icon"></i><div class="ht">Teams &amp; Brand Kits</div><div class="hd">Collaborate and keep your brand consistent.</div></div>
+  </div>
+</div>
+
+<!-- ===== Create with AI (full-page takeover, matches prod) ===== -->
+<div class="ai-overlay" id="ai-overlay">
+  <aside class="ai-rail">
+    <div class="ai-rail-top">
+      <div class="ai-rail-logo"><svg class="pmw-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3 2.95 11.25c-.83.37-.77 1.57.1 1.85l4.7 1.5 1.5 4.7c.28.87 1.48.93 1.85.1L21.6 3z" opacity=".5"/><path d="M21.6 3 8.6 16.1l1.15 3.6c.28.87 1.48.93 1.85.1L21.6 3z"/></svg></div>
+      <button class="ai-rail-ic" id="ai-back" aria-label="Toggle panel"><i class="ti ti-layout-sidebar"></i></button>
+      <button class="ai-rail-ic"><i class="ti ti-plus"></i></button>
+      <button class="ai-rail-ic"><i class="ti ti-search"></i></button>
+    </div>
+    <div class="ai-rail-bot">
+      <button class="ai-rail-ic"><i class="ti ti-bulb"></i></button>
+    </div>
+  </aside>
+  <button class="ai-upgrade" data-goto="team"><i class="ti ti-crown-filled"></i>Upgrade</button>
+  <div class="ai-page-scroll">
+    <div class="ai-hero">
+      <h1 class="ai-h1">Create with AI <span class="spark">&#10022;</span></h1>
+      <p class="ai-sub">Create designs, brainstorm ideas, write marketing text and more</p>
+      <div class="ai-prompt">
+        <div class="ph">Describe what you want to create...</div>
+        <div class="ai-prompt-row">
+          <button class="ai-plus"><i class="ti ti-plus"></i></button>
+          <span class="ai-chip"><i class="ti ti-layout-grid"></i>Templates</span>
+          <span class="ai-spacer"></span>
+          <button class="ai-mic"><i class="ti ti-microphone"></i></button>
+          <button class="ai-send"><i class="ti ti-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="section-label" style="margin-top:32px;">See what you can create &#10022;</div>
+    <div class="ai-grid">
+      <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-layout-grid"></i>Design</span></div><div class="ai-desc">Make a bold commercial sale design. Large central text saying &ldquo;MEGA SALE&rdquo;. Add smaller text: &ldquo;UP TO 80%&rdquo; and &ldquo;LIMITED TIME OFFER&rdquo;. Theme bright yellow and purple.</div></div>
+      <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-photo"></i>Images</span></div><div class="ai-desc">Image of a juicy gourmet burger on a wooden board with dripping cheese and fresh toppings, dramatic lighting.</div></div>
+      <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-pencil"></i>Redesign</span></div><div class="ai-desc">Change the theme of this design to a light green tone and update the copy for my church called &ldquo;Texas Main Church&rdquo;.</div></div>
+      <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-photo"></i>Change background</span></div><div class="ai-desc">Change the background to place the glass bottle on a white shelf in a luxurious retail setting with warm lighting.</div></div>
+      <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-message"></i>Write a caption</span></div><div class="ai-desc">Write a punchy Instagram caption for a weekend music venue promotion with a call to action and hashtags.</div></div>
+      <div class="ai-card"><div class="ai-thumb"><i class="ti ti-photo thumb-icon"></i><span class="ai-pill"><i class="ti ti-sparkles"></i>Marketing ideas</span></div><div class="ai-desc">Give me five marketing campaign ideas to promote a summer sale for a small clothing boutique.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Discover templates (standalone gallery page) ===== -->
+<div class="gallery-overlay" id="gallery-overlay">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo"><span class="logo-icon"><svg class="pmw-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3 2.95 11.25c-.83.37-.77 1.57.1 1.85l4.7 1.5 1.5 4.7c.28.87 1.48.93 1.85.1L21.6 3z" opacity=".5"/><path d="M21.6 3 8.6 16.1l1.15 3.6c.28.87 1.48.93 1.85.1L21.6 3z"/></svg></span>postermywall</div>
+      <nav class="top-nav">
+        <button class="top-nav-item" data-gnav="ai">AI</button>
+        <button class="top-nav-item" data-gnav="designs">Designs</button>
+        <button class="top-nav-item" data-gnav="events">Events</button>
+        <button class="top-nav-item" data-gnav="social">Social Media</button>
+        <button class="top-nav-item" data-gnav="emails">Emails</button>
+        <button class="top-nav-item" data-gnav="resources">Resources</button>
+        <button class="top-nav-item" data-gnav="pricing">Pricing</button>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-ctrl"><button class="icon-btn"><i class="ti ti-bell"></i></button></div>
+      <div class="search-wrap"><span class="icon"><i class="ti ti-search"></i></span><input type="text" placeholder="Search designs and more..."></div>
+      <div class="tb-ctrl"><button class="btn-solid">Create</button></div>
+      <div class="tb-ctrl"><div class="avatar"><i class="ti ti-user"></i></div></div>
+    </div>
+  </header>
+  <div class="ghero">
+    <h1>Discover templates</h1>
+    <div class="sub">Save time with free templates for all themes and sizes</div>
+    <div class="row">
+      <div class="gtoggle"><button class="active">Designs</button><button>Emails</button></div>
+      <div class="gsearch2"><i class="ti ti-search"></i><input type="text" placeholder="Search designs and more..."></div>
+      <button class="btn-outline"><i class="ti ti-layout-grid"></i>Browse by size</button>
+    </div>
+  </div>
+  <div class="gbody">
+    <div class="gal-side">
+      <div class="gal-side-h"><i class="ti ti-layout-grid"></i>Sizes</div>
+      <div class="gal-side-item active">All<i class="ti ti-check"></i></div>
+      <div class="gal-side-item">Flyers</div>
+      <div class="gal-side-item">Social Media Graphics<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Posters</div>
+      <div class="gal-side-item">Web Banners &amp; Backgrounds<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Print Banners<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Branding<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Marketing<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Covers<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Digital Signage<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Menus</div>
+      <div class="gal-side-item">Personal<i class="ti ti-chevron-right"></i></div>
+      <div class="gal-side-item">Certificates</div>
+    </div>
+    <div class="gcatgrid">
+      <div class="gcat-dashed" id="gal-blank"><i class="ti ti-plus"></i>Blank Design</div>
+      <div class="gcat-dashed" id="gal-ai"><span class="bigplus"><i class="ti ti-sparkles"></i></span>Create with AI</div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Recommended &#10022;</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Events</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Church</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Restaurant</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Bar</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Retail</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Concerts and Bands</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Small Business</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Party</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Menus</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Birthday</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Sale</div></div>
+      <div class="gcat gal-tpl"><div class="gcat-thumb"><i class="ti ti-photo thumb-icon"></i></div><div class="gcat-lbl">Real Estate</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Pricing (standalone page, matches /premium) ===== -->
+<div class="gallery-overlay" id="pricing-overlay">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo"><span class="logo-icon"><svg class="pmw-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 3 2.95 11.25c-.83.37-.77 1.57.1 1.85l4.7 1.5 1.5 4.7c.28.87 1.48.93 1.85.1L21.6 3z" opacity=".5"/><path d="M21.6 3 8.6 16.1l1.15 3.6c.28.87 1.48.93 1.85.1L21.6 3z"/></svg></span>postermywall</div>
+      <nav class="top-nav">
+        <button class="top-nav-item" data-gnav="ai">AI</button>
+        <button class="top-nav-item" data-gnav="designs">Designs</button>
+        <button class="top-nav-item" data-gnav="events">Events</button>
+        <button class="top-nav-item" data-gnav="social">Social Media</button>
+        <button class="top-nav-item" data-gnav="emails">Emails</button>
+        <button class="top-nav-item" data-gnav="resources">Resources</button>
+        <button class="top-nav-item" data-gnav="pricing">Pricing</button>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-ctrl"><button class="icon-btn"><i class="ti ti-bell"></i></button></div>
+      <div class="search-wrap"><span class="icon"><i class="ti ti-search"></i></span><input type="text" placeholder="Search designs and more..."></div>
+      <div class="tb-ctrl"><button class="btn-solid">Create</button></div>
+      <div class="tb-ctrl"><div class="avatar"><i class="ti ti-user"></i></div></div>
+    </div>
+  </header>
+  <div class="pr-scroll">
+    <div class="pr-hero">Find your perfect plan</div>
+    <div class="pr-sub">From first steps to big wins, power your growth with Premium.</div>
+    <div class="plan-toggle"><div class="seg"><button class="active">Monthly</button><button>Yearly &middot; Save 16%</button></div></div>
+    <div class="plan-grid pr-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free <span class="plan-badge">Current plan</span></div>
+        <div class="plan-desc">Get free downloads and try out cool design features &mdash; no strings attached.</div>
+        <div class="plan-price">PKR 0<span>/month</span></div>
+        <button class="plan-btn outline">Current plan</button>
+        <div class="plan-feat"><i class="ti ti-check"></i>Publish on one social media account</div>
+        <div class="plan-feat"><i class="ti ti-check"></i>Create easy animations and videos</div>
+        <div class="plan-feat"><i class="ti ti-check"></i>Resize designs in one click &mdash; for free!</div>
+      </div>
+      <div class="plan-card popular">
+        <div class="plan-name">Premium <span class="plan-badge">Popular</span></div>
+        <div class="plan-desc">Get powerful AI design and marketing tools to promote your brand like a pro.</div>
+        <div class="plan-price">PKR 950<span>/month</span></div>
+        <div class="pr-seats-label">Number of seats</div>
+        <div class="pr-seats"><button class="active">1</button><button>2 - 5</button><button>6 - 10</button><button>11+</button></div>
+        <div class="pr-save">Save <strong>up to 73%</strong> with teams!</div>
+        <button class="plan-btn solid">Upgrade now</button>
+        <div class="plan-feat"><i class="ti ti-sparkles"></i>Create with AI</div>
+        <div class="plan-feat"><i class="ti ti-check"></i>Unlimited downloads &mdash; no watermark!</div>
+        <div class="plan-feat"><i class="ti ti-check"></i>Schedule and track social posts &amp; emails</div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Premium Plus</div>
+        <div class="plan-desc">All about growth. Take your marketing and branding to new heights.</div>
+        <div class="plan-price">PKR 1,990<span>/month</span></div>
+        <div class="pr-seats-label">Number of seats</div>
+        <div class="pr-seats"><button class="active">1</button><button>2 - 5</button><button>6 - 10</button><button>11+</button></div>
+        <div class="pr-save">Save <strong>up to 25%</strong> with teams!</div>
+        <button class="plan-btn outline">Upgrade now</button>
+        <div class="plan-feat"><i class="ti ti-sparkles"></i>Create with AI</div>
+        <div class="plan-feat"><i class="ti ti-check"></i>More email sends and social media accounts</div>
+        <div class="plan-feat"><i class="ti ti-check"></i>Brand Kits and team sharing</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Premium upsell modal (shared by Content Planner / Audience / Brand Kits) ===== -->
+<div class="upsell-overlay" id="upsell-modal">
+  <div class="upsell-dialog">
+    <button class="upsell-x" id="upsell-close" aria-label="Close"><i class="ti ti-x"></i></button>
+    <div class="upsell-left">
+      <div class="upsell-title" id="upsell-title"></div>
+      <div class="upsell-sub" id="upsell-sub"></div>
+      <div class="upsell-checks" id="upsell-checks"></div>
+      <button class="upsell-viewplans" data-goto="team">View plans</button>
+    </div>
+    <div class="upsell-right"><div class="upsell-preview" id="upsell-preview"></div></div>
   </div>
 </div>
 
@@ -1126,19 +1554,279 @@
 </div>
 
 <script>
-window.PMW_FROZEN_CHANGES=['Hero heading changed from "Create something new with AI" to "Create with AI".'];
-window.PMW_OVERVIEW_MD=[
-'**My Stuff — New Home** reworks the empty Designs landing into an AI-first entry point.',
-'',
-'### Why',
-'Users landed on a blank grid with no clear starting point. The new home leads with a prompt box so creation starts in one click.',
-'',
-'### Highlights',
-'- New **“Create something new with AI”** hero with a prompt field',
-'- Quick actions: Create design, Marketing ideas, Make images, Write a caption',
-'- Folders and Designs kept below the fold'
-].join('\n');
+window.PMW_OVERVIEW_MD = [
+  "Made the My Stuff lo-fi fully clickable: every first click in the header, sidebar, and dashboard now resolves to a destination.",
+  "",
+  "**What changed**",
+  "- Added a full **Design Editor** destination (left tool rail, hatched canvas, Add page, zoom, Design panel) that opens from any design card, Blank design, template tile, or recommended/AI card — with a Back arrow to return.",
+  "- Added a **Help Center** destination (search + category cards) reachable from the account menu and Resources links.",
+  "- Wired all previously-dead links: header mega-menu links and footer CTAs, the account menu (My Stuff, Order History, Help Center, Unlimited Downloads, Log out→Anon), and the Create menu now route to the right in-app view.",
+  "- Dashboard actions wired: prompt bar + chips and the AI gallery tile route to Create with AI; Upgrade / View plans / Get Premium route to Pricing.",
+  "- Routing reuses the harness' switchView and keeps the sidebar selection in sync; opening a destination closes any open mega-menu/popover so nothing overlaps.",
+  "",
+  "_Why:_ Depth-first pass so the prototype feels live — every first click works and new pages get a static lo-fi, then return."
+];
+window.PMW_FROZEN_CHANGES = [
+  "Main header — section updated",
+  "Events — rebuilt as “Event pages & calendar”",
+  "Events — My events / Shared with me / Events calendar tabs",
+  "Events — Events calendar banners",
+  "Events — Upcoming events + instant graphic card",
+  "Events — table header (Event / Details / Performance)",
+  "Events — “Create a new event” row",
+  "Events — sample event row",
+  "Emails — page renamed to “Emails”",
+  "Emails — My campaigns / Shared / Mailing lists / Performance / Settings tabs",
+  "Emails — campaigns table header",
+  "Emails — “Create a new email campaign” row",
+  "Emails — “Special Offer Email Template” draft row",
+  "Emails — “No Title” draft row",
+  "Tablet view — section updated",
+  "Styling updated across the prototype",
+  "Added the Design editor page",
+  "Added the Help center page",
+  "Added the Create with AI page",
+  "Added the Templates gallery page",
+  "Added the Pricing page",
+  "Added the Premium upgrade popup"
+];
 </script>
 <script src="app.js?v=12" defer></script>
+<!-- ===== Branch wiring: route every first click to a destination ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Register icons used by the new destinations that aren't in the shared map,
+  // then re-run the harness icon replacement to fill the still-empty <i> tags.
+  if (typeof ICONS === 'object') {
+    Object.assign(ICONS, {
+      'arrow-left': '<path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" />',
+      'arrow-back-up': '<path d="M9 14l-4 -4l4 -4" /><path d="M5 10h11a4 4 0 1 1 0 8h-1" />',
+      'arrow-forward-up': '<path d="M15 14l4 -4l-4 -4" /><path d="M19 10h-11a4 4 0 1 0 0 8h1" />',
+      'cloud-check': '<path d="M6.7 18a4.5 4.5 0 1 1 .5 -9a5 5 0 0 1 9.7 1.5h.4a3 3 0 0 1 0 6h-10.6" /><path d="M9 13l2 2l4 -4" />',
+      'send': '<path d="M10 14l11 -9" /><path d="M21 5l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -8l-8 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />',
+      'droplet': '<path d="M6.8 11a6 6 0 1 0 10.4 0l-5.2 -8l-5.2 8z" />',
+      'bolt': '<path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" />',
+      'ban': '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M5.7 5.7l12.6 12.6" />',
+      'text': '<path d="M4 5h16" /><path d="M12 5v14" /><path d="M9 19h6" />',
+      'layout': '<path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1" /><path d="M4 9h16" /><path d="M10 9v11" />',
+      'upload': '<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4v12" />',
+      'bulb': '<path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7" /><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3" /><path d="M9.7 17l4.6 0" />',
+      'layout-sidebar': '<path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1" /><path d="M9 4v16" />',
+      'arrows-sort': '<path d="M3 9l4 -4l4 4" /><path d="M7 5v14" /><path d="M21 15l-4 4l-4 -4" /><path d="M17 5v14" />',
+      'event': '<path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M9 11l2 2l4 -4" />',
+      'thumb-up': '<path d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3" />',
+      'calendar-edit': '<path d="M11.5 21h-5.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M18.4 15.6a2.1 2.1 0 0 1 3 3l-3.4 3.4h-3v-3z" />',
+      'brand-kit': '<path d="M6 5a2 2 0 1 0 0 4a2 2 0 0 0 0 -4" /><path d="M16 5a2 2 0 1 0 0 4a2 2 0 0 0 0 -4" /><path d="M4 15h4v4h-4z" /><path d="M16 15h4v4h-4z" />',
+      'history': '<path d="M12 8l0 4l2 2" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />'
+    });
+    if (typeof replaceIcons === 'function') replaceIcons();
+  }
+  var editor = document.getElementById('editor-overlay');
+  var help   = document.getElementById('help-overlay');
+  var aiPage = document.getElementById('ai-overlay');
+  var gallery = document.getElementById('gallery-overlay');
+  var pricing = document.getElementById('pricing-overlay');
+
+  function closeChrome(){
+    if (typeof closeMega === 'function') closeMega();
+    document.querySelectorAll('.tb-pop').forEach(function(p){ p.classList.remove('open'); });
+    var ctx = document.getElementById('ctx-menu'); if (ctx) ctx.classList.remove('open');
+    var cm = document.getElementById('create-modal'); if (cm) cm.style.display = 'none';
+  }
+  var upsell = document.getElementById('upsell-modal');
+  var UPSELL = {
+    planner: { title: 'Your monthly content at a glance', sub: 'Get Premium to unlock more powerful marketing tools.', icon: 'calendar', checks: [
+      ['Create with AI.', ' Generate designs, ideas, and text with simple prompts.'],
+      ['Plan and schedule', ' your social posts and emails in one calendar.'],
+      ['Keep track', ' of upcoming global, regional, and religious holidays.'],
+      ['Connect and post', ' to multiple social platforms: Facebook, Instagram, TikTok, and more.'],
+      ['Stay on brand', ' and look like a pro with Brand Kits.'] ] },
+    audience: { title: 'Grow your business with branded email marketing', sub: 'Enjoy a seamless email marketing experience with Premium.', icon: 'mail', checks: [
+      ['Create with AI.', ' Generate designs, ideas, and text with simple prompts.'],
+      ['Send emails directly', ' from PosterMyWall.'],
+      ['Enjoy up to 10,000 free email sends', ' every month.'],
+      ['Measure campaign success', ' with performance reports.'],
+      ['Use a custom email address', ' to send emails.'] ] },
+    brand: { title: 'Wow customers with beautiful branded content', sub: 'Get Premium to keep your marketing consistently on-brand.', icon: 'palette', checks: [
+      ['Save your brand', " colors, fonts, and logos in one place."],
+      ['Apply your brand', ' to any design in one click.'],
+      ['Share Brand Kits', ' with your team.'],
+      ['Stay consistent', ' across designs, social posts, and emails.'] ] }
+  };
+  function openUpsell(feature, navItem){
+    var d = UPSELL[feature]; if (!d) return;
+    closeChrome(); closeAllPages();
+    if (typeof switchView === 'function') switchView('designs');
+    document.querySelectorAll('.nav-item').forEach(function(x){ x.classList.remove('active'); });
+    if (navItem) navItem.classList.add('active');
+    document.getElementById('upsell-title').textContent = d.title;
+    document.getElementById('upsell-sub').textContent = d.sub;
+    document.getElementById('upsell-checks').innerHTML = d.checks.map(function(c){
+      return '<div class="upsell-check"><span class="ic">&#10003;</span><span><strong>' + c[0] + '</strong>' + c[1] + '</span></div>';
+    }).join('');
+    document.getElementById('upsell-preview').innerHTML = '<i class="ti ti-' + d.icon + ' thumb-icon"></i>';
+    if (typeof replaceIcons === 'function') replaceIcons();
+    upsell.classList.add('open');
+  }
+  function closeAllPages(){ editor.classList.remove('open'); help.classList.remove('open'); aiPage.classList.remove('open'); gallery.classList.remove('open'); pricing.classList.remove('open'); upsell.classList.remove('open'); }
+  function openPricing(){ closeChrome(); closeAllPages(); pricing.classList.add('open'); pricing.scrollTop = 0; }
+  function openEditor(){ closeChrome(); closeAllPages(); editor.classList.add('open'); }
+  function closeEditor(){ editor.classList.remove('open'); }
+  function openHelp(){ closeChrome(); closeAllPages(); help.classList.add('open'); }
+  function closeHelp(){ help.classList.remove('open'); }
+  function openAI(){ closeChrome(); closeAllPages(); aiPage.classList.add('open'); }
+  function openGallery(){ closeChrome(); closeAllPages(); gallery.classList.add('open'); gallery.scrollTop = 0; }
+  function backToDashboard(){
+    closeAllPages();
+    document.querySelectorAll('.nav-item').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-view') === 'designs'); });
+    if (typeof switchView === 'function') switchView('designs');
+  }
+
+  // Route to an in-app sidebar view (reusing the harness' global switchView)
+  function gotoView(view){
+    closeChrome(); closeEditor(); closeHelp();
+    document.querySelectorAll('.nav-item').forEach(function(x){
+      x.classList.toggle('active', x.getAttribute('data-view') === view);
+    });
+    if (typeof switchView === 'function') switchView(view);
+    var main = document.querySelector('.main'); if (main) main.scrollTop = 0;
+  }
+
+  // ---- Editor open / close ----
+  document.querySelectorAll('.design-card-thumb').forEach(function(t){
+    t.addEventListener('click', function(e){
+      if (e.target.closest('.dc-toolbar')) return; // toolbar icons handled separately
+      openEditor();
+    });
+  });
+  document.querySelectorAll('.create-card, .create-dashed, .gal-tile:not(.add), .rec-card, .m-card .m-thumb, .ai-card').forEach(function(el){
+    el.addEventListener('click', openEditor);
+  });
+  document.getElementById('ed-back').addEventListener('click', closeEditor);
+  document.getElementById('help-back').addEventListener('click', closeHelp);
+
+  // Clicking the PMW logo anywhere returns to My Stuff (brand mark = home)
+  document.querySelectorAll('.logo, .ai-rail-logo, .help-bar .logo, .ed-tb-left .logo').forEach(function(l){
+    l.style.cursor = 'pointer';
+    l.addEventListener('click', backToDashboard);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && (editor.classList.contains('open') || help.classList.contains('open') || aiPage.classList.contains('open') || gallery.classList.contains('open') || pricing.classList.contains('open') || upsell.classList.contains('open'))) backToDashboard();
+  });
+
+  // Gallery internals: Blank → editor, Create with AI → AI page, template category → editor, top nav routes
+  var galBlank = document.getElementById('gal-blank'); if (galBlank) galBlank.addEventListener('click', openEditor);
+  var galAI = document.getElementById('gal-ai'); if (galAI) galAI.addEventListener('click', openAI);
+  gallery.querySelectorAll('.gal-tpl').forEach(function(c){ c.addEventListener('click', openEditor); });
+  // Top-nav items only reveal their dropdown on hover (handled by app.js) — no click navigation.
+
+  // Sidebar "Create with AI" opens the full-page AI takeover (not an embedded view)
+  var aiNav = document.querySelector('.nav-item[data-view="ai"]');
+  if (aiNav) aiNav.addEventListener('click', openAI);
+
+  // AI page's own prompt send / cards lead into the editor
+  aiPage.querySelectorAll('.ai-send, .ai-plus, .ai-card').forEach(function(b){ b.addEventListener('click', openEditor); });
+
+  // Editor inner niceties
+  editor.querySelectorAll('.ed-rail-item').forEach(function(it){
+    it.addEventListener('click', function(){
+      editor.querySelectorAll('.ed-rail-item').forEach(function(x){ x.classList.remove('active'); });
+      it.classList.add('active');
+    });
+  });
+  editor.querySelectorAll('[data-switch]').forEach(function(sw){
+    sw.addEventListener('click', function(){ sw.classList.toggle('on'); });
+  });
+
+  // ---- Routing helpers ----
+  function routeByText(txt){
+    var t = (txt || '').toLowerCase();
+    if (/create with ai|ai writer|ai voice|ai images|ai subtitles|ai background|ai email|caption|marketing ideas/.test(t)) return openAI();
+    if (/email|newsletter|signup form/.test(t)) return gotoView('emails');
+    if (/event|rsvp|landing page|calendar/.test(t)) return gotoView('events');
+    if (/instagram|facebook|tiktok|youtube|linkedin|pinterest|threads|whatsapp|social|content planner|scheduling|\bx\b/.test(t)) return gotoView('social');
+    if (/brand kit/.test(t)) return gotoView('brand');
+    if (/audience/.test(t)) return gotoView('audience');
+    if (/pricing|individuals|teams|premium|plan|upgrade/.test(t)) return openPricing();
+    if (/blog|discover|tutorial|about|newsroom|help center|help|support|getting started/.test(t)) return openHelp();
+    if (/qr code|menu maker|animations|stickers|resize|styles|logo|certificate|business card/.test(t)) return openEditor();
+    return openGallery(); // generic: browse templates in the Discover gallery
+  }
+
+  // ---- Header mega-menu links ----
+  document.querySelectorAll('.mega .mm-link, .mega .mm-foot-btn, .mega .mm-promo-title, .mega .mm-promo a').forEach(function(l){
+    l.addEventListener('click', function(){ routeByText(l.textContent); });
+  });
+
+  // Fix mega-menu anchoring. app.js positions panels with viewport coords, but each
+  // .mega is absolutely positioned inside the device frame, so it gets shifted right by
+  // the frame offset. Re-anchor relative to the panel's containing block (the frame).
+  function anchorMega(trigger){
+    var key = trigger.getAttribute('data-mega');
+    var panel = document.getElementById('mega-' + key);
+    if (!panel || !panel.classList.contains('open')) return;
+    var cb = panel.offsetParent || document.querySelector('.frame-clip');
+    if (!cb) return;
+    var cbRect = cb.getBoundingClientRect();
+    var tRect = trigger.getBoundingClientRect();
+    var left = tRect.left - cbRect.left;
+    var maxLeft = cb.clientWidth - panel.offsetWidth - 16;
+    if (left > maxLeft) left = Math.max(16, maxLeft);
+    if (left < 16) left = 16;
+    panel.style.left = left + 'px';
+  }
+  document.querySelectorAll('.top-nav-item[data-mega]').forEach(function(item){
+    function fix(){ requestAnimationFrame(function(){ anchorMega(item); }); }
+    item.addEventListener('mouseenter', fix);
+    item.addEventListener('click', fix);
+  });
+
+  // ---- Topbar account menu ----
+  document.querySelectorAll('#pop-account .tb-item').forEach(function(it){
+    it.addEventListener('click', function(){
+      var t = it.textContent.toLowerCase();
+      if (/log out/.test(t)){
+        var anon = document.querySelector('#user-dd .pv-dd-item[data-user="anon"]');
+        closeChrome(); if (anon) anon.click(); return;
+      }
+      if (/order history/.test(t)) return gotoView('orders');
+      if (/help center/.test(t)) return openHelp();
+      if (/unlimited downloads/.test(t)) return openPricing();
+      return gotoView('designs'); // My Stuff
+    });
+  });
+
+  // ---- Topbar create menu ----
+  document.querySelectorAll('#pop-create .tb-create-item').forEach(function(it){
+    it.addEventListener('click', function(){ routeByText(it.textContent); });
+  });
+
+  // ---- Dashboard primary actions / prompts / upgrades ----
+  document.querySelectorAll('#hero .prompt-chip, #hero .prompt-btn').forEach(function(b){
+    b.addEventListener('click', openAI);
+  });
+  document.querySelectorAll('.upsell-btn, .plp-btn, .ord-banner .btn-outline.solid, [data-goto="team"]').forEach(function(b){
+    b.addEventListener('click', openPricing);
+  });
+  // Sidebar "Team" opens the standalone Pricing page (crown-locked upsell)
+  var teamNav = document.querySelector('.nav-item[data-view="team"]');
+  if (teamNav) teamNav.addEventListener('click', openPricing);
+  // Content Planner / Audience / Brand Kits open a Premium upsell modal over the page
+  ['planner','audience','brand'].forEach(function(f){
+    var nav = document.querySelector('.nav-item[data-view="' + f + '"]');
+    if (nav) nav.addEventListener('click', function(){ openUpsell(f, nav); });
+  });
+  document.getElementById('upsell-close').addEventListener('click', backToDashboard);
+  upsell.addEventListener('click', function(e){ if (e.target === upsell) backToDashboard(); });
+  // Pricing page: top-nav hover-less routes, seat + Monthly/Yearly toggles
+  pricing.querySelectorAll('.top-nav-item[data-gnav]').forEach(function(a){ a.addEventListener('click', function(){ routeByText(a.textContent); }); });
+  pricing.querySelectorAll('.pr-seats').forEach(function(g){ g.querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){ g.querySelectorAll('button').forEach(function(x){ x.classList.remove('active'); }); b.classList.add('active'); }); }); });
+  pricing.querySelectorAll('.plan-toggle .seg button').forEach(function(b){ b.addEventListener('click', function(){ pricing.querySelectorAll('.plan-toggle .seg button').forEach(function(x){ x.classList.remove('active'); }); b.classList.add('active'); }); });
+  // "Create with AI" gallery tile opens the full-page AI takeover
+  document.querySelectorAll('.gal-tile.add').forEach(function(b){
+    b.addEventListener('click', openAI);
+  });
+});
+</script>
 </body>
 </html>

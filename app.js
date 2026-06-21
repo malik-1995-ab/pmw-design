@@ -804,9 +804,10 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       var _shown=_name.length>28?_name.slice(0,28).trim()+'…':_name;
       label.innerHTML='<span class="iter-name">'+esc2(_shown)+'</span> · Iterations <span class="iter-chip">'+(idx+1)+' / '+bes.length+'</span>';
       var mainItem='<div class="pv-dd-item" data-file="'+mainEntry.file+'"><span class="icon">'+GLOBE+'</span><span class="pv-dd-name">PosterMyWall Lofi</span><span class="pv-dd-check">'+CHECK+'</span></div>';
-      var iters=bes.map(function(it,i){var multi=bes.length>1;var acts='<span class="iter-actions">'+(multi?'<span class="iter-act del" data-file="'+it.file+'">'+TRASH+'</span>':'')+'<span class="iter-act ren" data-file="'+it.file+'">'+PENCIL+'</span><span class="iter-act dup" data-file="'+it.file+'">'+DUP+'</span></span>';return '<div class="pv-dd-item'+(it.file===cur?' active':'')+'" data-file="'+it.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">Iteration '+(i+1)+'</span><span class="iter-sub">'+fmt(it.created)+'</span><span class="pv-dd-check">'+CHECK+'</span>'+acts+'</div>';}).join('');
+      var merged=bes.some(function(it){return it.status==='merged';});
+      var iters=bes.map(function(it,i){var multi=bes.length>1;var acts=merged?'':'<span class="iter-actions">'+(multi?'<span class="iter-act del" data-file="'+it.file+'">'+TRASH+'</span>':'')+'<span class="iter-act ren" data-file="'+it.file+'">'+PENCIL+'</span><span class="iter-act dup" data-file="'+it.file+'">'+DUP+'</span></span>';return '<div class="pv-dd-item'+(it.file===cur?' active':'')+'" data-file="'+it.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">Iteration '+(i+1)+'</span><span class="iter-sub">'+fmt(it.created)+'</span><span class="pv-dd-check">'+CHECK+'</span>'+acts+'</div>';}).join('');
       var _isView=(document.body.getAttribute('data-role')==='view');
-      var addBtnHTML=_isView?'':'<div class="iter-menu-div"></div><button class="iter-add"><span class="icon">'+PLUS+'</span><span>Add iteration</span></button>';
+      var addBtnHTML=(_isView||merged)?'':'<div class="iter-menu-div"></div><button class="iter-add"><span class="icon">'+PLUS+'</span><span>Add iteration</span></button>';
       menu.innerHTML=mainItem+'<div class="iter-menu-div"></div>'+iters+addBtnHTML;
       menu.querySelectorAll('.pv-dd-item').forEach(function(item){item.addEventListener('click',function(){var f=item.getAttribute('data-file');dd.classList.remove('open');if(f&&f!==cur)window.location.href=f;});});
       var addB=menu.querySelector('.iter-add');if(addB){addB.addEventListener('click',function(e){e.stopPropagation();dd.classList.remove('open');copyPrompt('Add a new iteration to the "'+_name+'" branch — duplicate the latest iteration of this branch as a new iteration, register it in iterations.json, and open it.');});}
@@ -869,18 +870,60 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
   }
   // ===== Details: auto-generated brief pointers + a thumbnail of each changed area =====
   function describe(el){
-    var txt=(el.textContent||'').replace(/\s+/g,' ').trim(),kind='Section';
-    if(el.matches&&el.matches('h1,h2,h3,h4,h5'))kind='Heading';
-    else if(el.tagName==='IMG')kind='Image';
-    else if(el.matches&&el.matches('button,[class*=btn],[class*=cbtn]'))kind='Button';
-    else if(el.tagName==='A')kind='Link';
-    else if((''+(el.className||'')).indexOf('card')>-1)kind='Card';
-    if(kind==='Image')return 'Image updated';
-    if(txt)return kind+' updated — “'+(txt.length>56?txt.slice(0,56).trim()+'…':txt)+'”';
-    return kind+' updated';
+    // Plain-English labels. CSS / scripts / off-canvas pages don't map to a visible shell element.
+    if(el.tagName==='STYLE')return 'Styling updated';
+    if(el.tagName==='SCRIPT')return 'Behavior updated';
+    var _id=el.id||'';
+    var OVL={'editor-overlay':'Added the Design editor page','gallery-overlay':'Added the Templates gallery page','pricing-overlay':'Added the Pricing page','ai-overlay':'Added the Create with AI page','help-overlay':'Added the Help center page','upsell-modal':'Added the Premium upgrade popup'};
+    if(OVL[_id])return OVL[_id];
+    if((''+(el.className||'')).indexOf('overlay')>-1)return 'Added a new page';
+    if(el.tagName==='IMG')return 'Updated an image';
+    var txt=(el.textContent||'').replace(/\s+/g,' ').trim(),kind='section';
+    if(el.matches&&el.matches('h1,h2,h3,h4,h5'))kind='heading';
+    else if(el.matches&&el.matches('button,[class*=btn],[class*=cbtn]'))kind='button';
+    else if(el.tagName==='A')kind='link';
+    else if((''+(el.className||'')).indexOf('card')>-1)kind='card';
+    var short=txt.length>40?txt.slice(0,40).trim()+'…':txt;
+    if(short)return 'Updated the '+kind+' “'+short+'”';
+    return 'Updated a '+kind;
+  }
+  // Bring a changed element into view even if it lives in a hidden view or a closed overlay/page.
+  function revealElement(el){
+    if(!el||!el.closest)return;
+    var frame=document.querySelector('#vframe .frame-clip')||document;
+    var ov=el.closest('[class*="overlay"]');
+    // Close any other open page/overlay first so they don't stack on top of each other.
+    Array.prototype.forEach.call(frame.querySelectorAll('[class*="overlay"].open'),function(o){if(o!==ov)o.classList.remove('open');});
+    if(ov){if(!ov.classList.contains('open'))ov.classList.add('open');return;}
+    // Target lives in the main shell: if it's in a hidden view, switch to that view.
+    var view=el.closest('.content[id^="view-"]');
+    if(view&&getComputedStyle(view).display==='none'){
+      var name=view.id.replace('view-','');
+      document.querySelectorAll('.nav-item').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-view')===name);});
+      if(typeof switchView==='function')switchView(name);
+    }
+  }
+  // Friendly name of the page/area a changed element lives in (shown as secondary text).
+  function locate(el){
+    if(!el||!el.closest)return '';
+    var ov=el.closest('[class*="overlay"]');
+    if(ov){var M={'editor-overlay':'Design editor','gallery-overlay':'Templates gallery','pricing-overlay':'Pricing page','ai-overlay':'Create with AI','help-overlay':'Help center','upsell-modal':'Premium popup'};return M[ov.id]||'Page';}
+    if(el.tagName==='STYLE'||el.tagName==='SCRIPT')return 'Whole prototype';
+    if(el.closest('.mega'))return 'Header menu';
+    if(el.closest('.topbar')||el.closest('.nav-zone'))return 'Main header';
+    if(el.closest('.sidebar'))return 'Sidebar';
+    if(el.closest('.shell-mobile'))return 'Mobile view';
+    if(el.closest('.shell-tablet'))return 'Tablet view';
+    var view=el.closest('.content[id^="view-"]');
+    if(view){var N={designs:'Designs',ai:'Create with AI',events:'Events',social:'Social Media Posts',emails:'Emails',planner:'Content Planner',business:'My Business',audience:'Audience',brand:'Brand Kits',team:'Pricing',orders:'Order history',trash:'Trash'};return N[view.id.replace('view-','')]||'Designs';}
+    if(el.closest('.hero'))return 'Designs';
+    if(el.closest('.main'))return 'Designs';
+    return 'Main';
   }
   function flashOrange(el){
-    if(!el)return;el.classList.remove('diff-flash-orange');void el.offsetWidth;el.classList.add('diff-flash-orange');
+    if(!el)return;
+    if(el.closest&&el.closest('[class*="overlay"]'))return; // don't tint full-page overlays
+    el.classList.remove('diff-flash-orange');void el.offsetWidth;el.classList.add('diff-flash-orange');
     setTimeout(function(){el.classList.remove('diff-flash-orange');},1500);
   }
   function revertToast(){var t=document.createElement('div');t.className='merge-toast';t.textContent='Revert prompt copied — paste it into Cowork.';document.body.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove();},2800);}
@@ -903,20 +946,22 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     var cur=(location.pathname.split('/').pop())||'';
     computeChanged(mainFile,function(){
       var els=_changed||[];
+      var lt=document.getElementById('diff-list-title');if(lt)lt.textContent='List of all changes ('+els.length+')';
       if(!els.length){container.innerHTML='<div class="diff-empty-state">No changes from Main yet.</div>';return;}
       container.innerHTML='';
       els.forEach(function(el,i){
         var card=document.createElement('div');card.className='diff-detail';
         var desc=describe(el);
-        var t=document.createElement('div');t.className='diff-d-text';t.innerHTML='<span class="diff-d-num">'+(i+1)+'</span><span>'+desc+'</span>';
+        var loc=locate(el);
+        var t=document.createElement('div');t.className='diff-d-text';t.innerHTML='<span class="diff-d-num">'+(i+1)+'</span><span>'+desc+(loc?'<span class="diff-d-loc">'+escTxt(loc)+'</span>':'')+'</span>';
         card.appendChild(t);
-        var foot=document.createElement('div');foot.className='diff-d-foot';
-        foot.innerHTML='<button class="diff-revert">Revert to Main</button>';
-        card.appendChild(foot);
-        card.addEventListener('mouseenter',function(){el.classList.add('diff-hover-orange');});
+        var rb=document.createElement('button');rb.className='diff-revert';rb.textContent='Revert';
+        card.appendChild(rb);
+        var isOverlay=!!(el.closest&&el.closest('[class*="overlay"]'));
+        card.addEventListener('mouseenter',function(){if(!isOverlay)el.classList.add('diff-hover-orange');});
         card.addEventListener('mouseleave',function(){el.classList.remove('diff-hover-orange');});
-        card.addEventListener('click',function(e){if(e.target.closest('.diff-revert'))return;if(el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});});
-        foot.querySelector('.diff-revert').addEventListener('click',function(e){
+        card.addEventListener('click',function(e){if(e.target.closest('.diff-revert'))return;revealElement(el);setTimeout(function(){if(el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});flashOrange(el);},120);});
+        rb.addEventListener('click',function(e){
           e.stopPropagation();
           var p='In the branch "'+cur+'", revert this change back to Main ("'+mainFile+'"): '+desc+'. Restore that exact element to its Main version (leave all other branch changes intact), then refresh the branch Summary.';
           if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(p).catch(function(){});
@@ -934,34 +979,70 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     var d=document.createElement('aside');d.className='diff-drawer';d.id='diff-drawer';
     d.innerHTML='<div class="diff-drawer-head"><h2 class="diff-title">Changes in this Lofi</h2><button class="diff-drawer-x" id="diff-drawer-x" data-tip="Close">&times;</button></div>'
       +'<div class="diff-drawer-body"><img class="diff-hint-img" src="click-hint.png" alt=""><p class="diff-hint-blue">Click on grey areas to highlight updates even when this drawer is closed</p>'
-      +'<div class="diff-sec-row"><div class="diff-sec-title">Summary</div><button class="diff-sum-edit" id="diff-sum-edit">Edit</button></div>'
-      +'<div class="diff-overview" id="diff-summary"></div><button class="diff-showmore" id="diff-showmore" style="display:none;"></button>'
-      +'<div class="diff-divider"></div>'
-      +'<div class="diff-sec-title">List of exact changes</div><div class="diff-details" id="diff-details"></div></div>';
+      +'<div class="diff-sec-row"><div class="diff-sec-title">Summary</div></div>'
+      +'<div class="diff-sum-rtf" id="diff-sum-rtf">'
+        +'<div class="diff-sum-ed" id="diff-sum-ed" contenteditable="true" data-ph="Add summary pointers"></div>'
+        +'<div class="diff-sum-toolbar">'
+          +'<button type="button" data-cmd="bold" data-tip="Bold" style="font-weight:700;">B</button>'
+          +'<button type="button" data-cmd="italic" data-tip="Italic" style="font-style:italic;font-family:Georgia,serif;">I</button>'
+          +'<button type="button" data-cmd="underline" data-tip="Underline" style="text-decoration:underline;">U</button>'
+          +'<button type="button" data-cmd="strikeThrough" data-tip="Strikethrough" style="text-decoration:line-through;">S</button>'
+          +'<span class="sep"></span>'
+          +'<button type="button" data-cmd="insertUnorderedList" data-tip="Bulleted list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/><path d="M5 6v.01"/><path d="M5 12v.01"/><path d="M5 18v.01"/></svg></button>'
+          +'<button type="button" data-cmd="insertOrderedList" data-tip="Numbered list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 6h9"/><path d="M11 12h9"/><path d="M11 18h9"/><path d="M4 16a2 2 0 1 1 4 0c0 .591 -.601 1.46 -1 2l-3 3h4"/><path d="M6 10V4L4 6"/></svg></button>'
+          +'<span class="sep"></span>'
+          +'<button type="button" data-cmd="createLink" data-tip="Add link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6 -6"/><path d="M11 6l.5 -.5a4.95 4.95 0 0 1 7 7l-.5 .5"/><path d="M13 18l-.5 .5a4.95 4.95 0 0 1 -7 -7l.5 -.5"/></svg></button>'
+        +'</div>'
+      +'</div>'
+      +'<div class="diff-sec-title" id="diff-list-title" style="margin-top:36px;">List of all changes</div><div class="diff-details" id="diff-details"></div></div>';
     document.body.appendChild(d);
     d.querySelector('#diff-drawer-x').addEventListener('click',function(){var b=document.getElementById('diff-btn');if(b)b.click();});
-    // Frozen (merged) branches are read-only: hide the Summary editor.
+    // One-time styles for the rich-text Summary editor.
+    if(!document.getElementById('diff-sum-style')){
+      var st=document.createElement('style');st.id='diff-sum-style';
+      st.textContent='.diff-sum-rtf{border:1px solid var(--br-neutral-primary);border-radius:12px;overflow:hidden;transition:border-color .12s,box-shadow .12s;}'
+        +'.diff-sum-rtf:focus-within{border-color:var(--ct-neutral-primary);}'
+        +'.diff-sum-ed{min-height:120px;max-height:300px;overflow-y:auto;padding:12px 14px;font-size:14px;line-height:20px;color:var(--ct-neutral-primary);outline:none;}'
+        +'.diff-sum-ed:empty:before{content:attr(data-ph);color:var(--ct-neutral-tertiary);pointer-events:none;}'
+        +'.diff-sum-ed ul,.diff-sum-ed ol{padding-left:22px;margin:4px 0;}.diff-sum-ed a{color:#2d6cdf;text-decoration:underline;}'
+        +'.diff-sum-toolbar{display:flex;align-items:center;gap:2px;padding:6px 8px;border-top:1px solid var(--br-neutral-primary);}'
+        +'.diff-sum-toolbar button{min-width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border:none;background:none;border-radius:8px;color:var(--ct-neutral-secondary);font-size:15px;line-height:1;cursor:pointer;padding:0 6px;}'
+        +'.diff-sum-toolbar button:hover{background:var(--bg-neutral-secondary-default);color:var(--ct-neutral-primary);}'
+        +'.diff-sum-toolbar .sep{width:1px;height:18px;background:var(--br-neutral-primary);margin:0 4px;}'
+        +'.diff-sum-rtf.ro .diff-sum-toolbar{display:none;}.diff-sum-rtf.ro .diff-sum-ed{color:var(--ct-neutral-secondary);}'
+        +'.diff-d-loc{display:block;margin-top:3px;font-size:12px;font-weight:400;color:var(--ct-neutral-tertiary);}'
+        +'.diff-detail{position:relative;}.diff-detail .diff-d-text{padding-right:76px;}.diff-detail .diff-revert{position:absolute;top:10px;right:10px;margin:0;}';
+      document.head.appendChild(st);
+    }
     var FROZEN=Array.isArray(window.PMW_FROZEN_CHANGES)&&window.PMW_FROZEN_CHANGES.length;
-    if(FROZEN){var _eb=d.querySelector('#diff-sum-edit');if(_eb)_eb.style.display='none';}
-    var curMd=OVERVIEW_MD;
-    var sumEl=d.querySelector('#diff-summary'),moreBtn=d.querySelector('#diff-showmore');
-    function applyClamp(){sumEl.classList.remove('clamped');moreBtn.style.display='none';if(sumEl.scrollHeight>252){sumEl.classList.add('clamped');moreBtn.style.display='';moreBtn.textContent='Show more';}}
-    function renderSummary(md){curMd=md;sumEl.innerHTML=mdToHtml(md);applyClamp();}
-    moreBtn.addEventListener('click',function(){if(sumEl.classList.contains('clamped')){sumEl.classList.remove('clamped');moreBtn.textContent='Show less';}else{sumEl.classList.add('clamped');moreBtn.textContent='Show more';}});
-    d.querySelector('#diff-sum-edit').addEventListener('click',function(){
-      moreBtn.style.display='none';sumEl.classList.remove('clamped');
-      sumEl.innerHTML='<div class="diff-sum-edit-area"><textarea id="diff-sum-ta"></textarea><div class="diff-sum-actions"><button class="anno-link" id="diff-sum-cancel">Cancel</button><button class="anno-btn anno-btn-primary" id="diff-sum-save">Save</button></div></div>';
-      var ta=sumEl.querySelector('#diff-sum-ta');ta.value=curMd||'';ta.focus();
-      sumEl.querySelector('#diff-sum-cancel').onclick=function(){renderSummary(curMd);};
-      sumEl.querySelector('#diff-sum-save').onclick=function(){
-        var md=ta.value;
-        fetch(SUM_URL+"/rest/v1/summaries",{method:'POST',headers:Object.assign({'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},SUM_H),body:JSON.stringify({mockup:summaryKey(),md:md,updated_at:new Date().toISOString()})})
-          .then(function(){renderSummary(md);}).catch(function(){renderSummary(md);});
-      };
+    var ed=d.querySelector('#diff-sum-ed'),rtf=d.querySelector('#diff-sum-rtf');
+    // Editable for admin/edit seats; read-only for view/guest (and on frozen branches).
+    function setSumMode(){
+      var r=(window.PMWAuth&&PMWAuth.role)?PMWAuth.role():'view';
+      var ok=(r==='admin'||r==='edit')&&!FROZEN;
+      ed.setAttribute('contenteditable',ok?'true':'false');
+      rtf.classList.toggle('ro',!ok);
+    }
+    setSumMode();
+    if(window.PMWAuth&&PMWAuth.require)PMWAuth.require(function(){setSumMode();});
+    function saveSummary(){
+      if(rtf.classList.contains('ro'))return;
+      fetch(SUM_URL+"/rest/v1/summaries",{method:'POST',headers:Object.assign({'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},SUM_H),body:JSON.stringify({mockup:summaryKey(),md:ed.innerHTML,updated_at:new Date().toISOString()})}).catch(function(){});
+    }
+    d.querySelectorAll('.diff-sum-toolbar button').forEach(function(b){
+      b.addEventListener('mousedown',function(e){e.preventDefault();});
+      b.addEventListener('click',function(e){
+        e.preventDefault();if(rtf.classList.contains('ro'))return;ed.focus();
+        var cmd=b.getAttribute('data-cmd');
+        if(cmd==='createLink'){var u=prompt('Link URL');if(u)document.execCommand('createLink',false,u);}
+        else{document.execCommand(cmd,false,null);}
+        saveSummary();
+      });
     });
+    ed.addEventListener('blur',saveSummary);
     fetch(SUM_URL+"/rest/v1/summaries?select=md&mockup=eq."+encodeURIComponent(summaryKey()),{headers:SUM_H})
-      .then(function(r){return r.json();}).then(function(rows){renderSummary((rows&&rows[0]&&rows[0].md)?rows[0].md:OVERVIEW_MD);})
-      .catch(function(){renderSummary(OVERVIEW_MD);});
+      .then(function(r){return r.json();}).then(function(rows){ed.innerHTML=(rows&&rows[0]&&rows[0].md)?rows[0].md:'';})
+      .catch(function(){});
     renderDetails(d.querySelector('#diff-details'),mainFile);
     return d;
   }
@@ -1012,12 +1093,12 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     Promise.all([fetch(mainFile+'?b='+Date.now()).then(function(r){return r.text();}),fetch(cur+'?b='+Date.now()).then(function(r){return r.text();})]).then(function(t){
       var md=new DOMParser().parseFromString(t[0],'text/html');
       var bd=new DOMParser().parseFromString(t[1],'text/html');
-      var mShell=md.querySelector('.shell'),bShell=bd.querySelector('.shell');
-      var liveShell=document.querySelector('#vframe .shell');
+      var mShell=md.querySelector('.frame-clip'),bShell=bd.querySelector('.frame-clip');
+      var liveShell=document.querySelector('#vframe .frame-clip');
       if(!mShell||!bShell||!liveShell)return;
       clearDiff();
       var paths=diffPaths(bShell,mShell),c=0;
-      paths.forEach(function(pth){var el=resolvePath(liveShell,pth);if(el){el.classList.add('diff-changed');c++;}});
+      paths.forEach(function(pth){var el=resolvePath(liveShell,pth);if(el&&el.tagName!=='STYLE'&&el.tagName!=='SCRIPT'&&!(el.closest&&el.closest('[class*="overlay"]'))){el.classList.add('diff-changed');c++;}});
       if(c===0){var t2=document.createElement('div');t2.id='diff-empty';t2.textContent='No changes from main yet';document.body.appendChild(t2);setTimeout(function(){if(t2.parentNode)t2.remove();},2200);}
     }).catch(function(){});
   }
@@ -1026,7 +1107,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     var cur=(location.pathname.split('/').pop())||'';
     Promise.all([fetch(mainFile+'?b='+Date.now()).then(function(r){return r.text();}),fetch(cur+'?b='+Date.now()).then(function(r){return r.text();})]).then(function(t){
       var md=new DOMParser().parseFromString(t[0],'text/html'),bd=new DOMParser().parseFromString(t[1],'text/html');
-      var mShell=md.querySelector('.shell'),bShell=bd.querySelector('.shell'),liveShell=document.querySelector('#vframe .shell');
+      // Compare the whole frame (.frame-clip) not just .shell, so out-of-shell pages/overlays AND inline <style> (CSS) changes are detected too.
+      var mShell=md.querySelector('.frame-clip'),bShell=bd.querySelector('.frame-clip'),liveShell=document.querySelector('#vframe .frame-clip');
       if(!mShell||!bShell||!liveShell){_changed=[];cb();return;}
       var paths=diffPaths(bShell,mShell),els=[];
       paths.forEach(function(p){var el=resolvePath(liveShell,p);if(el)els.push(el);});
@@ -1034,7 +1116,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     }).catch(function(){_changed=[];cb();});
   }
   function pulse(mainFile){
-    function go(){(_changed||[]).forEach(function(el){el.classList.remove('diff-pulse');void el.offsetWidth;el.classList.add('diff-pulse');el.addEventListener('animationend',function h(){el.classList.remove('diff-pulse');el.removeEventListener('animationend',h);});});}
+    function go(){(_changed||[]).forEach(function(el){if(el.closest&&el.closest('[class*="overlay"]'))return;el.classList.remove('diff-pulse');void el.offsetWidth;el.classList.add('diff-pulse');el.addEventListener('animationend',function h(){el.classList.remove('diff-pulse');el.removeEventListener('animationend',h);});});}
     if(_changed)go();else computeChanged(mainFile,go);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
@@ -1054,6 +1136,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       var main=list.filter(function(it){return it.main;})[0]||list[0];
       if(!main||main.file===cur)return;
       var me=list.filter(function(it){return it.file===cur;})[0]||{file:cur};
+      if(me.status==='merged')return; // merged branch is closed — no Merge CTA
       add(me,main.file);
     }).catch(function(){});
   }
@@ -1084,9 +1167,10 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     document.body.appendChild(bg);
     bg.querySelector('[data-x]').onclick=function(){bg.remove();};
     bg.querySelector('[data-ok]').onclick=function(){bg.remove();
-      var who=(window.PMWAuth&&PMWAuth.profile&&PMWAuth.profile());var byName=(who&&(who.name||who.email))||'Someone';
-      fetch(SB_URL+"/rest/v1/merges",{method:'POST',headers:Object.assign({'Content-Type':'application/json',Prefer:'return=minimal'},H),body:JSON.stringify({branch:bname,file:me.file,merged_by:byName})}).catch(function(){});
-      var p='Merge the branch "'+bname+'" ('+me.file+') into Main ('+mainFile+') — apply this branch\'s design changes to Main, then mark the branch as merged in iterations.json (set its "status" to "merged" and add "merged_at"). KEEP the branch file and its entry — never delete a branch; we keep full history. Before applying, FREEZE this branch\'s change record: capture the current "List of exact changes" and write it into the branch file as an inline window.PMW_FROZEN_CHANGES = [ ... ] array (one short string per change), so the merged branch keeps showing its changes read-only instead of recomputing to "No changes from Main".';
+      // NOTE: do NOT log a changelog row here. Copying the prompt is not a merge — the
+      // merge is only real once Cowork executes it. Cowork logs the merges row at that point
+      // (see prompt below), so just copying the command no longer creates phantom entries.
+      var p='Merge the branch "'+bname+'" ('+me.file+') into Main ('+mainFile+') — apply this branch\'s design changes to Main, then mark the branch as merged in iterations.json (set its "status" to "merged" and add "merged_at"). KEEP the branch file and its entry — never delete a branch; we keep full history. Before applying, FREEZE this branch\'s change record: capture the current "List of exact changes" and write it into the branch file as an inline window.PMW_FROZEN_CHANGES = [ ... ] array (one short string per change), so the merged branch keeps showing its changes read-only instead of recomputing to "No changes from Main". Finally, record the merge in the Change log: insert one row into the Supabase "merges" table with { branch, file, merged_by } so it appears in the dashboard Change log (only after the merge is actually applied).';
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(p).then(function(){toast('Merge prompt copied — paste it into Cowork to run it.');},function(){toast(p);});}else{toast(p);}};
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();

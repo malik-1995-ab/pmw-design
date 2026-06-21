@@ -1,7 +1,25 @@
 [
   {
-    "n": 1,
-    "file": "my-stuff-2.html",
+    "main": true,
+    "file": "postermywall-lofi.html",
     "created": "2026-06-18T10:58:33Z"
+  },
+  {
+    "branch": "update-ai-title",
+    "n": 1,
+    "name": "Update AI title",
+    "file": "update-ai-title.html",
+    "created": "2026-06-21T12:00:00Z",
+    "status": "merged",
+    "merged_at": "2026-06-21T12:30:00Z"
+  },
+  {
+    "branch": "my-stuff-mockup-update",
+    "n": 1,
+    "name": "My Stuff Mockup Update",
+    "file": "my-stuff-mockup-update.html",
+    "created": "2026-06-21T00:00:00Z",
+    "status": "merged",
+    "merged_at": "2026-06-21T18:45:00Z"
   }
 ]
