@@ -3242,7 +3242,8 @@ userDD.querySelectorAll('.pv-dd-item').forEach(item => {
 
 // Role-gate: view/guest cannot switch device (tablet/mobile) or user type;
 // also filters dropdowns so view seats only see Main + current branch, no dividers.
-function applyViewRestrictions(role) {
+function applyViewRestrictions(role, doMenuCleanup) {
+  if (doMenuCleanup === undefined) doMenuCleanup = true;
   var locked = (role === 'view' || role === 'guest' || !role);
   ['tablet', 'mobile'].forEach(function(dev) {
     var btn = document.querySelector('#device-toggle button[data-device="' + dev + '"]');
@@ -3250,7 +3251,7 @@ function applyViewRestrictions(role) {
   });
   var udd = document.getElementById('user-dd');
   if (udd) udd.classList.toggle('role-locked', locked);
-  if (locked) {
+  if (locked && doMenuCleanup) {
     // Iterations dropdown: strip divider + "Add iteration" button
     var imenu = document.getElementById('iters-dd-menu');
     if (imenu) imenu.querySelectorAll('.iter-menu-div, .iter-add').forEach(function(el) { el.remove(); });
@@ -3266,7 +3267,9 @@ function applyViewRestrictions(role) {
     }
   }
 }
-applyViewRestrictions((window.PMWAuth && PMWAuth.role) ? PMWAuth.role() : 'view');
+// Initial call: gates device toggles + user-dd only (skip menu cleanup to avoid false-locking admin)
+applyViewRestrictions((window.PMWAuth && PMWAuth.role) ? PMWAuth.role() : 'view', false);
+// Auth-resolved call: full restrictions with real role
 if (window.PMWAuth && PMWAuth.require) PMWAuth.require(function(p, r) { applyViewRestrictions(r || 'view'); });
 
 // Screen selector dropdown (top-left)
@@ -3785,7 +3788,6 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
         if(bks.length){_h+='<div class="iter-menu-div"></div>'+bks.map(function(k){var e=bEntries(k);var L=e[e.length-1];return '<div class="pv-dd-item" data-file="'+L.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">'+esc2(bName(k))+'</span><span class="iter-sub">'+fmt(L.created)+'</span></div>';}).join('');}
         menu.innerHTML=_h;
         menu.querySelectorAll('.pv-dd-item').forEach(function(item){item.addEventListener('click',function(){var ff=item.getAttribute('data-file');dd.classList.remove('open');if(ff&&ff!==cur)window.location.href=ff;});});
-        applyViewRestrictions(document.body.getAttribute('data-role'));
         return;
       }
       var key=current.branch;
@@ -3793,7 +3795,6 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       var idx=0;for(var _i=0;_i<bes.length;_i++){if(bes[_i].file===cur){idx=_i;break;}}
       var _name=bName(key);
       var _shown=_name.length>28?_name.slice(0,28).trim()+'…':_name;
-      var _isView=(document.body.getAttribute('data-role')==='view');
       var merged=bes.some(function(it){return it.status==='merged';});
 
       // ===== (A) #iter-dd is the branch/screen selector — same as on Main, listing Main + all branches =====
@@ -3814,6 +3815,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       btn.addEventListener('click',function(){idd.classList.remove('open');}); // opening branch selector closes iterations
       document.addEventListener('click',function(e){if(!idd.contains(e.target))idd.classList.remove('open');});
       var iters=bes.map(function(it,i){var multi=bes.length>1;var acts=merged?'':'<span class="iter-actions">'+(multi?'<span class="iter-act del" data-file="'+it.file+'">'+TRASH+'</span>':'')+'<span class="iter-act ren" data-file="'+it.file+'">'+PENCIL+'</span><span class="iter-act dup" data-file="'+it.file+'">'+DUP+'</span></span>';return '<div class="pv-dd-item'+(it.file===cur?' active':'')+'" data-file="'+it.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">Iteration '+(i+1)+'</span><span class="iter-sub">'+fmt(it.created)+'</span><span class="pv-dd-check">'+CHECK+'</span>'+acts+'</div>';}).join('');
+      var _isView=(document.body.getAttribute('data-role')==='view');
       var addBtnHTML=(_isView||merged)?'':'<div class="iter-menu-div"></div><button class="iter-add"><span class="icon">'+PLUS+'</span><span>Add iteration</span></button>';
       imenu.innerHTML=iters+addBtnHTML;
       imenu.querySelectorAll('.pv-dd-item').forEach(function(item){item.addEventListener('click',function(){var f=item.getAttribute('data-file');idd.classList.remove('open');if(f&&f!==cur)window.location.href=f;});});
@@ -3821,7 +3823,6 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       imenu.querySelectorAll('.iter-act.dup').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');idd.classList.remove('open');copyPrompt('Duplicate iteration ('+ff+') in the "'+_name+'" branch — create a new iteration that is a copy of it and register it in iterations.json.');});});
       imenu.querySelectorAll('.iter-act.del').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');idd.classList.remove('open');copyPrompt('Delete iteration ('+ff+') from the "'+_name+'" branch — remove it from iterations.json and delete the file.');});});
       imenu.querySelectorAll('.iter-act.ren').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');var it=list.filter(function(x){return x.file===ff;})[0];idd.classList.remove('open');if(it)renameModal(it);});});
-      applyViewRestrictions(document.body.getAttribute(\'data-role\'));
 
     }).catch(function(){});
   }
