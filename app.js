@@ -229,6 +229,9 @@ vframe.querySelectorAll('.rz').forEach(handle => {
 // (drawers open, comments panel open, small screens). Never zooms past 1x.
 function fitFrame(){
   if(!vframe||!stageEl) return;
+  // Thumbnail / compare-overlay mode is full-bleed (width:100%, height:100vh) — never fit-zoom,
+  // otherwise the frame shrinks and leaves an empty strip at the bottom.
+  if(document.documentElement.classList.contains('pmw-thumb')){ vframe.style.zoom=''; return; }
   var dev = vframe.getAttribute('data-device');
   if(dev === 'full'){ vframe.style.zoom=''; return; }
   vframe.style.zoom = '';                 // reset to measure natural size
@@ -906,10 +909,12 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     var on=false;
     btn.addEventListener('click',function(){
       on=!on;btn.classList.toggle('diff-on',on);
-      if(on){runDiff(mainFile);openDrawer(drawer);}else{clearDiff();closeDrawer(drawer);}
+      if(on){runDiff(mainFile);openDrawer(drawer);if(drawer.__refreshCompare)drawer.__refreshCompare();}else{clearDiff();closeDrawer(drawer);}
     });
+    // Press-and-hold the grey canvas area (when the drawer is closed) to compare with production —
+    // same behaviour as the "Compare with production" button. Release (global pointerup) restores.
     var stage=document.querySelector(".stage");
-    if(stage){stage.addEventListener("click",function(e){if(e.target!==stage||on)return;pulse(mainFile);});}
+    if(stage){stage.addEventListener("pointerdown",function(e){if(e.target!==stage||on)return;e.preventDefault();if(drawer.__compareShow)drawer.__compareShow();});}
   }
   // ===== Overview: Cowork-authored markdown per branch/file (ask Cowork to update OVERVIEW_MD) =====
   var OVERVIEW_MD=(typeof window.PMW_OVERVIEW_MD==='string')?window.PMW_OVERVIEW_MD:[
@@ -935,23 +940,30 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     return html;
   }
   // ===== Details: auto-generated brief pointers + a thumbnail of each changed area =====
-  function describe(el){
-    // Plain-English labels. CSS / scripts / off-canvas pages don't map to a visible shell element.
-    if(el.tagName==='STYLE')return 'Styling updated';
-    if(el.tagName==='SCRIPT')return 'Behavior updated';
+  function describe(el,type){
+    // Plain-English, action-led labels for a viewer who knows nothing about the markup:
+    // lead with WHAT happened (Added / Edited) + the kind of thing + its visible text.
+    var act=(type==='added')?'Added':'Edited';
+    if(el.tagName==='STYLE')return 'Restyled — colours, spacing or layout';
+    if(el.tagName==='SCRIPT')return 'Updated interactive behaviour';
     var _id=el.id||'';
-    var OVL={'editor-overlay':'Added the Design editor page','gallery-overlay':'Added the Templates gallery page','pricing-overlay':'Added the Pricing page','ai-overlay':'Added the Create with AI page','help-overlay':'Added the Help center page','upsell-modal':'Added the Premium upgrade popup'};
+    var OVL={'editor-overlay':'Added the Design editor page','gallery-overlay':'Added the Templates gallery page','pricing-overlay':'Added the Pricing page','ai-overlay':'Added the Create with AI page','help-overlay':'Added the Help centre page','upsell-modal':'Added the Premium upgrade popup'};
     if(OVL[_id])return OVL[_id];
-    if((''+(el.className||'')).indexOf('overlay')>-1)return 'Added a new page';
-    if(el.tagName==='IMG')return 'Updated an image';
-    var txt=(el.textContent||'').replace(/\s+/g,' ').trim(),kind='section';
-    if(el.matches&&el.matches('h1,h2,h3,h4,h5'))kind='heading';
-    else if(el.matches&&el.matches('button,[class*=btn],[class*=cbtn]'))kind='button';
-    else if(el.tagName==='A')kind='link';
-    else if((''+(el.className||'')).indexOf('card')>-1)kind='card';
-    var short=txt.length>40?txt.slice(0,40).trim()+'…':txt;
-    if(short)return 'Updated the '+kind+' “'+short+'”';
-    return 'Updated a '+kind;
+    var cls=''+(el.className||'');
+    if(cls.indexOf('overlay')>-1)return 'Added a new page';
+    if(el.tagName==='IMG')return act+' an image';
+    var txt=(el.textContent||'').replace(/\s+/g,' ').trim();
+    var short=txt.length>36?txt.slice(0,36).trim()+'…':txt;
+    var q=function(s){return '“'+s+'”';};
+    if(el.matches&&el.matches('.logo,.sidebar-logo,.logo-icon'))return act+' the logo';
+    if(el.matches&&el.matches('.nav-item,.top-nav-item'))return short?(act+' menu item '+q(short)):(act+' a menu item');
+    if(el.matches&&el.matches('h1,h2,h3,h4,h5'))return short?(act+' heading '+q(short)):(act+' a heading');
+    if(el.matches&&el.matches('input,textarea'))return act+' an input field';
+    if(el.matches&&el.matches('button,[class*=btn],[class*=cbtn]'))return short?(act+' button '+q(short)):(act+' a button');
+    if(el.tagName==='A')return short?(act+' link '+q(short)):(act+' a link');
+    if(cls.indexOf('card')>-1)return short?(act+' card '+q(short)):(act+' a card');
+    if(short)return act+' text '+q(short);
+    return act+' a layout area';
   }
   // Bring a changed element into view even if it lives in a hidden view or a closed overlay/page.
   function revealElement(el){
@@ -1033,9 +1045,10 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       var lt=document.getElementById('diff-list-title');if(lt)lt.textContent='List of all changes ('+els.length+')';
       if(!els.length){container.innerHTML='<div class="diff-empty-state">No changes from Main yet.</div>';return;}
       container.innerHTML='';
-      els.forEach(function(el,i){
+      els.forEach(function(item,i){
+        var el=item.el;
         var card=document.createElement('div');card.className='diff-detail';
-        var desc=describe(el);
+        var desc=describe(el,item.type);
         var loc=locate(el);
         var t=document.createElement('div');t.className='diff-d-text';t.innerHTML='<span class="diff-d-num">'+(i+1)+'</span><span>'+desc+(loc?'<span class="diff-d-loc">'+escTxt(loc)+'</span>':'')+'</span>';
         card.appendChild(t);
@@ -1062,8 +1075,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     if(document.getElementById('diff-drawer'))return document.getElementById('diff-drawer');
     var d=document.createElement('aside');d.className='diff-drawer';d.id='diff-drawer';
     d.innerHTML='<div class="diff-drawer-head"><h2 class="diff-title">Changes in this Lofi</h2><button class="diff-drawer-x" id="diff-drawer-x" data-tip="Close">&times;</button></div>'
-      +'<div class="diff-drawer-body"><img class="diff-hint-img" src="click-hint.png" alt=""><p class="diff-hint-blue">Click on grey areas to highlight updates even when this drawer is closed</p>'
+      +'<div class="diff-drawer-body"><img class="diff-hint-img" src="click-hint.png" alt=""><p class="diff-hint-blue">Press and hold a grey area to compare with production — even when this drawer is closed</p>'
       +'<div class="diff-sec-row"><div class="diff-sec-title">Summary</div></div>'
+      +'<button type="button" class="diff-compare-btn" id="diff-compare-btn"><span class="icon" style="display:inline-flex;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M6 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M11 6h5a2 2 0 0 1 2 2v7"/><path d="M14 9l-3 -3l3 -3"/><path d="M13 18h-5a2 2 0 0 1 -2 -2v-7"/><path d="M10 15l3 3l-3 3"/></svg></span><span>Compare with production</span></button>'
       +'<div class="diff-sum-rtf" id="diff-sum-rtf">'
         +'<div class="diff-sum-ed" id="diff-sum-ed" contenteditable="true" data-ph="Add summary pointers"></div>'
         +'<div class="diff-sum-toolbar">'
@@ -1078,9 +1092,101 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
           +'<button type="button" data-cmd="createLink" data-tip="Add link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6 -6"/><path d="M11 6l.5 -.5a4.95 4.95 0 0 1 7 7l-.5 .5"/><path d="M13 18l-.5 .5a4.95 4.95 0 0 1 -7 -7l.5 -.5"/></svg></button>'
         +'</div>'
       +'</div>'
-      +'<div class="diff-sec-title" id="diff-list-title" style="margin-top:36px;">List of all changes</div><div class="diff-details" id="diff-details"></div></div>';
+      +'<div class="diff-sec-title" id="diff-list-title" style="margin-top:36px;">List of all changes</div>'
+      +'<div class="diff-details" id="diff-details"></div></div>';
     document.body.appendChild(d);
     d.querySelector('#diff-drawer-x').addEventListener('click',function(){var b=document.getElementById('diff-btn');if(b)b.click();});
+    // "Compare with production": press-and-HOLD to swap the live preview to Main (production);
+    // releasing restores this branch. Main is shown via a full-bleed thumb-mode iframe over the frame.
+    var cmpBtn=d.querySelector('#diff-compare-btn');
+    if(cmpBtn){
+      var mainFrame=null,wantSync=false,trail=[];
+      function srcUrl(){return mainFile+(mainFile.indexOf('?')>-1?'&':'?')+'thumb=1&b='+Date.now();}
+      // === EXACT compare by REPLAY ===
+      // We don't try to *reconstruct* prod's state (an estimate) — many states come from bespoke
+      // handlers (openUpsell forces the Designs bg + fills the modal, openPricing, openEditor, …).
+      // Instead we record the user's real clicks inside the branch mockup, and on hold we reset the
+      // Main iframe to a clean dashboard and REPLAY those same clicks, letting Main's OWN handlers
+      // produce its exact equivalent state. Like-for-like, not a guess.
+      function cssEsc(s){try{return CSS.escape(s);}catch(e){return (''+s).replace(/[^\w-]/g,'\\$&');}}
+      function sigOf(el,root){
+        if(!el||el===root||el.nodeType!==1)return null;
+        if(el.id)return {sel:'#'+cssEsc(el.id),idx:0};
+        var sel=el.tagName.toLowerCase();
+        ['data-view','data-mega','data-act','data-tab','data-goto','data-switch','data-gnav'].forEach(function(a){
+          if(!el.hasAttribute(a))return;var v=el.getAttribute(a);sel+=(v!==''&&v!=null)?('['+a+'="'+v+'"]'):('['+a+']');
+        });
+        var cn=(typeof el.className==='string')?el.className:'';
+        cn.trim().split(/\s+/).filter(Boolean).slice(0,3).forEach(function(c){sel+='.'+cssEsc(c);});
+        var all=root?Array.prototype.slice.call(root.querySelectorAll(sel)):[];
+        return {sel:sel,idx:Math.max(0,all.indexOf(el))};
+      }
+      function findIn(doc,sig){
+        if(!sig)return null;
+        if(sig.sel.charAt(0)==='#')return doc.querySelector(sig.sel);
+        var all=doc.querySelectorAll(sig.sel);return all[sig.idx]||all[0]||null;
+      }
+      // Record real clicks inside the live mockup (capture phase, never blocks the UI).
+      var liveClip=document.querySelector('#vframe .frame-clip');
+      if(liveClip){
+        liveClip.addEventListener('click',function(e){
+          var t=e.target.closest&&e.target.closest('a,button,[data-view],[data-mega],[data-act],[data-tab],[data-goto],[data-switch],[data-gnav],.nav-item,.tab-item,.design-card-thumb,.create-card,.create-dashed,.gal-tile,.gal-tpl,.rec-card,.ai-card,.m-thumb,.ed-rail-item,.upsell-viewplans,.upsell-btn,.logo,[id]');
+          var sig=sigOf(t||e.target,liveClip);if(sig)trail.push(sig);
+        },true);
+      }
+      function resetMain(win,doc){
+        doc.querySelectorAll('[class*="overlay"],[class*="modal"]').forEach(function(o){o.classList.remove('open');o.classList.remove('show');});
+        if(typeof win.switchView==='function'){try{win.switchView('designs');}catch(e){}}
+        doc.querySelectorAll('.nav-item').forEach(function(x){x.classList.toggle('active',x.getAttribute('data-view')==='designs');});
+      }
+      function syncState(){
+        if(!mainFrame)return;
+        var win=mainFrame.contentWindow,doc=mainFrame.contentDocument;if(!win||!doc)return;
+        var live=document.querySelector('#vframe .frame-clip');
+        // user type (set via the harness top bar, not part of the click trail)
+        var liveShell=live&&live.querySelector('.shell'),u=liveShell&&liveShell.getAttribute('data-user'),mShell=doc.querySelector('.shell');
+        if(u&&mShell)mShell.setAttribute('data-user',u);
+        // clean base, then replay the branch's real interaction trail on Main's own handlers
+        resetMain(win,doc);
+        trail.forEach(function(sig){var el=findIn(doc,sig);if(el){try{el.click();}catch(e){}}});
+        // HOVER/transient panels (mega menus, popovers) open without a click — mirror whatever is
+        // currently open by id so prod shows the same panel.
+        var HOV='[class*="mega"],[class*="tb-pop"],[class*="dropdown"],[class*="popover"]';
+        live&&live.querySelectorAll(HOV).forEach(function(el){
+          if(!el.id)return;var m=doc.getElementById(el.id);if(!m)return;
+          ['open','show'].forEach(function(t){m.classList.toggle(t,el.classList.contains(t));});
+        });
+        // INPUT state — mirror typed text, checkboxes and radios into Main's matching fields.
+        live&&live.querySelectorAll('input,textarea,select').forEach(function(el){
+          var m=findIn(doc,sigOf(el,live));if(!m)return;
+          if(el.type==='checkbox'||el.type==='radio'){m.checked=el.checked;}
+          else{try{m.value=el.value;}catch(e){}}
+        });
+      }
+      function trySync(){if(wantSync&&mainFrame&&mainFrame.contentWindow&&typeof mainFrame.contentWindow.switchView==='function'){syncState();wantSync=false;}}
+      function ensureFrame(){
+        if(mainFrame&&mainFrame.isConnected)return mainFrame;
+        var clip=document.querySelector('#vframe .frame-clip');if(!clip)return null;
+        mainFrame=document.createElement('iframe');
+        mainFrame.className='diff-compare-frame';
+        mainFrame.title='Production (Main) preview';
+        mainFrame.addEventListener('load',trySync);   // replay once a (re)loaded frame is ready
+        mainFrame.src=srcUrl();
+        clip.appendChild(mainFrame);
+        return mainFrame;
+      }
+      ensureFrame();
+      // Refresh the Main preview to the latest version whenever the drawer is (re)opened.
+      d.__refreshCompare=function(){var f=ensureFrame();if(f)f.src=srcUrl();};
+      // Sync while still hidden, THEN reveal — so the reset+replay rebuild is never visible.
+      function showMain(){var f=ensureFrame();if(!f)return;wantSync=true;trySync();f.classList.add('on');cmpBtn.classList.add('holding');}
+      function hideMain(){if(mainFrame)mainFrame.classList.remove('on');cmpBtn.classList.remove('holding');wantSync=false;}
+      // Expose so pressing the grey canvas area (drawer closed) triggers the same compare.
+      d.__compareShow=showMain;
+      cmpBtn.addEventListener('pointerdown',function(e){e.preventDefault();showMain();});
+      document.addEventListener('pointerup',hideMain);
+      document.addEventListener('pointercancel',hideMain);
+    }
     // One-time styles for the rich-text Summary editor.
     if(!document.getElementById('diff-sum-style')){
       var st=document.createElement('style');st.id='diff-sum-style';
@@ -1095,7 +1201,12 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
         +'.diff-sum-toolbar .sep{width:1px;height:18px;background:var(--br-neutral-primary);margin:0 4px;}'
         +'.diff-sum-rtf.ro .diff-sum-toolbar{display:none;}.diff-sum-rtf.ro .diff-sum-ed{color:var(--ct-neutral-secondary);}'
         +'.diff-d-loc{display:block;margin-top:3px;font-size:12px;font-weight:400;color:var(--ct-neutral-tertiary);}'
-        +'.diff-detail{position:relative;}.diff-detail .diff-d-text{padding-right:76px;}.diff-detail .diff-revert{position:absolute;top:10px;right:10px;margin:0;}';
+        +'.diff-detail{position:relative;}.diff-detail .diff-d-text{padding-right:76px;}.diff-detail .diff-revert{position:absolute;top:10px;right:10px;margin:0;}'
+        +'.diff-compare-btn{width:100%;height:40px;margin:0 0 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:var(--radius-12);background:#2F6DF6;color:#fff;font-family:inherit;font-size:14px;font-weight:600;line-height:20px;cursor:pointer;transition:background .12s;}'
+        +'.diff-compare-btn:hover{background:#255ad1;}'
+        +'.diff-compare-btn.holding{background:#1f4cae;}'
+        +'.diff-compare-frame{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:inherit;background:#fff;z-index:2000;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .12s ease;}'
+        +'.diff-compare-frame.on{opacity:1;visibility:visible;}';
       document.head.appendChild(st);
     }
     var FROZEN=Array.isArray(window.PMW_FROZEN_CHANGES)&&window.PMW_FROZEN_CHANGES.length;
@@ -1140,7 +1251,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
   function matchSig(el){
     var k=el.getAttribute('data-diff-id')||el.getAttribute('data-id')||el.getAttribute('id');
     if(k)return 'K:'+el.tagName+'|'+k;
-    return el.tagName+'|'+(el.getAttribute('class')||'')+'|'+(el.getAttribute('data-mstab')||el.getAttribute('data-user')||el.getAttribute('data-file')||'');
+    return el.tagName+'|'+(el.getAttribute('class')||'')+'|'+(el.getAttribute('data-view')||el.getAttribute('data-mega')||el.getAttribute('data-mstab')||el.getAttribute('data-user')||el.getAttribute('data-file')||'');
   }
   // Longest-common-subsequence alignment of two child lists by matchSig (handles inserts/deletes/reorders).
   function lcsPairs(a,b){
@@ -1156,14 +1267,33 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
   }
   function diffPaths(b,m){
     var out=[];
+    // Index every Main element by identity so a *relocated* subtree (e.g. a sidebar moved to a new
+    // parent) can still be paired with its Main counterpart and compared internally — otherwise the
+    // whole moved block reads as one opaque "added" node and its inner edits are never detected.
+    var mIndex={};
+    (function idx(n){var k=matchSig(n);(mIndex[k]=mIndex[k]||[]).push(n);Array.prototype.forEach.call(n.children,idx);})(m);
+    var consumed=[];
+    function globalMatch(cb){
+      var list=mIndex[matchSig(cb)];
+      if(!list||list.length!==1)return null;     // only when the identity is unambiguous
+      var el=list[0];
+      if(consumed.indexOf(el)>-1)return null;
+      consumed.push(el);return el;
+    }
     (function walk(bb,mm,path){
       var bk=kids(bb),mk=kids(mm);
       var map={};lcsPairs(bk,mk).forEach(function(p){map[p[0]]=p[1];});
       for(var i=0;i<bk.length;i++){
         var pp=path.concat(i),cb=bk[i];
-        if(!(i in map)){out.push(pp);continue;}   // no counterpart in main → added/changed node
+        if(!(i in map)){
+          // No sibling counterpart. Before calling it "added", see if this exact node lives
+          // elsewhere in Main (i.e. it moved) — if so, recurse so inner changes are still found.
+          var gm=globalMatch(cb);
+          if(gm){walk(cb,gm,pp);continue;}
+          out.push({path:pp,type:'added'});continue;                 // genuinely new node
+        }
         var cm=mk[map[i]];
-        if(sig(cb)!==sig(cm)||ownText(cb)!==ownText(cm)){out.push(pp);}  // same identity, content/attrs changed
+        if(sig(cb)!==sig(cm)||ownText(cb)!==ownText(cm)){out.push({path:pp,type:'edited'});}  // same identity, content/attrs changed
         walk(cb,cm,pp);
       }
     })(b,m,[]);
@@ -1194,7 +1324,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       if(!mShell||!bShell||!liveShell)return;
       clearDiff();
       var paths=diffPaths(bShell,mShell),c=0;
-      paths.forEach(function(pth){var el=resolvePath(liveShell,pth);if(el&&el.tagName!=='STYLE'&&el.tagName!=='SCRIPT'&&!(el.closest&&el.closest('[class*="overlay"]'))){el.classList.add('diff-changed');c++;}});
+      paths.forEach(function(p){var el=resolvePath(liveShell,p.path);if(el&&el.tagName!=='STYLE'&&el.tagName!=='SCRIPT'&&!(el.closest&&el.closest('[class*="overlay"]'))){el.classList.add('diff-changed');c++;}});
       if(c===0){var t2=document.createElement('div');t2.id='diff-empty';t2.textContent='No changes from main yet';document.body.appendChild(t2);setTimeout(function(){if(t2.parentNode)t2.remove();},2200);}
     }).catch(function(){});
   }
@@ -1207,13 +1337,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       var mShell=md.querySelector('.frame-clip'),bShell=bd.querySelector('.frame-clip'),liveShell=document.querySelector('#vframe .frame-clip');
       if(!mShell||!bShell||!liveShell){_changed=[];cb();return;}
       var paths=diffPaths(bShell,mShell),els=[];
-      paths.forEach(function(p){var el=resolvePath(liveShell,p);if(el)els.push(el);});
+      paths.forEach(function(p){var el=resolvePath(liveShell,p.path);if(el)els.push({el:el,type:p.type});});
       _changed=els;cb();
     }).catch(function(){_changed=[];cb();});
-  }
-  function pulse(mainFile){
-    function go(){(_changed||[]).forEach(function(el){if(el.closest&&el.closest('[class*="overlay"]'))return;el.classList.remove('diff-pulse');void el.offsetWidth;el.classList.add('diff-pulse');el.addEventListener('animationend',function h(){el.classList.remove('diff-pulse');el.removeEventListener('animationend',h);});});}
-    if(_changed)go();else computeChanged(mainFile,go);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
