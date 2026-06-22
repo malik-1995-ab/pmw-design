@@ -282,6 +282,19 @@ userDD.querySelectorAll('.pv-dd-item').forEach(item => {
   });
 });
 
+// Role-gate: view/guest cannot switch device (tablet/mobile) or user type
+function applyViewRestrictions(role) {
+  var locked = (role === 'view' || role === 'guest' || !role);
+  ['tablet', 'mobile'].forEach(function(dev) {
+    var btn = document.querySelector('#device-toggle button[data-device="' + dev + '"]');
+    if (btn) btn.disabled = locked;
+  });
+  var udd = document.getElementById('user-dd');
+  if (udd) udd.classList.toggle('role-locked', locked);
+}
+applyViewRestrictions((window.PMWAuth && PMWAuth.role) ? PMWAuth.role() : 'view');
+if (window.PMWAuth && PMWAuth.require) PMWAuth.require(function(p, r) { applyViewRestrictions(r || 'view'); });
+
 // Screen selector dropdown (top-left)
 const screenDD = document.getElementById('screen-dd');
 const screenBtn = document.getElementById('screen-dd-btn');
@@ -819,7 +832,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
 
       // ===== (B) separate Iterations dropdown beside it =====
       var idd=document.createElement('div');idd.className='pv-dd pv-dd-left';idd.id='iters-dd';
-      idd.innerHTML='<button class="pv-dd-btn" id="iters-dd-btn"><span>Iteration '+(idx+1)+'</span><span class="iter-chip">'+(idx+1)+' / '+bes.length+'</span><span class="chev">'+CHEV+'</span></button><div class="pv-dd-menu" id="iters-dd-menu"></div>';
+      idd.innerHTML='<button class="pv-dd-btn" id="iters-dd-btn"><span>Iterations</span><span class="iter-chip">'+(idx+1)+' / '+bes.length+'</span><span class="chev">'+CHEV+'</span></button><div class="pv-dd-menu" id="iters-dd-menu"></div>';
       dd.parentNode.insertBefore(idd,dd.nextSibling);
       var ibtn=idd.querySelector('#iters-dd-btn'),imenu=idd.querySelector('#iters-dd-menu');
       ibtn.addEventListener('click',function(e){e.stopPropagation();dd.classList.remove('open');idd.classList.toggle('open');});

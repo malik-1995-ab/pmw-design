@@ -91,7 +91,12 @@
     var hadGate=!!document.getElementById("pmw-auth-gate");
     removeGate();
     var name=(user.user_metadata&&(user.user_metadata.name||user.user_metadata.full_name))||e.split("@")[0];
-    client.from("profiles").upsert({id:user.id,email:e,name:name},{onConflict:"id"}).then(function(){
+    // Check if profile already exists. New users get role:'view'; existing users keep their current role.
+    client.from("profiles").select("role").eq("id",user.id).maybeSingle().then(function(exist){
+      var upsertObj={id:user.id,email:e,name:name};
+      if(!exist.data) upsertObj.role="view";   // new user → default to view
+      return client.from("profiles").upsert(upsertObj,{onConflict:"id"});
+    }).then(function(){
       client.from("profiles").select("role,name,email").eq("id",user.id).single().then(function(r){
         profile=(r&&r.data)||{role:"view",name:name,email:e};
         role=(profile&&profile.role)||"view"; resolved=true;

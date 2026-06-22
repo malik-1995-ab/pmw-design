@@ -325,6 +325,7 @@ body:not(.nav-iconly) #diff-btn[data-tip]:hover::after, body:not(.nav-iconly) #m
 .pv-dd-btn .icon { font-size: 20px; color: var(--ct-neutral-secondary); }
 .pv-dd-btn .chev { font-size: 16px; color: var(--ct-neutral-tertiary); transition: transform .15s; }
 .pv-dd.open .pv-dd-btn .chev { transform: rotate(180deg); }
+.pv-dd.role-locked .pv-dd-btn { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 .pv-dd-menu { position: absolute; top: 40px; right: 0; min-width: 224px; background: var(--bg-neutral-primary-default); border: 1px solid var(--br-neutral-primary); border-radius: var(--radius-16); box-shadow: var(--shadow-floating-md); padding: 8px; display: none; z-index: 800; }
 .pv-dd.open .pv-dd-menu { display: block; }
 .pv-dd-left .pv-dd-menu { left: 0; right: auto; }

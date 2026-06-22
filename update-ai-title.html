@@ -482,6 +482,7 @@ body:not(.nav-iconly) #diff-btn[data-tip]:hover::after, body:not(.nav-iconly) #m
 .pv-dd-btn .icon { font-size: 20px; color: var(--ct-neutral-secondary); }
 .pv-dd-btn .chev { font-size: 16px; color: var(--ct-neutral-tertiary); transition: transform .15s; }
 .pv-dd.open .pv-dd-btn .chev { transform: rotate(180deg); }
+.pv-dd.role-locked .pv-dd-btn { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 .pv-dd-menu { position: absolute; top: 40px; right: 0; min-width: 224px; background: var(--bg-neutral-primary-default); border: 1px solid var(--br-neutral-primary); border-radius: var(--radius-16); box-shadow: var(--shadow-floating-md); padding: 8px; display: none; z-index: 800; }
 .pv-dd.open .pv-dd-menu { display: block; }
 .pv-dd-left .pv-dd-menu { left: 0; right: auto; }
@@ -2787,6 +2788,19 @@ userDD.querySelectorAll('.pv-dd-item').forEach(item => {
   });
 });
 
+// Role-gate: view/guest cannot switch device (tablet/mobile) or user type
+function applyViewRestrictions(role) {
+  var locked = (role === 'view' || role === 'guest' || !role);
+  ['tablet', 'mobile'].forEach(function(dev) {
+    var btn = document.querySelector('#device-toggle button[data-device="' + dev + '"]');
+    if (btn) btn.disabled = locked;
+  });
+  var udd = document.getElementById('user-dd');
+  if (udd) udd.classList.toggle('role-locked', locked);
+}
+applyViewRestrictions((window.PMWAuth && PMWAuth.role) ? PMWAuth.role() : 'view');
+if (window.PMWAuth && PMWAuth.require) PMWAuth.require(function(p, r) { applyViewRestrictions(r || 'view'); });
+
 // Screen selector dropdown (top-left)
 const screenDD = document.getElementById('screen-dd');
 const screenBtn = document.getElementById('screen-dd-btn');
@@ -3324,7 +3338,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
 
       // ===== (B) separate Iterations dropdown beside it =====
       var idd=document.createElement('div');idd.className='pv-dd pv-dd-left';idd.id='iters-dd';
-      idd.innerHTML='<button class="pv-dd-btn" id="iters-dd-btn"><span>Iteration '+(idx+1)+'</span><span class="iter-chip">'+(idx+1)+' / '+bes.length+'</span><span class="chev">'+CHEV+'</span></button><div class="pv-dd-menu" id="iters-dd-menu"></div>';
+      idd.innerHTML='<button class="pv-dd-btn" id="iters-dd-btn"><span>Iterations</span><span class="iter-chip">'+(idx+1)+' / '+bes.length+'</span><span class="chev">'+CHEV+'</span></button><div class="pv-dd-menu" id="iters-dd-menu"></div>';
       dd.parentNode.insertBefore(idd,dd.nextSibling);
       var ibtn=idd.querySelector('#iters-dd-btn'),imenu=idd.querySelector('#iters-dd-menu');
       ibtn.addEventListener('click',function(e){e.stopPropagation();dd.classList.remove('open');idd.classList.toggle('open');});
