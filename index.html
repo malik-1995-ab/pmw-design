@@ -36,10 +36,10 @@
   .meta h3 { margin: 0 0 2px; font-size: 15px; font-weight: 600; }
   .meta span { font-size: 12px; color: var(--muted); }
   .badge { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px; white-space: nowrap; flex-shrink: 0; }
-  .badge.main { background: var(--ink); color: #fff; }
-  .badge.open { background: #FFF4E5; color: #B25E09; }
-  .badge.ready { background: #E7F7EE; color: #137333; }
-  .badge.merged { background: #EDEBFF; color: #5B4DBE; }
+  .badge.main { background: var(--ink); color: #fff; }                 /* Production — dark */
+  .badge.open { background: #E6EEFF; color: #2F6DF6; }                 /* N Comments — blue */
+  .badge.ready { background: #EEEEF1; color: #5A5A6E; }                /* In progress — grey */
+  .badge.merged { background: #E7F7EE; color: #137333; }               /* Done — green */
   .more-btn { height: 40px; padding: 0 18px; border: 1px solid var(--line); background: var(--card); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; font-family: inherit; transition: border-color .15s ease; }
   .more-btn:hover { border-color: #d8dbe2; }
   .badge.loading { color: transparent; min-width: 64px; background: linear-gradient(90deg, #ececf0 25%, #f5f6f8 50%, #ececf0 75%); background-size: 200% 100%; animation: pv-shimmer 1.2s ease-in-out infinite; }
@@ -120,7 +120,7 @@
   function card(it){
     var isMain=!!it.main;
     var nm=namesMap[mid(it.file)];var label=isMain?(nm||'PosterMyWall Lofi'):(nm||it.name||'New Lofi');
-    var badge=(!isMain&&it.status==='merged')?'<span class="badge merged">Merged</span>':'<span class="badge loading" data-badge="'+mid(it.file)+'" data-main="'+(isMain?1:0)+'">…</span>';
+    var badge=(!isMain&&it.status==='merged')?'<span class="badge merged">Done</span>':'<span class="badge loading" data-badge="'+mid(it.file)+'" data-main="'+(isMain?1:0)+'">…</span>';
     return '<a class="card'+(isMain?' main':'')+'" href="'+it.file+'">'
       +'<div class="thumb"><iframe data-src="'+it.file+'" loading="lazy" tabindex="-1"></iframe></div>'
       +'<div class="meta"><div class="t"><h3>'+label+'</h3><span>'+fmt(it.created)+'</span></div>'
@@ -190,9 +190,9 @@
     fetch(SB_URL+"/rest/v1/annotations?select=id&mockup=eq."+mid(file)+"&resolved=eq.false",{headers:H})
       .then(function(r){return r.json();}).then(function(rows){
         var n=Array.isArray(rows)?rows.length:0;
-        if(isMain){el.className='badge main';el.textContent='Main';return;}
-        if(n>0){el.className='badge open';el.textContent=n+' open';}
-        else{el.className='badge ready';el.textContent='Ready to merge';}
+        if(isMain){el.className='badge main';el.textContent='Production';return;}
+        if(n>0){el.className='badge open';el.textContent=n+(n===1?' Comment':' Comments');}
+        else{el.className='badge ready';el.textContent='In progress';}
       }).catch(function(){el.className='badge';el.textContent='';});
   }
   Promise.all([fetch('iterations.json?b='+Date.now()).then(function(r){return r.json();}),fetch(SB_URL+'/rest/v1/iteration_names?select=mockup,name',{headers:H}).then(function(r){return r.json();}).catch(function(){return [];})]).then(function(_res){

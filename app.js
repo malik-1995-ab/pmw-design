@@ -934,10 +934,28 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     // recomputing to "No changes" (branch shell == Main after merge).
     var frozen=window.PMW_FROZEN_CHANGES;
     if(Array.isArray(frozen)&&frozen.length){
+      var ltf=document.getElementById('diff-list-title');if(ltf)ltf.textContent='List of all changes ('+frozen.length+')';
       container.innerHTML='<div class="diff-frozen-note">Merged — this list is frozen (read-only).</div>';
-      frozen.forEach(function(desc,i){
+      var frame=document.querySelector('#vframe .frame-clip');
+      frozen.forEach(function(item,i){
+        // Each item is either a plain string, or { t:desc, loc:area, sel:CSS selector }.
+        var desc=(typeof item==='string')?item:(item&&item.t)||'';
+        var loc=(typeof item==='object'&&item)?(item.loc||''):'';
+        var sel=(typeof item==='object'&&item)?(item.sel||''):'';
         var card=document.createElement('div');card.className='diff-detail diff-detail-frozen';
-        card.innerHTML='<div class="diff-d-text"><span class="diff-d-num">'+(i+1)+'</span><span>'+escTxt(desc)+'</span></div>';
+        card.innerHTML='<div class="diff-d-text"><span class="diff-d-num">'+(i+1)+'</span><span>'+escTxt(desc)+(loc?'<span class="diff-d-loc">'+escTxt(loc)+'</span>':'')+'</span></div>';
+        if(sel){
+          card.style.cursor='pointer';
+          var resolve=function(){var el=null;try{el=(frame&&frame.querySelector(sel))||document.querySelector(sel);}catch(e){}return el;};
+          card.addEventListener('mouseenter',function(){var el=resolve();if(el&&!(el.closest&&el.closest('[class*="overlay"]')))el.classList.add('diff-hover-orange');});
+          card.addEventListener('mouseleave',function(){var el=resolve();if(el)el.classList.remove('diff-hover-orange');});
+          card.addEventListener('click',function(){
+            var el=resolve();
+            if(!el)return;
+            revealElement(el);
+            setTimeout(function(){if(el.scrollIntoView)el.scrollIntoView({behavior:'smooth',block:'center'});flashOrange(el);},120);
+          });
+        }
         container.appendChild(card);
       });
       return;
@@ -1087,8 +1105,20 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
   }
   function resolvePath(root,path){var n=root;for(var i=0;i<path.length;i++){var k=kids(n);if(!k[path[i]])return null;n=k[path[i]];}return n;}
   function runDiff(mainFile){
-    // Merged/frozen branches have no live diff vs Main — skip the empty-state toast.
-    if(Array.isArray(window.PMW_FROZEN_CHANGES)&&window.PMW_FROZEN_CHANGES.length)return;
+    // Merged/frozen branches: the live diff vs Main is empty, so drive the blue highlights
+    // off the frozen change list's selectors instead — same "What changed?" experience, read-only.
+    var FZ=window.PMW_FROZEN_CHANGES;
+    if(Array.isArray(FZ)&&FZ.length){
+      clearDiff();
+      var ff=document.querySelector('#vframe .frame-clip')||document;
+      FZ.forEach(function(item){
+        var sel=(item&&typeof item==='object')?item.sel:'';
+        if(!sel)return;
+        var el=null;try{el=ff.querySelector(sel)||document.querySelector(sel);}catch(e){}
+        if(el&&el.tagName!=='STYLE'&&el.tagName!=='SCRIPT'&&!(el.closest&&el.closest('[class*="overlay"]')))el.classList.add('diff-changed');
+      });
+      return;
+    }
     var cur=(location.pathname.split('/').pop())||'';
     Promise.all([fetch(mainFile+'?b='+Date.now()).then(function(r){return r.text();}),fetch(cur+'?b='+Date.now()).then(function(r){return r.text();})]).then(function(t){
       var md=new DOMParser().parseFromString(t[0],'text/html');
@@ -1170,7 +1200,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       // NOTE: do NOT log a changelog row here. Copying the prompt is not a merge — the
       // merge is only real once Cowork executes it. Cowork logs the merges row at that point
       // (see prompt below), so just copying the command no longer creates phantom entries.
-      var p='Merge the branch "'+bname+'" ('+me.file+') into Main ('+mainFile+') — apply this branch\'s design changes to Main, then mark the branch as merged in iterations.json (set its "status" to "merged" and add "merged_at"). KEEP the branch file and its entry — never delete a branch; we keep full history. Before applying, FREEZE this branch\'s change record: capture the current "List of exact changes" and write it into the branch file as an inline window.PMW_FROZEN_CHANGES = [ ... ] array (one short string per change), so the merged branch keeps showing its changes read-only instead of recomputing to "No changes from Main". Finally, record the merge in the Change log: insert one row into the Supabase "merges" table with { branch, file, merged_by } so it appears in the dashboard Change log (only after the merge is actually applied).';
+      var p='Merge the branch "'+bname+'" ('+me.file+') into Main ('+mainFile+') — apply this branch\'s design changes to Main, then mark the branch as merged in iterations.json (set its "status" to "merged" and add "merged_at"). KEEP the branch file and its entry — never delete a branch; we keep full history. FREEZE this branch as a self-contained time-capsule of how it looked and worked at merge: (1) write its change record into the branch file as inline window.PMW_FROZEN_CHANGES = [ { t:"short description", loc:"area name", sel:"CSS selector of the changed element" }, ... ] so the merged branch still lists its changes, highlights them on hover, and shows the blue "What changed?" outlines (read-only, no Revert); (2) inline a snapshot of the shared assets into the branch file — replace the app.css <link>, app.js <script src>, and auth.js <script src> with the current file contents inside inline <style>/<script> tags (escape any </script> as <\\/script>) so future changes to the shared files never alter this archived branch. Finally, record the merge in the Change log: insert one row into the Supabase "merges" table with { branch, file, merged_by } (only after the merge is actually applied).';
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(p).then(function(){toast('Merge prompt copied — paste it into Cowork to run it.');},function(){toast(p);});}else{toast(p);}};
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
