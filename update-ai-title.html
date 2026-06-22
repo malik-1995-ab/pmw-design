@@ -2788,7 +2788,8 @@ userDD.querySelectorAll('.pv-dd-item').forEach(item => {
   });
 });
 
-// Role-gate: view/guest cannot switch device (tablet/mobile) or user type
+// Role-gate: view/guest cannot switch device (tablet/mobile) or user type;
+// also filters dropdowns so view seats only see Main + current branch, no dividers.
 function applyViewRestrictions(role) {
   var locked = (role === 'view' || role === 'guest' || !role);
   ['tablet', 'mobile'].forEach(function(dev) {
@@ -2797,6 +2798,21 @@ function applyViewRestrictions(role) {
   });
   var udd = document.getElementById('user-dd');
   if (udd) udd.classList.toggle('role-locked', locked);
+  if (locked) {
+    // Iterations dropdown: strip divider + "Add iteration" button
+    var imenu = document.getElementById('iters-dd-menu');
+    if (imenu) imenu.querySelectorAll('.iter-menu-div, .iter-add').forEach(function(el) { el.remove(); });
+    // Branches dropdown: keep only "PosterMyWall Lofi" + active (current), strip all others + divider
+    var bmenu = document.getElementById('iter-dd-menu');
+    if (bmenu) {
+      bmenu.querySelectorAll('.iter-menu-div').forEach(function(el) { el.remove(); });
+      bmenu.querySelectorAll('.pv-dd-item').forEach(function(item) {
+        var nameEl = item.querySelector('.pv-dd-name');
+        var isMain = nameEl && nameEl.textContent === 'PosterMyWall Lofi';
+        if (!item.classList.contains('active') && !isMain) item.remove();
+      });
+    }
+  }
 }
 applyViewRestrictions((window.PMWAuth && PMWAuth.role) ? PMWAuth.role() : 'view');
 if (window.PMWAuth && PMWAuth.require) PMWAuth.require(function(p, r) { applyViewRestrictions(r || 'view'); });
@@ -3317,6 +3333,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
         if(bks.length){_h+='<div class="iter-menu-div"></div>'+bks.map(function(k){var e=bEntries(k);var L=e[e.length-1];return '<div class="pv-dd-item" data-file="'+L.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">'+esc2(bName(k))+'</span><span class="iter-sub">'+fmt(L.created)+'</span></div>';}).join('');}
         menu.innerHTML=_h;
         menu.querySelectorAll('.pv-dd-item').forEach(function(item){item.addEventListener('click',function(){var ff=item.getAttribute('data-file');dd.classList.remove('open');if(ff&&ff!==cur)window.location.href=ff;});});
+        applyViewRestrictions(document.body.getAttribute('data-role'));
         return;
       }
       var key=current.branch;
@@ -3352,6 +3369,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       imenu.querySelectorAll('.iter-act.dup').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');idd.classList.remove('open');copyPrompt('Duplicate iteration ('+ff+') in the "'+_name+'" branch — create a new iteration that is a copy of it and register it in iterations.json.');});});
       imenu.querySelectorAll('.iter-act.del').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');idd.classList.remove('open');copyPrompt('Delete iteration ('+ff+') from the "'+_name+'" branch — remove it from iterations.json and delete the file.');});});
       imenu.querySelectorAll('.iter-act.ren').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');var it=list.filter(function(x){return x.file===ff;})[0];idd.classList.remove('open');if(it)renameModal(it);});});
+      applyViewRestrictions(document.body.getAttribute(\'data-role\'));
 
     }).catch(function(){});
   }
