@@ -985,6 +985,11 @@ body[data-role="view"] #anno-comments-btn:hover{opacity:.9;}
 body[data-role="view"] #anno-comments-btn .anno-count{background:rgba(255,255,255,.22);color:var(--ct-neutral-primary-on-dark);}
 body[data-role="view"] #anno-share-btn{order:1;background:var(--bg-neutral-primary-default);color:var(--ct-neutral-primary);border-color:var(--br-neutral-primary);}
 body[data-role="view"] #anno-share-btn:hover{background:var(--bg-neutral-secondary-default);border-color:var(--br-neutral-primary-hover);opacity:1;}
+/* Main page: New Lofi for admin/edit; outline Share for view (never both). data-pmw-main is set by app.js once iterations.json confirms Main. */
+body[data-pmw-main] #anno-share-btn{display:none;}
+body[data-pmw-main][data-role="view"] #new-branch-btn{display:none!important;}
+body[data-pmw-main][data-role="view"] #anno-share-btn{display:inline-flex;background:var(--bg-neutral-primary-default);color:var(--ct-neutral-primary);border-color:var(--br-neutral-primary);}
+body[data-pmw-main][data-role="view"] #anno-share-btn:hover{background:var(--bg-neutral-secondary-default);border-color:var(--br-neutral-primary-hover);opacity:1;}
 .pv-anno-toggle,.anno-cbtn{height:38px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--br-neutral-primary);border-radius:var(--radius-12);background:var(--bg-neutral-primary-default);color:var(--ct-neutral-primary);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .12s,border-color .12s;}
 .pv-anno-toggle:hover,.anno-cbtn:hover{background:var(--bg-neutral-secondary-default);border-color:var(--br-neutral-primary-hover);}
 .pv-anno-toggle.active{background:var(--ct-neutral-primary);color:var(--ct-neutral-primary-on-dark);border-color:var(--ct-neutral-primary);}

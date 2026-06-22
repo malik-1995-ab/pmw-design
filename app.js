@@ -297,15 +297,26 @@ function applyViewRestrictions(role, doMenuCleanup) {
     // Iterations dropdown: strip divider + "Add iteration" button
     var imenu = document.getElementById('iters-dd-menu');
     if (imenu) imenu.querySelectorAll('.iter-menu-div, .iter-add').forEach(function(el) { el.remove(); });
-    // Branches dropdown: keep only "PosterMyWall Lofi" + active (current), strip all others + divider
+    // Branches dropdown: keep "PosterMyWall Lofi" + active (current) + the branch the viewer came from,
+    // and keep the divider between Main and branch when a branch remains.
     var bmenu = document.getElementById('iter-dd-menu');
     if (bmenu) {
-      bmenu.querySelectorAll('.iter-menu-div').forEach(function(el) { el.remove(); });
+      var fromFile = null;
+      try { fromFile = sessionStorage.getItem('pmw_view_from'); } catch (e) {}
       bmenu.querySelectorAll('.pv-dd-item').forEach(function(item) {
         var nameEl = item.querySelector('.pv-dd-name');
         var isMain = nameEl && nameEl.textContent === 'PosterMyWall Lofi';
-        if (!item.classList.contains('active') && !isMain) item.remove();
+        var keep = item.classList.contains('active') || isMain ||
+                   (fromFile && item.getAttribute('data-file') === fromFile);
+        if (!keep) item.remove();
       });
+      // Divider stays only if at least one branch item survived alongside Main.
+      var hasBranch = false;
+      bmenu.querySelectorAll('.pv-dd-item').forEach(function(it) {
+        var n = it.querySelector('.pv-dd-name');
+        if (!(n && n.textContent === 'PosterMyWall Lofi')) hasBranch = true;
+      });
+      if (!hasBranch) bmenu.querySelectorAll('.iter-menu-div').forEach(function(el) { el.remove(); });
     }
   }
 }
@@ -817,7 +828,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
         isMain=true;
         btn.innerHTML='<span class="icon">'+GLOBE+'</span><span>PosterMyWall Lofi</span><span class="chev">'+CHEV+'</span>';
         var cb=document.getElementById('anno-comments-btn');if(cb)cb.style.display='none';
-        var sb=document.getElementById('anno-share-btn');if(sb)sb.style.display='none';
+        // Main right side: New Lofi (admin/edit) vs outline Share (view/guest). Visibility is role-gated in app.css via data-pmw-main; clear any stale inline hide.
+        var sb=document.getElementById('anno-share-btn');if(sb)sb.style.display='';
+        document.body.setAttribute('data-pmw-main','1');
         var right=document.querySelector('.preview-bar .pv-right');
         if(right&&!document.getElementById('new-branch-btn')){
           var nb=document.createElement('button');nb.id='new-branch-btn';nb.className='merge-btn';nb.innerHTML='<span class="icon" style="display:inline-flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg></span><span>New Lofi</span>';
@@ -834,6 +847,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       }
       var key=current.branch;
       var bes=bEntries(key);
+      // Remember the branch the viewer is on so that, after switching to Main, the branches dropdown can still show it (view-role memory).
+      try{sessionStorage.setItem('pmw_view_from',bes[bes.length-1].file);}catch(e){}
       var idx=0;for(var _i=0;_i<bes.length;_i++){if(bes[_i].file===cur){idx=_i;break;}}
       var _name=bName(key);
       var _shown=_name.length>28?_name.slice(0,28).trim()+'…':_name;
