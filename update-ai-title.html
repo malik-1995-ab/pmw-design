@@ -245,7 +245,7 @@ body:not(.nav-iconly) #diff-btn[data-tip]:hover::after, body:not(.nav-iconly) #m
 .pv-ic .icon { font-size: 16px; }
 .pv-title { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--ct-neutral-primary); margin-left: 4px; }
 .pv-title .pv-sub { color: var(--ct-neutral-tertiary); font-weight: 400; }
-.pv-center { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pv-center { position: absolute; left: 50%; top: 0; height: 100%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 8px; }
 .pv-center > * { flex-shrink: 0; }
 .pv-left, .pv-right { flex-shrink: 0; }
 .pv-seg { display: flex; align-items: center; gap: 4px; background: var(--bg-neutral-primary-default); border: 1px solid var(--br-neutral-primary); border-radius: var(--radius-12); padding: 3px; }
@@ -3324,7 +3324,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
 
       // ===== (B) separate Iterations dropdown beside it =====
       var idd=document.createElement('div');idd.className='pv-dd pv-dd-left';idd.id='iters-dd';
-      idd.innerHTML='<button class="pv-dd-btn" id="iters-dd-btn"><span>Iterations</span><span class="iter-chip">'+(idx+1)+' / '+bes.length+'</span><span class="chev">'+CHEV+'</span></button><div class="pv-dd-menu" id="iters-dd-menu"></div>';
+      idd.innerHTML='<button class="pv-dd-btn" id="iters-dd-btn"><span>Iteration '+(idx+1)+'</span><span class="iter-chip">'+(idx+1)+' / '+bes.length+'</span><span class="chev">'+CHEV+'</span></button><div class="pv-dd-menu" id="iters-dd-menu"></div>';
       dd.parentNode.insertBefore(idd,dd.nextSibling);
       var ibtn=idd.querySelector('#iters-dd-btn'),imenu=idd.querySelector('#iters-dd-menu');
       ibtn.addEventListener('click',function(e){e.stopPropagation();dd.classList.remove('open');idd.classList.toggle('open');});
