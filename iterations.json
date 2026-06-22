@@ -21,5 +21,12 @@
     "created": "2026-06-21T00:00:00Z",
     "status": "merged",
     "merged_at": "2026-06-21T18:45:00Z"
+  },
+  {
+    "branch": "330-ai-home-marketing",
+    "n": 1,
+    "name": "330. AI Home & Marketing",
+    "file": "330-ai-home-marketing.html",
+    "created": "2026-06-22T00:00:00Z"
   }
 ]
