@@ -6,7 +6,7 @@
 <title>PMW Lo-fi — My Stuff</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap">
 <script src="auth.js?v=3"></script>
-<link rel="stylesheet" href="app.css?v=12">
+<link rel="stylesheet" href="app.css?v=13">
 </head>
 <body>
 <div class="preview-bar">
@@ -81,15 +81,15 @@
     <div class="nav-divider"></div>
     <div class="nav-group">
       <button class="nav-item" data-view="orders"><i class="ti ti-wallet"></i>Order history</button>
-      <button class="nav-item" data-view="help"><i class="ti ti-help-circle"></i>Get Help &amp; Resources</button>
+      <button class="nav-item" data-view="help"><i class="ti ti-help-circle"></i>Get Help</button>
       <button class="nav-item" data-view="trash"><i class="ti ti-trash"></i>Trash</button>
     </div>
     <div class="sidebar-upsell">
       <div class="upsell-body">
-        Get <strong>unlimited downloads &amp; marketing</strong> for less with PosterMyWall Premium
+        Get <strong>unlimited downloads &amp; marketing</strong> with PosterMyWall Premium. <a class="upsell-link">View Pricing</a>
       </div>
       <div class="upsell-actions">
-        <button class="upsell-btn">Upgrade to Premium</button>
+        <button class="upsell-btn"><i class="ti ti-crown-filled"></i>Upgrade to Premium</button>
       </div>
     </div>
   </aside>
@@ -1194,7 +1194,13 @@
 .sidebar-logo .logo-icon { display: flex; align-items: center; justify-content: center; }
 .sidebar-logo .logo-icon svg.pmw-mark { fill: currentColor; stroke: none; }
 /* Upsell: single full-width button */
-.sidebar-upsell .upsell-btn { width: 100%; }
+.sidebar-upsell { border-top: none; }
+.sidebar-upsell .upsell-btn { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #F5C04E; color: var(--ct-neutral-primary); border: none; }
+.sidebar-upsell .upsell-btn:hover { opacity: 1; background: #EBB43C; }
+.sidebar-upsell .upsell-btn .icon { display: inline-flex; font-size: 16px; }
+.sidebar-upsell .upsell-link { color: var(--ct-neutral-primary); font-weight: 600; text-decoration: underline; cursor: pointer; white-space: nowrap; }
+/* "Create a design" modal is confined to the mockup frame (not the whole platform). */
+.modal-overlay { position: absolute; }
 </style>
 
 <!-- ===== Design Editor (opens when a design / blank / template is clicked) ===== -->
@@ -1597,7 +1603,7 @@ window.PMW_OVERVIEW_MD = [
   "_Why: a lighter, app-style layout for the AI Home & Marketing direction._"
 ];
 </script>
-<script src="app.js?v=41" defer></script>
+<script src="app.js?v=43" defer></script>
 <!-- ===== Branch wiring: route every first click to a destination ===== -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1711,6 +1717,16 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('ed-back').addEventListener('click', closeEditor);
   document.getElementById('help-back').addEventListener('click', closeHelp);
 
+  // ---- "Create a design" modal: opened by the "+" design card and the "New design" button ----
+  // Move it inside the device frame so it overlays only the mockup, never the whole platform.
+  (function(){ var fcEl = document.querySelector('#vframe .frame-clip'), cmEl = document.getElementById('create-modal'); if (fcEl && cmEl && cmEl.parentElement !== fcEl) fcEl.appendChild(cmEl); })();
+  function openCreateModal(){ closeChrome(); var cm = document.getElementById('create-modal'); if (cm) cm.style.display = 'flex'; }
+  function closeCreateModal(){ var cm = document.getElementById('create-modal'); if (cm) cm.style.display = 'none'; }
+  document.querySelectorAll('.design-add, #btn-new-design').forEach(function(el){ el.style.cursor = 'pointer'; el.addEventListener('click', openCreateModal); });
+  var createCloseBtn = document.getElementById('create-close'); if (createCloseBtn) createCloseBtn.addEventListener('click', closeCreateModal);
+  var createOv = document.getElementById('create-modal'); if (createOv) createOv.addEventListener('click', function(e){ if (e.target === createOv) closeCreateModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeCreateModal(); });
+
   // Clicking the PMW logo anywhere returns to My Stuff (brand mark = home)
   document.querySelectorAll('.logo, .ai-rail-logo, .help-bar .logo, .ed-tb-left .logo').forEach(function(l){
     l.style.cursor = 'pointer';
@@ -1811,7 +1827,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('#hero .prompt-chip, #hero .prompt-btn').forEach(function(b){
     b.addEventListener('click', openAI);
   });
-  document.querySelectorAll('.upsell-btn, .plp-btn, .ord-banner .btn-outline.solid, [data-goto="team"]').forEach(function(b){
+  document.querySelectorAll('.upsell-btn, .upsell-link, .plp-btn, .ord-banner .btn-outline.solid, [data-goto="team"]').forEach(function(b){
     b.addEventListener('click', openPricing);
   });
   // Sidebar "Team" opens the standalone Pricing page (crown-locked upsell)

@@ -297,30 +297,10 @@ function applyViewRestrictions(role, doMenuCleanup) {
   var udd = document.getElementById('user-dd');
   if (udd) udd.classList.toggle('role-locked', locked);
   if (locked && doMenuCleanup) {
-    // Iterations dropdown: strip divider + "Add iteration" button
+    // Iterations dropdown: strip divider + "Add iteration" button.
+    // (The branches dropdown is gated separately, at build time, by gateForView — URL-scoped.)
     var imenu = document.getElementById('iters-dd-menu');
     if (imenu) imenu.querySelectorAll('.iter-menu-div, .iter-add').forEach(function(el) { el.remove(); });
-    // Branches dropdown: keep "PosterMyWall Lofi" + active (current) + the branch the viewer came from,
-    // and keep the divider between Main and branch when a branch remains.
-    var bmenu = document.getElementById('iter-dd-menu');
-    if (bmenu) {
-      var fromFile = null;
-      try { fromFile = sessionStorage.getItem('pmw_view_from'); } catch (e) {}
-      bmenu.querySelectorAll('.pv-dd-item').forEach(function(item) {
-        var nameEl = item.querySelector('.pv-dd-name');
-        var isMain = nameEl && nameEl.textContent === 'PosterMyWall Lofi';
-        var keep = item.classList.contains('active') || isMain ||
-                   (fromFile && item.getAttribute('data-file') === fromFile);
-        if (!keep) item.remove();
-      });
-      // Divider stays only if at least one branch item survived alongside Main.
-      var hasBranch = false;
-      bmenu.querySelectorAll('.pv-dd-item').forEach(function(it) {
-        var n = it.querySelector('.pv-dd-name');
-        if (!(n && n.textContent === 'PosterMyWall Lofi')) hasBranch = true;
-      });
-      if (!hasBranch) bmenu.querySelectorAll('.iter-menu-div').forEach(function(el) { el.remove(); });
-    }
   }
 }
 // Initial call: gates device toggles + user-dd only (menus not yet built; skip menu cleanup to avoid false-locking admin)
@@ -827,6 +807,22 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       function bEntries(k){return list.filter(function(it){return it.branch===k;}).sort(function(a,b){return (a.n||0)-(b.n||0);});}
       function bName(k){var e=bEntries(k);return namesMap[mid(e[0].file)]||(e[0]&&e[0].name)||k;}
       function esc2(s){return (''+s).split('<').join('&lt;');}
+      // View/guest seats may only ever see Main + ONE branch in this dropdown: the branch they
+      // arrived through. That scope is URL-based (current branch file, or ?b=<key> on Main) — robust
+      // across reloads/new tabs, never relying on sessionStorage. Filtering happens here at build
+      // time (menu exists) and re-runs on auth-resolve, so it can't race the async menu build.
+      function gateForView(role){
+        if(!(role==='view'||role==='guest'||!role))return;
+        var scope=current.branch||null;
+        if(!scope){try{scope=new URLSearchParams(location.search).get('b');}catch(e){}}
+        menu.querySelectorAll('.pv-dd-item').forEach(function(item){
+          if(item.getAttribute('data-main'))return;
+          if(scope&&item.getAttribute('data-branch')===scope)return;
+          item.remove();
+        });
+        if(!menu.querySelector('.pv-dd-item[data-branch]'))menu.querySelectorAll('.iter-menu-div').forEach(function(el){el.remove();});
+      }
+      function setupViewGate(){ if(window.PMWAuth&&PMWAuth.require)PMWAuth.require(function(p,r){gateForView(r||'view');}); else gateForView('view'); }
       if(current.main){
         isMain=true;
         btn.innerHTML='<span class="icon">'+GLOBE+'</span><span>PosterMyWall Lofi</span><span class="chev">'+CHEV+'</span>';
@@ -840,18 +836,17 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
           right.appendChild(nb);
           nb.addEventListener('click',function(){namePrompt(function(name){copyPrompt('Create a new lo-fi (branch) named "'+name+'" off Main (postermywall-lofi.html) — duplicate the Main mockup as a new branch called "'+name+'", register it in iterations.json, and open it.');});});
         }
-        var _h='<div class="pv-dd-item active" data-file="'+mainEntry.file+'"><span class="icon">'+GLOBE+'</span><span class="pv-dd-name">PosterMyWall Lofi</span><span class="pv-dd-check">'+CHECK+'</span></div>';
+        var _h='<div class="pv-dd-item active" data-main="1" data-file="'+mainEntry.file+'"><span class="icon">'+GLOBE+'</span><span class="pv-dd-name">PosterMyWall Lofi</span><span class="pv-dd-check">'+CHECK+'</span></div>';
         var bks=bKeys();
         bks.sort(function(a,b){var la=bEntries(a),lb=bEntries(b);return (new Date(lb[lb.length-1].created||0))-(new Date(la[la.length-1].created||0));}); // newest first
-        if(bks.length){_h+='<div class="iter-menu-div"></div>'+bks.map(function(k){var e=bEntries(k);var L=e[e.length-1];return '<div class="pv-dd-item" data-file="'+L.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">'+esc2(bName(k))+'</span><span class="iter-sub">'+fmt(L.created)+'</span></div>';}).join('');}
+        if(bks.length){_h+='<div class="iter-menu-div"></div>'+bks.map(function(k){var e=bEntries(k);var L=e[e.length-1];return '<div class="pv-dd-item" data-branch="'+k+'" data-file="'+L.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">'+esc2(bName(k))+'</span><span class="iter-sub">'+fmt(L.created)+'</span></div>';}).join('');}
         menu.innerHTML=_h;
         menu.querySelectorAll('.pv-dd-item').forEach(function(item){item.addEventListener('click',function(){var ff=item.getAttribute('data-file');dd.classList.remove('open');if(ff&&ff!==cur)window.location.href=ff;});});
+        setupViewGate();
         return;
       }
       var key=current.branch;
       var bes=bEntries(key);
-      // Remember the branch the viewer is on so that, after switching to Main, the branches dropdown can still show it (view-role memory).
-      try{sessionStorage.setItem('pmw_view_from',bes[bes.length-1].file);}catch(e){}
       var idx=0;for(var _i=0;_i<bes.length;_i++){if(bes[_i].file===cur){idx=_i;break;}}
       var _name=bName(key);
       var _shown=_name.length>28?_name.slice(0,28).trim()+'…':_name;
@@ -861,10 +856,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       btn.innerHTML='<span class="icon">'+PAGE+'</span><span class="pv-dd-name" style="font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc2(_shown)+'</span><span class="chev">'+CHEV+'</span>';
       var bks=bKeys();
       bks.sort(function(a,b){var la=bEntries(a),lb=bEntries(b);return (new Date(lb[lb.length-1].created||0))-(new Date(la[la.length-1].created||0));}); // newest first
-      var selH='<div class="pv-dd-item" data-file="'+mainEntry.file+'"><span class="icon">'+GLOBE+'</span><span class="pv-dd-name">PosterMyWall Lofi</span></div>';
-      if(bks.length){selH+='<div class="iter-menu-div"></div>'+bks.map(function(k){var e=bEntries(k);var L=e[e.length-1];var isCur=(k===key);return '<div class="pv-dd-item'+(isCur?' active':'')+'" data-file="'+L.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">'+esc2(bName(k))+'</span>'+(isCur?'<span class="pv-dd-check">'+CHECK+'</span>':'<span class="iter-sub">'+fmt(L.created)+'</span>')+'</div>';}).join('');}
+      var selH='<div class="pv-dd-item" data-main="1" data-file="'+mainEntry.file+'?b='+key+'"><span class="icon">'+GLOBE+'</span><span class="pv-dd-name">PosterMyWall Lofi</span></div>';
+      if(bks.length){selH+='<div class="iter-menu-div"></div>'+bks.map(function(k){var e=bEntries(k);var L=e[e.length-1];var isCur=(k===key);return '<div class="pv-dd-item'+(isCur?' active':'')+'" data-branch="'+k+'" data-file="'+L.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">'+esc2(bName(k))+'</span>'+(isCur?'<span class="pv-dd-check">'+CHECK+'</span>':'<span class="iter-sub">'+fmt(L.created)+'</span>')+'</div>';}).join('');}
       menu.innerHTML=selH;
       menu.querySelectorAll('.pv-dd-item').forEach(function(item){item.addEventListener('click',function(){var f=item.getAttribute('data-file');dd.classList.remove('open');if(f&&f!==cur)window.location.href=f;});});
+      setupViewGate();
 
       // ===== (B) separate Iterations dropdown beside it =====
       var idd=document.createElement('div');idd.className='pv-dd pv-dd-left';idd.id='iters-dd';
@@ -1128,10 +1124,22 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       }
       // Record real clicks inside the live mockup (capture phase, never blocks the UI).
       var liveClip=document.querySelector('#vframe .frame-clip');
+      // The mockup is "at base" when no full-page overlay/modal is open and the default dashboard
+      // view (designs) is showing — i.e. exactly what resetMain() reproduces with an empty trail.
+      function atBase(){
+        if(!liveClip)return true;
+        if(liveClip.querySelector('[class*="overlay"].open,[class*="modal"].open'))return false;
+        var dv=liveClip.querySelector('#view-designs');
+        if(dv&&getComputedStyle(dv).display==='none')return false;
+        return true;
+      }
       if(liveClip){
         liveClip.addEventListener('click',function(e){
           var t=e.target.closest&&e.target.closest('a,button,[data-view],[data-mega],[data-act],[data-tab],[data-goto],[data-switch],[data-gnav],.nav-item,.tab-item,.design-card-thumb,.create-card,.create-dashed,.gal-tile,.gal-tpl,.rec-card,.ai-card,.m-thumb,.ed-rail-item,.upsell-viewplans,.upsell-btn,.logo,[id]');
           var sig=sigOf(t||e.target,liveClip);if(sig)trail.push(sig);
+          // After the click's handler runs: if we're back at the plain dashboard, the visible state
+          // needs no replay — drop the trail so stale steps (a closed page/modal) don't persist.
+          setTimeout(function(){if(atBase())trail.length=0;},0);
         },true);
       }
       function resetMain(win,doc){
