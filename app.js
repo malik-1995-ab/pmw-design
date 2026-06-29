@@ -31,6 +31,12 @@ function switchView(id) {
   // Hero only shows on the designs view
   hero.style.display = (id === 'designs') ? 'block' : 'none';
 }
+// ONE stable, white-contrast-safe colour per person (keyed by display name), shared by BOTH the
+// comment-thread avatars AND the live-presence cursors/bubbles so a user looks the same everywhere.
+var PMW_USER_PALETTE=['#2563EB','#DC2626','#059669','#7C3AED','#DB2777','#EA580C','#0891B2','#4F46E5','#16A34A','#CA8A04','#9333EA','#E11D48','#0284C7','#0D9488','#65A30D','#C026D3','#B45309','#475569','#BE123C','#1D4ED8'];
+// Pinned per-user colours (override the deterministic palette for specific accounts).
+var PMW_USER_COLORS={'abdullah@250mils.com':'#16A34A','Abdullah Malik':'#16A34A'};
+function pmwUserColor(key){key=''+(key||'?');if(PMW_USER_COLORS[key])return PMW_USER_COLORS[key];var h=0;for(var i=0;i<key.length;i++)h=(h*31+key.charCodeAt(i))>>>0;return PMW_USER_PALETTE[h%PMW_USER_PALETTE.length];}
 
 switchView('designs');
 
@@ -409,8 +415,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     setTimeout(mountLayer,400);
     var _devTog=document.getElementById('device-toggle');if(_devTog)_devTog.addEventListener('click',function(){removePending();closePop();setTimeout(function(){mountLayer();render();},300);});
     var annos=[],replies={},mode=false,draft=null,curPop=null,pendingEl=null,curThreadId=null,numById={},editState=null;
-    var AV_COLORS=['#E5484D','#2F6DF6','#E5731E','#12A150','#8B5CF6','#EC4899','#0EA5E9','#D97706','#0F766E','#7C3AED'];
-    function avatarColor(name){var s=(''+(name||'?'));var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return AV_COLORS[h%AV_COLORS.length];}
+    function avatarColor(name){return pmwUserColor(name);}
     function avatarLetter(name){var s=(''+(name||'?')).trim();return (s.charAt(0)||'?').toUpperCase();}
     var SVG_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2l4 -4"/></svg>';
     var SVG_X='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
@@ -910,7 +915,13 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     // Press-and-hold the grey canvas area (when the drawer is closed) to compare with production —
     // same behaviour as the "Compare with production" button. Release (global pointerup) restores.
     var stage=document.querySelector(".stage");
-    if(stage){stage.addEventListener("pointerdown",function(e){if(e.target!==stage||on)return;e.preventDefault();if(drawer.__compareShow)drawer.__compareShow();});}
+    if(stage){
+      stage.addEventListener("pointerdown",function(e){if(e.target!==stage||on)return;e.preventDefault();stage.classList.add('stage-pressing');if(drawer.__compareShow)drawer.__compareShow();});
+      document.addEventListener("pointerup",function(){stage.classList.remove('stage-pressing');});
+      document.addEventListener("pointercancel",function(){stage.classList.remove('stage-pressing');});
+      stage.addEventListener("pointermove",function(e){stage.classList.toggle('stage-hover',e.target===stage);});
+      stage.addEventListener("pointerleave",function(){stage.classList.remove('stage-hover');});
+    }
   }
   // ===== Overview: Cowork-authored markdown per branch/file (ask Cowork to update OVERVIEW_MD) =====
   var OVERVIEW_MD=(typeof window.PMW_OVERVIEW_MD==='string')?window.PMW_OVERVIEW_MD:[
@@ -1404,4 +1415,76 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(p).then(function(){toast('Merge prompt copied — paste it into Cowork to run it.');},function(){toast(p);});}else{toast(p);}};
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+/* --- live presence: Figma-style cursors + click ripples + viewer avatars (Supabase Realtime) --- */
+(function(){
+  if(/[?&]thumb\b/.test(location.search))return;                 // skip dashboard thumbnails
+  var clip=document.querySelector('#vframe .frame-clip'); if(!clip)return;  // mockups only (Main + branches)
+  var SBU="https://oglajrkysripzcyahlux.supabase.co",SBK="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbGFqcmt5c3JpcHpjeWFobHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NjUyMDUsImV4cCI6MjA5NzM0MTIwNX0.2Fjx1ugopkUP_QaHGFVIH49vQi5ck0k93oUsSPOMWoo";
+  var MOCKUP=(window.PMW_MOCKUP)||((location.pathname.split('/').pop()||'').replace('.html',''))||'main';
+  var myId=Math.random().toString(36).slice(2,10);   // per-tab presence id
+  // Wide palette of white-contrast-safe colours (Tailwind 600/700, all AA on white). A logged-in user
+  // gets a LIFETIME-fixed colour derived deterministically from their account — same on every device,
+  // never reshuffles. Anonymous viewers get a stable per-browser colour. Both only draw from this palette.
+  function pickColor(){
+    var p=window.PMWAuth&&PMWAuth.profile&&PMWAuth.profile();
+    if(p&&(p.name||p.email))return pmwUserColor(p.name||p.email);   // same key as comment authors → matches everywhere
+    var c;try{c=localStorage.getItem('pmw_cursor_color');}catch(e){}
+    if(!c){c=PMW_USER_PALETTE[Math.floor(Math.random()*PMW_USER_PALETTE.length)];try{localStorage.setItem('pmw_cursor_color',c);}catch(e){}}
+    return c;
+  }
+  var myColor=pickColor();
+  var myName='Guest';
+  function refreshName(){try{var p=window.PMWAuth&&PMWAuth.profile&&PMWAuth.profile();if(p&&(p.name||p.email))myName=p.name||p.email;}catch(e){}}
+  refreshName();
+  var CURSOR='<svg viewBox="0 0 16 16" width="20" height="20"><path d="M2 1.5 L2 13 L5 10 L7.2 14.5 L9.3 13.6 L7.1 9.2 L11 9.2 Z" fill="currentColor" stroke="#fff" stroke-width="1.1" stroke-linejoin="round"/></svg>';
+  var layer=document.createElement('div');layer.id='live-cursors';document.body.appendChild(layer);
+  var avatars=document.createElement('div');avatars.id='pv-presence';
+  var pvHost=document.querySelector('.preview-bar .pv-right')||document.querySelector('.preview-bar .pv-center');
+  if(pvHost)pvHost.insertBefore(avatars,pvHost.firstChild);
+  var cursors={};
+  function rect(){return clip.getBoundingClientRect();}
+  function place(c){var r=rect();c.el.style.left=(r.left+c.nx*r.width)+'px';c.el.style.top=(r.top+c.ny*r.height)+'px';}
+  function placeAll(){for(var id in cursors)place(cursors[id]);}
+  function upsert(d){
+    var c=cursors[d.id];
+    if(!c){var el=document.createElement('div');el.className='lc-cursor';el.innerHTML=CURSOR+'<span class="lc-name"></span>';layer.appendChild(el);c=cursors[d.id]={el:el};}
+    c.nx=d.x;c.ny=d.y;c.last=performance.now();
+    c.el.style.color=d.color||'#2F6DF6';
+    var nm=c.el.querySelector('.lc-name');nm.textContent=d.name||'Guest';nm.style.background=d.color||'#2F6DF6';
+    place(c);
+  }
+  function ripple(d){var r=rect();var el=document.createElement('div');el.className='lc-ripple';el.style.left=(r.left+d.x*r.width)+'px';el.style.top=(r.top+d.y*r.height)+'px';el.style.borderColor=d.color||'#2F6DF6';layer.appendChild(el);setTimeout(function(){el.remove();},650);}
+  function renderAvatars(state){
+    var users={};Object.keys(state||{}).forEach(function(k){(state[k]||[]).forEach(function(m){if(m&&m.id)users[m.id]=m;});});
+    var ids=Object.keys(users);
+    // Remove cursors for anyone no longer present (a viewer's cursor stays put while they're here).
+    for(var cid in cursors){if(!users[cid]){cursors[cid].el.remove();delete cursors[cid];}}
+    if(!ids.length){avatars.innerHTML='';return;}
+    avatars.innerHTML=ids.slice(0,5).map(function(id){var u=users[id];var ini=((u.name||'?').trim().charAt(0)||'?').toUpperCase();return '<span class="lc-av'+(id===myId?' me':'')+'" data-tip="'+((u.name||'Guest')+(id===myId?' (you)':''))+'" style="background:'+(u.color||'#888')+'">'+ini+'</span>';}).join('')+(ids.length>5?'<span class="lc-av lc-more">+'+(ids.length-5)+'</span>':'');
+  }
+  window.addEventListener('resize',placeAll,{passive:true});
+  document.addEventListener('scroll',placeAll,{passive:true,capture:true});
+  setInterval(function(){var t=performance.now();for(var id in cursors){if(t-cursors[id].last>60000){cursors[id].el.remove();delete cursors[id];}}},5000);
+  import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm').then(function(mod){
+    var sb=mod.createClient(SBU,SBK,{realtime:{params:{eventsPerSecond:30}}});
+    var ch=sb.channel('room:'+MOCKUP,{config:{presence:{key:myId}}});
+    ch.on('presence',{event:'sync'},function(){renderAvatars(ch.presenceState());});
+    ch.on('broadcast',{event:'cursor'},function(p){if(p.payload&&p.payload.id!==myId)upsert(p.payload);});
+    ch.on('broadcast',{event:'click'},function(p){if(p.payload&&p.payload.id!==myId)ripple(p.payload);});
+    ch.subscribe(function(status){if(status==='SUBSCRIBED')ch.track({id:myId,name:myName,color:myColor});});
+    var last=0;
+    window.addEventListener('mousemove',function(e){
+      var now=performance.now();if(now-last<33)return;last=now;
+      var r=rect();if(!r.width)return;var nx=(e.clientX-r.left)/r.width,ny=(e.clientY-r.top)/r.height;
+      if(nx<-0.05||nx>1.05||ny<-0.05||ny>1.05)return;
+      ch.send({type:'broadcast',event:'cursor',payload:{id:myId,name:myName,color:myColor,x:nx,y:ny}});
+    },{passive:true});
+    window.addEventListener('click',function(e){
+      var r=rect();var nx=(e.clientX-r.left)/r.width,ny=(e.clientY-r.top)/r.height;
+      if(nx<0||nx>1||ny<0||ny>1)return;
+      ch.send({type:'broadcast',event:'click',payload:{id:myId,color:myColor,x:nx,y:ny}});
+    },true);
+    if(window.PMWAuth&&PMWAuth.require)PMWAuth.require(function(){refreshName();myColor=pickColor();try{ch.track({id:myId,name:myName,color:myColor});}catch(e){}});
+  }).catch(function(){/* Realtime unavailable — presence degrades silently */});
 })();
