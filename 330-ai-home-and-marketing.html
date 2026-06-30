@@ -6,7 +6,7 @@
 <title>PMW Lo-fi — My Stuff</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap">
 <script src="auth.js?v=3"></script>
-<link rel="stylesheet" href="app.css?v=19">
+<link rel="stylesheet" href="app.css?v=26">
 </head>
 <body>
 <div class="preview-bar">
@@ -67,21 +67,22 @@
       </div>
     </div>
     <div class="nav-group">
-      <button class="nav-item active" data-view="designs"><i class="ti ti-layout-grid"></i>Designs</button>
-      <button class="nav-item nav-ai" data-view="ai"><i class="ti ti-sparkles"></i>Create with AI</button>
+      <button class="nav-item active" data-view="home"><i class="ti ti-home"></i>Home</button>
+      <button class="nav-item" data-view="designs"><i class="ti ti-layout-grid"></i>Designs</button>
+      <button class="nav-item" data-view="ai"><i class="ti ti-sparkles"></i>AI Chats</button>
       <button class="nav-item" data-view="events"><i class="ti ti-calendar-event"></i>Events</button>
       <button class="nav-item" data-view="social"><i class="ti ti-share"></i>Social Media Posts</button>
       <button class="nav-item" data-view="emails"><i class="ti ti-mail"></i>Emails<i class="ti ti-crown-filled crown-icon"></i></button>
-      <button class="nav-item" data-view="planner"><i class="ti ti-calendar"></i>Content Planner<i class="ti ti-crown-filled crown-icon"></i></button>
+      <div class="nav-divider"></div>
       <button class="nav-item" data-view="business"><i class="ti ti-building"></i>My Business</button>
-      <button class="nav-item" data-view="audience"><i class="ti ti-user-circle"></i>Audience<i class="ti ti-crown-filled crown-icon"></i></button>
-      <button class="nav-item" data-view="brand"><i class="ti ti-palette"></i>Brand Kits<i class="ti ti-crown-filled crown-icon"></i></button>
-      <button class="nav-item" data-view="team"><i class="ti ti-users"></i>Team<i class="ti ti-crown-filled crown-icon"></i></button>
+      <button class="nav-item" data-view="audience"><i class="ti ti-user-circle"></i>My Customers<i class="ti ti-crown-filled crown-icon"></i></button>
+      <button class="nav-item" data-view="brand"><i class="ti ti-palette"></i>My Styles<i class="ti ti-crown-filled crown-icon"></i></button>
+      <button class="nav-item" data-view="team"><i class="ti ti-users"></i>My Team<i class="ti ti-crown-filled crown-icon"></i></button>
     </div>
     <div class="nav-divider"></div>
     <div class="nav-group">
-      <button class="nav-item" data-view="orders"><i class="ti ti-wallet"></i>Order history</button>
       <button class="nav-item" data-view="help"><i class="ti ti-help-circle"></i>Get Help</button>
+      <button class="nav-item" data-view="orders"><i class="ti ti-wallet"></i>Order history</button>
       <button class="nav-item" data-view="trash"><i class="ti ti-trash"></i>Trash</button>
     </div>
     <div class="sidebar-upsell">
@@ -123,16 +124,87 @@
 
       <div class="search-wrap">
         <span class="icon"><i class="ti ti-search"></i></span>
-        <input type="text" placeholder="Search designs and more...">
+        <input type="text" placeholder="Search...">
         <div class="tb-pop" id="pop-search">
           <div class="tb-search-pills">
-            <button class="tb-search-pill active"><i class="ti ti-layout-grid"></i>Templates</button>
-            <button class="tb-search-pill"><i class="ti ti-folder"></i>My designs</button>
-            <button class="tb-search-pill"><i class="ti ti-sparkles"></i>Create with AI</button>
+            <button class="tb-search-pill active" data-hsp="templates"><i class="ti ti-layout-grid"></i>Browse templates</button>
+            <button class="tb-search-pill" data-hsp="ai"><i class="ti ti-sparkles"></i>Create with AI</button>
+            <button class="tb-search-pill" data-hsp="mine"><i class="ti ti-folder"></i>Find My Stuff</button>
           </div>
-          <div class="tb-skel w1"></div>
-          <div class="tb-skel w2"></div>
-          <div class="tb-skel w3"></div>
+
+          <div class="hs-panel" data-hpanel="templates">
+            <div class="hs-rec-h">Recommended for you <span class="hs-rec-spark"><i class="ti ti-sparkles"></i></span></div>
+            <div class="hs-rec-row">
+              <span class="hs-rec-card"></span>
+              <span class="hs-rec-card"></span>
+              <span class="hs-rec-card"></span>
+              <span class="hs-rec-card"></span>
+              <span class="hs-rec-card"></span>
+              <span class="hs-rec-card"></span>
+              <span class="hs-rec-card"></span>
+              <span class="hs-rec-card"></span>
+            </div>
+            <div class="hs-cats">
+              <div class="hs-cat">
+                <div class="hs-cat-h">Themes</div>
+                <div class="hs-cat-item"><i class="ti ti-calendar-event"></i>4th of july</div>
+                <div class="hs-cat-item"><i class="ti ti-calendar-event"></i>Events</div>
+                <div class="hs-cat-item"><i class="ti ti-building"></i>Church</div>
+                <div class="hs-cat-item"><i class="ti ti-building"></i>Small business</div>
+                <div class="hs-cat-item"><i class="ti ti-users"></i>Bands</div>
+              </div>
+              <div class="hs-cat">
+                <div class="hs-cat-h">Sizes</div>
+                <div class="hs-cat-item"><i class="ti ti-photo"></i>Poster</div>
+                <div class="hs-cat-item"><i class="ti ti-photo"></i>Flyer</div>
+                <div class="hs-cat-item"><i class="ti ti-photo"></i>Banner</div>
+                <div class="hs-cat-item"><i class="ti ti-mail"></i>Menu</div>
+                <div class="hs-cat-item"><i class="ti ti-mail"></i>Invitation</div>
+              </div>
+              <div class="hs-cat">
+                <div class="hs-cat-h">Videos</div>
+                <div class="hs-cat-item"><i class="ti ti-player-play"></i>Video templates</div>
+                <div class="hs-cat-item"><i class="ti ti-layout-grid"></i>Digital signage</div>
+                <div class="hs-cat-item"><i class="ti ti-player-play"></i>Video editor</div>
+                <div class="hs-cat-item"><i class="ti ti-player-play"></i>Video recorder</div>
+                <div class="hs-cat-item"><i class="ti ti-photo"></i>Background remover</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hs-panel" data-hpanel="ai" hidden>
+            <div class="hs-ai-box">
+              <div class="hs-ai-ph">Describe what you want to create...</div>
+              <div class="hs-ai-row">
+                <div class="hs-ai-left">
+                  <span class="hs-ai-plus"><i class="ti ti-plus"></i></span>
+                  <span class="hs-ai-chip"><span class="hs-ai-chip-ic"></span>Templates</span>
+                </div>
+                <div class="hs-ai-right">
+                  <span class="hs-ai-mic"><i class="ti ti-microphone"></i></span>
+                  <span class="hs-ai-send"><i class="ti ti-arrow-right"></i></span>
+                </div>
+              </div>
+            </div>
+            <div class="hs-more-h">Do more with AI</div>
+            <div class="ai-feat-row hs-more-row">
+              <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-player-play"></i><span class="ai-feat-badge">New</span></span><span class="ai-feat-label">AI videos</span></button>
+              <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-photo"></i></span><span class="ai-feat-label">AI images</span></button>
+              <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-microphone"></i></span><span class="ai-feat-label">AI Audio</span></button>
+              <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-player-play"></i></span><span class="ai-feat-label">AI Subtitles</span></button>
+              <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-photo"></i></span><span class="ai-feat-label">Remove bg</span></button>
+              <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-maximize"></i></span><span class="ai-feat-label">AI Upscale</span></button>
+            </div>
+          </div>
+
+          <div class="hs-panel" data-hpanel="mine" hidden>
+            <div class="hs-trend-h">Recents</div>
+            <div class="psp-doc"><span class="psp-thumb"></span><span>White Joyful 4th of July Sale Instagram Story</span></div>
+            <div class="psp-doc"><span class="psp-fic"><i class="ti ti-folder"></i></span><span>Untitled folder</span></div>
+            <div class="psp-doc"><span class="psp-thumb"></span><span>Revival</span></div>
+            <div class="psp-doc"><span class="psp-thumb"></span><span>Restaurant Social Media Video Promotion Template</span></div>
+            <div class="psp-doc"><span class="psp-fic"><i class="ti ti-folder"></i></span><span>Apple folder</span></div>
+          </div>
         </div>
       </div>
 
@@ -456,26 +528,111 @@
 
     <main class="main">
 
-      <!-- Hero (shared across designs view) -->
-      <div class="hero" id="hero">
-        <h1>Create with <span class="spark">AI</span> <span class="spark">✦</span></h1>
-        <div class="prompt-bar">
-          <input type="text" placeholder="Describe what you want to create...">
-          <div class="prompt-actions">
-            <button class="prompt-btn"><i class="ti ti-microphone"></i></button>
-            <button class="prompt-btn send"><i class="ti ti-arrow-right"></i></button>
+      <!-- Home view (the Create with AI hero lives here now, not on Designs) -->
+      <div class="content" id="view-home" style="display:none;">
+        <div class="hero" id="hero">
+          <h1>Good morning Olivia, let's get started today</h1>
+          <div class="prompt-shell">
+            <div class="home-search-pop" id="home-search-pop">
+              <div class="hs-bar-space"></div>
+              <div class="tb-search-pills">
+                <button class="tb-search-pill active" data-hsp="templates"><i class="ti ti-layout-grid"></i>Browse templates</button>
+                <button class="tb-search-pill" data-hsp="ai"><i class="ti ti-sparkles"></i>Create with AI</button>
+                <button class="tb-search-pill" data-hsp="mine"><i class="ti ti-folder"></i>Find My Stuff</button>
+              </div>
+
+              <div class="hs-panel" data-hpanel="templates">
+                <div class="hs-rec-h">Recommended for you <span class="hs-rec-spark"><i class="ti ti-sparkles"></i></span></div>
+                <div class="hs-rec-row">
+                  <span class="hs-rec-card"></span>
+                  <span class="hs-rec-card"></span>
+                  <span class="hs-rec-card"></span>
+                  <span class="hs-rec-card"></span>
+                  <span class="hs-rec-card"></span>
+                  <span class="hs-rec-card"></span>
+                  <span class="hs-rec-card"></span>
+                  <span class="hs-rec-card"></span>
+                </div>
+                <div class="hs-cats">
+                  <div class="hs-cat">
+                    <div class="hs-cat-h">Themes</div>
+                    <div class="hs-cat-item"><i class="ti ti-calendar-event"></i>4th of july</div>
+                    <div class="hs-cat-item"><i class="ti ti-calendar-event"></i>Events</div>
+                    <div class="hs-cat-item"><i class="ti ti-building"></i>Church</div>
+                    <div class="hs-cat-item"><i class="ti ti-building"></i>Small business</div>
+                    <div class="hs-cat-item"><i class="ti ti-users"></i>Bands</div>
+                  </div>
+                  <div class="hs-cat">
+                    <div class="hs-cat-h">Sizes</div>
+                    <div class="hs-cat-item"><i class="ti ti-photo"></i>Poster</div>
+                    <div class="hs-cat-item"><i class="ti ti-photo"></i>Flyer</div>
+                    <div class="hs-cat-item"><i class="ti ti-photo"></i>Banner</div>
+                    <div class="hs-cat-item"><i class="ti ti-mail"></i>Menu</div>
+                    <div class="hs-cat-item"><i class="ti ti-mail"></i>Invitation</div>
+                  </div>
+                  <div class="hs-cat">
+                    <div class="hs-cat-h">Videos</div>
+                    <div class="hs-cat-item"><i class="ti ti-player-play"></i>Video templates</div>
+                    <div class="hs-cat-item"><i class="ti ti-layout-grid"></i>Digital signage</div>
+                    <div class="hs-cat-item"><i class="ti ti-player-play"></i>Video editor</div>
+                    <div class="hs-cat-item"><i class="ti ti-player-play"></i>Video recorder</div>
+                    <div class="hs-cat-item"><i class="ti ti-photo"></i>Background remover</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hs-panel" data-hpanel="ai" hidden>
+                <div class="hs-ai-box">
+                  <div class="hs-ai-ph">Describe what you want to create...</div>
+                  <div class="hs-ai-row">
+                    <div class="hs-ai-left">
+                      <span class="hs-ai-plus"><i class="ti ti-plus"></i></span>
+                      <span class="hs-ai-chip"><span class="hs-ai-chip-ic"></span>Templates</span>
+                    </div>
+                    <div class="hs-ai-right">
+                      <span class="hs-ai-mic"><i class="ti ti-microphone"></i></span>
+                      <span class="hs-ai-send"><i class="ti ti-arrow-right"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="hs-more-h">Do more with AI</div>
+                <div class="ai-feat-row hs-more-row">
+                  <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-player-play"></i><span class="ai-feat-badge">New</span></span><span class="ai-feat-label">AI videos</span></button>
+                  <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-photo"></i></span><span class="ai-feat-label">AI images</span></button>
+                  <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-microphone"></i></span><span class="ai-feat-label">AI Audio</span></button>
+                  <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-player-play"></i></span><span class="ai-feat-label">AI Subtitles</span></button>
+                  <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-photo"></i></span><span class="ai-feat-label">Remove bg</span></button>
+                  <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-maximize"></i></span><span class="ai-feat-label">AI Upscale</span></button>
+                </div>
+              </div>
+
+              <div class="hs-panel" data-hpanel="mine" hidden>
+                <div class="hs-trend-h">Recents</div>
+                <div class="psp-doc"><span class="psp-thumb"></span><span>White Joyful 4th of July Sale Instagram Story</span></div>
+                <div class="psp-doc"><span class="psp-fic"><i class="ti ti-folder"></i></span><span>Untitled folder</span></div>
+                <div class="psp-doc"><span class="psp-thumb"></span><span>Revival</span></div>
+                <div class="psp-doc"><span class="psp-thumb"></span><span>Restaurant Social Media Video Promotion Template</span></div>
+                <div class="psp-doc"><span class="psp-fic"><i class="ti ti-folder"></i></span><span>Apple folder</span></div>
+              </div>
+            </div>
+            <div class="prompt-bar">
+              <input type="text" id="home-search-input" placeholder="Browse templates, Create with AI &amp; much more...">
+            </div>
           </div>
-        </div>
-        <div class="prompt-chips">
-          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-layout-grid"></i></span>Create design</button>
-          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-sparkles"></i></span>Marketing ideas</button>
-          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-photo"></i></span>Make images</button>
-          <button class="prompt-chip"><span class="chip-ico"><i class="ti ti-message"></i></span>Write a caption</button>
+          <div class="ai-feat-row">
+            <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-player-play"></i><span class="ai-feat-badge">New</span></span><span class="ai-feat-label">AI videos</span></button>
+            <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-photo"></i></span><span class="ai-feat-label">AI images</span></button>
+            <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-microphone"></i></span><span class="ai-feat-label">AI Audio</span></button>
+            <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-player-play"></i></span><span class="ai-feat-label">AI Subtitles</span></button>
+            <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-photo"></i></span><span class="ai-feat-label">Remove bg</span></button>
+            <button class="ai-feat"><span class="ai-feat-thumb"><i class="ti ti-maximize"></i></span><span class="ai-feat-label">AI Upscale</span></button>
+          </div>
         </div>
       </div>
 
       <!-- Designs view (default) -->
       <div class="content" id="view-designs">
+        <div class="pg-title">Designs</div>
         <div class="tabs-row">
           <div class="tab-group" id="ms-tabs">
             <button class="tab-item active" data-mstab="my">My designs</button>
@@ -1168,7 +1325,7 @@
 
 /* ===== Branch "330. AI Home & Marketing" overrides (kept inside .frame-clip so "What changed?" detects them) ===== */
 /* White top header */
-.topbar { background: var(--bg-neutral-primary-default); border-bottom: 1px solid var(--br-neutral-primary); padding-left: 8px; padding-right: 8px; }
+.topbar { background: var(--bg-neutral-primary-default); border-bottom: none; padding-left: 8px; padding-right: 8px; }
 .topbar .logo { color: var(--ct-neutral-primary); }
 .topbar .logo-icon { background: var(--ct-neutral-primary); }
 .topbar .logo-icon svg { stroke: var(--ct-neutral-primary-on-dark); }
@@ -1177,16 +1334,19 @@
 .topbar .top-nav-item.active { background: var(--bg-neutral-secondary-default); color: var(--ct-neutral-primary); }
 .topbar .icon-btn { border: 1px solid var(--br-neutral-primary); color: var(--ct-neutral-secondary); }
 .topbar .icon-btn:hover { background: var(--bg-neutral-secondary-default); }
-.topbar .search-wrap .icon { color: var(--ct-neutral-tertiary); }
-.topbar .search-wrap input { border: 1px solid var(--br-neutral-primary); background: var(--bg-neutral-primary-default); color: var(--ct-neutral-primary); }
+.topbar .search-wrap > .icon { color: var(--ct-neutral-tertiary); left: 14px; right: auto; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; pointer-events: none; }
+.topbar .search-wrap > .icon, .topbar .search-wrap > .icon .icon { color: var(--ct-neutral-tertiary); }
+.topbar .search-wrap > .icon .icon { position: static; left: auto; top: auto; transform: none; width: 16px; height: 16px; }
+.topbar .search-wrap > .icon svg { width: 16px; height: 16px; display: block; fill: none; stroke: currentColor; stroke-width: 2; }
+.topbar .search-wrap input { border: 1px solid var(--br-neutral-primary); background: var(--bg-neutral-primary-default); color: var(--ct-neutral-primary); width: 168px; padding: 0 14px 0 38px; }
 .topbar .search-wrap input::placeholder { color: var(--ct-neutral-tertiary); }
 .topbar .search-wrap input:focus { border-color: var(--br-neutral-primary-hover); background: var(--bg-neutral-primary-default); }
 .topbar .btn-solid { background: var(--ct-neutral-primary); color: var(--ct-neutral-primary-on-dark); }
 .topbar .btn-solid:hover { background: var(--gray-90); }
 .topbar .avatar { background: var(--bg-neutral-secondary-default); border: 1px solid var(--br-neutral-primary); color: var(--ct-neutral-primary); }
 /* Full-height sidebar (logo at top) + header only over the right column */
-.shell { display: grid; grid-template-columns: 220px 1fr; grid-template-rows: 56px 1fr; grid-template-areas: "sidebar header" "sidebar main"; height: 100%; overflow: hidden; }
-.shell > .sidebar { grid-area: sidebar; height: 100%; display: flex; flex-direction: column; padding-top: 0; }
+.shell { display: grid; grid-template-columns: 248px 1fr; grid-template-rows: 56px 1fr; grid-template-areas: "sidebar header" "sidebar main"; height: 100%; overflow: hidden; }
+.shell > .sidebar { grid-area: sidebar; height: 100%; width: 248px; min-width: 248px; display: flex; flex-direction: column; padding-top: 0; }
 .shell > .nav-zone { grid-area: header; }
 .shell > .body-layout { grid-area: main; min-width: 0; }
 .sidebar-logo { height: 56px; flex-shrink: 0; display: flex; align-items: center; padding: 0 16px; }
@@ -1194,11 +1354,102 @@
 .sidebar-logo .logo-icon { display: flex; align-items: center; justify-content: center; }
 .sidebar-logo .logo-icon svg.pmw-mark { fill: currentColor; stroke: none; }
 /* Upsell: single full-width button */
-.sidebar-upsell { border-top: none; }
+.sidebar-upsell { border-top: none; margin: auto 8px 8px; border-radius: var(--radius-16); padding: 12px; }
 .sidebar-upsell .upsell-btn { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #F5C04E; color: var(--ct-neutral-primary); border: none; }
 .sidebar-upsell .upsell-btn:hover { opacity: 1; background: #EBB43C; }
 .sidebar-upsell .upsell-btn .icon { display: inline-flex; font-size: 16px; }
 .sidebar-upsell .upsell-link { color: var(--ct-neutral-primary); font-weight: 600; text-decoration: underline; cursor: pointer; white-space: nowrap; }
+/* The Create-with-AI hero now lives in the Home view; show it there (overrides switchView's designs-only toggle) */
+#view-home #hero { display: block !important; padding: 24px 24px 20px; border-bottom: none; margin-top: 8px; border-radius: var(--radius-24); background: var(--bg-neutral-primary-default); }
+/* Home search: input stays in place; the card expands around it */
+.prompt-shell { position: relative; max-width: 560px; margin: 0 auto; }
+.prompt-shell.hs-open { z-index: 100; }
+#view-home #hero .prompt-shell .prompt-bar { padding: 14px 16px; position: relative; z-index: 2; margin: 0; max-width: none; }
+.home-search-pop { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 100%; z-index: 1; text-align: left; background: var(--bg-neutral-primary-default); border: 1px solid var(--br-neutral-primary); border-radius: var(--radius-20); box-shadow: var(--shadow-floating-md); padding: 12px; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .14s ease, width .16s ease, box-shadow .16s ease; }
+.prompt-shell.hs-open .home-search-pop { opacity: 1; visibility: visible; pointer-events: auto; width: calc(100% + 24px); box-shadow: 0 14px 44px rgba(20,19,37,0.16); }
+.prompt-shell.hs-open .prompt-bar { box-shadow: none; }
+.hs-bar-space { height: 66px; }
+.home-search-pop .tb-search-pills { display: flex; gap: 4px; margin-bottom: 8px; background: var(--bg-neutral-secondary-default); border-radius: var(--radius-12); padding: 4px; }
+.home-search-pop .tb-search-pill { flex: 1; justify-content: center; border: none; background: transparent; border-radius: var(--radius-8); padding: 8px; }
+.home-search-pop .tb-search-pill:hover { background: rgba(20,19,37,0.04); }
+.home-search-pop .tb-search-pill.active { background: var(--bg-neutral-primary-default); box-shadow: var(--shadow-floating-sm); }
+.home-search-pop .tb-search-pill.active:hover { background: var(--bg-neutral-primary-default); }
+.hs-trend-h { font-size: 12px; font-weight: 600; color: var(--ct-neutral-secondary); margin: 12px 4px 4px; }
+.hs-trend-item { display: flex; align-items: center; gap: 10px; padding: 8px; margin: 0 -4px; border-radius: var(--radius-8); font-size: 14px; line-height: 20px; color: var(--ct-neutral-primary); cursor: pointer; }
+.hs-trend-item:hover { background: var(--bg-neutral-secondary-default); }
+.hs-trend-ic { display: inline-flex; flex-shrink: 0; }
+.hs-trend-ic svg { width: 18px; height: 18px; display: block; fill: none; stroke: var(--ct-neutral-tertiary); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Recommended-for-you row in the home dropdown */
+.hs-rec-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ct-neutral-secondary); margin: 16px 4px 8px; }
+/* Category columns (replaces Trending) */
+.hs-cats { display: flex; gap: 20px; padding: 4px; margin-top: 8px; }
+.hs-cat { flex: 1; min-width: 0; }
+.hs-cat-h { font-size: 12px; font-weight: 600; color: var(--ct-neutral-secondary); margin: 0 0 6px; }
+.hs-cat-item { display: flex; align-items: center; gap: 10px; padding: 7px 8px; margin: 0 -8px; border-radius: var(--radius-8); font-size: 14px; line-height: 20px; color: var(--ct-neutral-primary); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hs-cat-item:hover { background: var(--bg-neutral-secondary-default); }
+.hs-cat-item .icon { color: var(--ct-neutral-tertiary); font-size: 18px; flex-shrink: 0; display: inline-flex; }
+.hs-cat-item .icon svg { width: 18px; height: 18px; }
+.hs-rec-spark { display: inline-flex; color: var(--ct-neutral-tertiary); font-size: 14px; }
+.hs-rec-row { display: flex; gap: 8px; overflow-x: auto; padding: 0 4px 4px; margin: 0 -4px 4px; scrollbar-width: none; }
+.hs-rec-row::-webkit-scrollbar { display: none; }
+.hs-rec-card { flex: 0 0 auto; width: 64px; height: 88px; border-radius: var(--radius-8); background-color: var(--bg-neutral-secondary-default); background-image: repeating-linear-gradient(45deg, transparent 0 6px, rgba(20,19,37,0.06) 6px 7px); }
+
+/* Create with AI tab — full-width prompt box (home dropdown) */
+.home-search-pop .hs-panel[hidden], #pop-search .hs-panel[hidden] { display: none; }
+.hs-ai-box { border: 1px solid var(--br-neutral-primary); border-radius: var(--radius-16); padding: 14px 16px; margin: 20px 0 4px; }
+.hs-ai-ph { font-size: 14px; color: var(--ct-neutral-tertiary); margin-bottom: 24px; }
+.hs-ai-row { display: flex; align-items: center; justify-content: space-between; }
+.hs-ai-left, .hs-ai-right { display: flex; align-items: center; gap: 10px; }
+.hs-ai-plus { width: 30px; height: 30px; border-radius: var(--radius-full); border: 1px solid var(--br-neutral-primary); display: inline-flex; align-items: center; justify-content: center; color: var(--ct-neutral-secondary); font-size: 18px; cursor: pointer; }
+.hs-ai-chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 8px; border-radius: var(--radius-full); border: 1px solid var(--br-neutral-primary); font-size: 14px; font-weight: 600; color: var(--ct-neutral-primary); cursor: pointer; }
+.hs-ai-chip-ic { width: 22px; height: 22px; border-radius: var(--radius-4); flex-shrink: 0; background-color: var(--bg-neutral-secondary-default); background-image: repeating-linear-gradient(45deg, transparent 0 4px, rgba(20,19,37,0.07) 4px 5px); }
+.hs-ai-mic { color: var(--ct-neutral-secondary); font-size: 18px; display: inline-flex; cursor: pointer; }
+.hs-ai-send { width: 30px; height: 30px; border-radius: var(--radius-full); background: var(--bg-neutral-secondary-default); color: var(--ct-neutral-tertiary); display: inline-flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+.hs-more-h { font-size: 12px; font-weight: 600; color: var(--ct-neutral-secondary); margin: 14px 4px 0; }
+.home-search-pop .hs-more-row, #pop-search .hs-more-row { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; gap: 16px; margin-top: 0; padding: 10px 0 4px; scrollbar-width: none; }
+.hs-more-row::-webkit-scrollbar { display: none; }
+.hs-more-row .ai-feat-label { white-space: nowrap; }
+
+/* Header search dropdown — segmented toggle + three states */
+#pop-search .tb-search-pills { display: flex; gap: 4px; margin-bottom: 8px; background: var(--bg-neutral-secondary-default); border-radius: var(--radius-12); padding: 4px; }
+#pop-search .tb-search-pill { flex: 1; justify-content: center; gap: 4px; border: none; background: transparent; border-radius: var(--radius-8); padding: 8px 6px; font-size: 12px; white-space: nowrap; }
+#pop-search .tb-search-pill .icon svg { width: 14px; height: 14px; }
+#pop-search .tb-search-pill:hover { background: rgba(20,19,37,0.04); }
+#pop-search .tb-search-pill.active { background: var(--bg-neutral-primary-default); box-shadow: var(--shadow-floating-sm); color: var(--ct-neutral-primary); }
+#pop-search .tb-search-pill.active:hover { background: var(--bg-neutral-primary-default); }
+#pop-search { width: 440px; }
+#pop-search .icon { position: static; left: auto; right: auto; top: auto; transform: none; color: inherit; display: inline-flex; align-items: center; }
+#pop-search .psp-panel[hidden] { display: none; }
+#pop-search .hs-trend-h:first-child { margin-top: 4px; }
+.psp-doc { display: flex; align-items: center; gap: 10px; padding: 8px; margin: 0 -4px; border-radius: var(--radius-8); font-size: 14px; line-height: 20px; color: var(--ct-neutral-primary); cursor: pointer; }
+.psp-doc:hover { background: var(--bg-neutral-secondary-default); }
+.psp-doc > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.psp-thumb { flex-shrink: 0; width: 32px; height: 32px; border-radius: var(--radius-4); background-color: var(--bg-neutral-secondary-default); background-image: repeating-linear-gradient(45deg, transparent 0 5px, rgba(20,19,37,0.06) 5px 6px); }
+.psp-fic { flex-shrink: 0; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--ct-neutral-tertiary); }
+.psp-fic .icon { font-size: 18px; }
+.psp-fic svg { width: 18px; height: 18px; display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.psp-ai-box { border: 1px solid var(--br-neutral-primary); border-radius: var(--radius-12); padding: 12px; margin-bottom: 12px; }
+.psp-ai-ph { font-size: 14px; color: var(--ct-neutral-tertiary); margin-bottom: 20px; }
+.psp-ai-row { display: flex; align-items: center; justify-content: space-between; }
+.psp-ai-plus, .psp-ai-send { width: 28px; height: 28px; border-radius: var(--radius-full); display: inline-flex; align-items: center; justify-content: center; font-size: 16px; }
+.psp-ai-plus { border: 1px solid var(--br-neutral-primary); color: var(--ct-neutral-secondary); }
+.psp-ai-send { background: var(--bg-neutral-secondary-default); color: var(--ct-neutral-tertiary); }
+.psp-ai-chips { display: flex; gap: 8px; overflow: hidden; }
+.psp-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid var(--br-neutral-primary); border-radius: var(--radius-full); font-size: 13px; font-weight: 600; color: var(--ct-neutral-primary); background: var(--bg-neutral-primary-default); white-space: nowrap; cursor: pointer; }
+.psp-chip:hover { background: var(--bg-neutral-secondary-default); }
+.psp-chip-ic { width: 18px; height: 18px; border-radius: var(--radius-4); flex-shrink: 0; background-color: var(--bg-neutral-secondary-default); background-image: repeating-linear-gradient(45deg, transparent 0 4px, rgba(20,19,37,0.07) 4px 5px); }
+/* AI feature thumbnails under the Home prompt (neutral lo-fi, hatched placeholders) */
+.ai-feat-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
+.ai-feat { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+.ai-feat-thumb { position: relative; width: 56px; height: 56px; border-radius: var(--radius-12); background: var(--bg-neutral-secondary-default); display: flex; align-items: center; justify-content: center; overflow: visible; }
+.ai-feat-thumb::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-12); background-image: repeating-linear-gradient(135deg, transparent 0, transparent 9px, var(--gray-30) 9px, var(--gray-30) 10px); opacity: .4; }
+.ai-feat-thumb .icon { position: relative; z-index: 1; font-size: 20px; color: var(--ct-neutral-tertiary); }
+.ai-feat-badge { position: absolute; top: -6px; right: -8px; z-index: 2; background: var(--ct-neutral-primary); color: var(--ct-neutral-primary-on-dark); font-size: 10px; font-weight: 600; line-height: 1; padding: 3px 6px; border-radius: var(--radius-full); }
+.ai-feat-label { font-size: 12px; line-height: 16px; color: var(--ct-neutral-secondary); }
+.ai-feat:hover .ai-feat-thumb { background: var(--bg-neutral-tertiary-default); }
+/* Inset the between-groups divider to match the in-group divider's side padding */
+.sidebar > .nav-divider { margin-left: 8px; margin-right: 8px; }
 /* "Create a design" modal is confined to the mockup frame (not the whole platform). */
 .modal-overlay { position: absolute; }
 </style>
@@ -1603,7 +1854,7 @@ window.PMW_OVERVIEW_MD = [
   "_Why: a lighter, app-style layout for the AI Home & Marketing direction._"
 ];
 </script>
-<script src="app.js?v=51" defer></script>
+<script src="app.js?v=60" defer></script>
 <!-- ===== Branch wiring: route every first click to a destination ===== -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1793,8 +2044,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var tRect = trigger.getBoundingClientRect();
     var left = tRect.left - cbRect.left;
     var maxLeft = cb.clientWidth - panel.offsetWidth - 16;
-    if (left > maxLeft) left = Math.max(16, maxLeft);
-    if (left < 16) left = 16;
+    // Shift the panel left so its right edge always stays inside the frame.
+    // For panels wider than the frame this means left can go below the 16px
+    // gutter (the panel slides further left) rather than being cut on the right.
+    if (left > maxLeft) left = maxLeft;
+    if (left < 16 && maxLeft >= 16) left = 16;
     panel.style.left = left + 'px';
   }
   document.querySelectorAll('.top-nav-item[data-mega]').forEach(function(item){
@@ -1802,6 +2056,63 @@ document.addEventListener('DOMContentLoaded', function () {
     item.addEventListener('mouseenter', fix);
     item.addEventListener('click', fix);
   });
+
+  // Both search dropdowns (header + home) share the same panel structure —
+  // switch panels via the segmented pills (Browse templates / Create with AI / Find My Stuff)
+  ['pop-search','home-search-pop'].forEach(function(id){
+    var pop = document.getElementById(id);
+    if (!pop) return;
+    pop.querySelectorAll('.tb-search-pill[data-hsp]').forEach(function(pill){
+      pill.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        var key = pill.getAttribute('data-hsp');
+        pop.querySelectorAll('.tb-search-pill').forEach(function(p){ p.classList.toggle('active', p === pill); });
+        pop.querySelectorAll('.hs-panel').forEach(function(pn){ pn.hidden = pn.getAttribute('data-hpanel') !== key; });
+      });
+    });
+  });
+
+  // The shared harness uses ONE global handler for all .tb-search-pill, so clicking a
+  // pill in one dropdown clears the active state in the other. Re-normalize on open:
+  // ensure each dropdown always has exactly one active pill (and matching panel).
+  (function(){
+    function syncPop(pop){
+      if (!pop) return;
+      var active = pop.querySelector('.tb-search-pill.active');
+      if (!active) {
+        active = pop.querySelector('.tb-search-pill');
+        if (active) active.classList.add('active');
+      }
+      if (active) {
+        var hkey = active.getAttribute('data-hsp');
+        pop.querySelectorAll('.hs-panel').forEach(function(pn){ pn.hidden = pn.getAttribute('data-hpanel') !== hkey; });
+      }
+    }
+    var hInput = document.querySelector('.topbar .search-wrap input');
+    if (hInput) {
+      ['focus','click'].forEach(function(ev){ hInput.addEventListener(ev, function(){ setTimeout(function(){ syncPop(document.getElementById('pop-search')); }, 0); }); });
+    }
+    var homeInput = document.getElementById('home-search-input');
+    if (homeInput) {
+      homeInput.addEventListener('focus', function(){ setTimeout(function(){ syncPop(document.getElementById('home-search-pop')); }, 0); });
+    }
+  })();
+
+  // Close mega-menus when the cursor leaves both the trigger and the panel.
+  // Small grace delay lets the pointer cross the gap from trigger to panel.
+  (function(){
+    var closeTimer;
+    function scheduleClose(){ clearTimeout(closeTimer); closeTimer = setTimeout(function(){ if (typeof closeMega === 'function') closeMega(); }, 120); }
+    function cancelClose(){ clearTimeout(closeTimer); }
+    document.querySelectorAll('.top-nav-item[data-mega]').forEach(function(t){
+      t.addEventListener('mouseenter', cancelClose);
+      t.addEventListener('mouseleave', scheduleClose);
+    });
+    document.querySelectorAll('.mega').forEach(function(p){
+      p.addEventListener('mouseenter', cancelClose);
+      p.addEventListener('mouseleave', scheduleClose);
+    });
+  })();
 
   // ---- Topbar account menu ----
   document.querySelectorAll('#pop-account .tb-item').forEach(function(it){
@@ -1824,7 +2135,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // ---- Dashboard primary actions / prompts / upgrades ----
-  document.querySelectorAll('#hero .prompt-chip, #hero .prompt-btn').forEach(function(b){
+  document.querySelectorAll('#hero .prompt-chip, #hero .prompt-btn, #hero .ai-feat').forEach(function(b){
     b.addEventListener('click', openAI);
   });
   document.querySelectorAll('.upsell-btn, .upsell-link, .plp-btn, .ord-banner .btn-outline.solid, [data-goto="team"]').forEach(function(b){
@@ -1848,6 +2159,19 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.gal-tile.add').forEach(function(b){
     b.addEventListener('click', openAI);
   });
+
+  // Home search input: focus opens a suggestions dropdown; outside click closes it
+  var hsInput = document.getElementById('home-search-input');
+  if (hsInput) {
+    var hsBar = hsInput.closest('.prompt-shell');
+    hsInput.addEventListener('focus', function(){ if (hsBar) hsBar.classList.add('hs-open'); });
+    document.addEventListener('pointerdown', function(e){ if (hsBar && !hsBar.contains(e.target)) hsBar.classList.remove('hs-open'); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && hsBar) hsBar.classList.remove('hs-open'); });
+  }
+
+  // Default landing tab = Home (runs after app.js's load-time switchView('designs'))
+  document.querySelectorAll('.nav-item').forEach(function(x){ x.classList.toggle('active', x.getAttribute('data-view') === 'home'); });
+  if (typeof switchView === 'function') switchView('home');
 });
 </script>
 </body>

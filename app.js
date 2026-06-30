@@ -530,7 +530,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     function msgHTML(m,myName){
       var mine=(!!myName&&m.author===myName);
       var editing=(editState&&editState.kind===m.kind&&editState.id===m.id);
-      var menu=mine?'<div class="tp-menu-wrap"><button class="tp-menu-btn" data-act="msgmenu">'+SVG_DOTS+'</button><div class="tp-menu"><button data-act="editmsg" data-kind="'+m.kind+'" data-id="'+m.id+'">Edit comment</button><button class="danger" data-act="delmsg" data-kind="'+m.kind+'" data-id="'+m.id+'">Delete comment</button></div></div>':'';
+      var convertBtn=(mine&&m.kind==='anno')?'<button data-act="toannotation" data-id="'+m.id+'">Convert to annotation</button>':'';
+      var menu=mine?'<div class="tp-menu-wrap"><button class="tp-menu-btn" data-act="msgmenu">'+SVG_DOTS+'</button><div class="tp-menu"><button data-act="editmsg" data-kind="'+m.kind+'" data-id="'+m.id+'">Edit comment</button>'+convertBtn+'<button class="danger" data-act="delmsg" data-kind="'+m.kind+'" data-id="'+m.id+'">Delete comment</button></div></div>':'';
       var textPart=editing
         ?'<div class="tp-edit"><textarea data-edit-input data-kind="'+m.kind+'" data-id="'+m.id+'">'+esc(m.text)+'</textarea><div class="tp-edit-actions"><button class="anno-link" data-act="canceledit">Cancel</button><button class="anno-link" data-act="saveedit" data-kind="'+m.kind+'" data-id="'+m.id+'">Save</button></div></div>'
         :'<div class="tp-text">'+esc(m.text)+'</div>';
@@ -567,6 +568,21 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
         .then(function(){return fetch(SB_URL+"/rest/v1/annotations?id=eq."+id,{method:'DELETE',headers:HR});})
         .then(function(r){return r.json();}).then(function(rows){if(!Array.isArray(rows)||!rows.length)throw new Error('denied');});
     }
+    // Convert between a comment (threaded) and an annotation (standalone marker, no replies/thread).
+    function convertAnno(id,toType){
+      var p=fetch(SB_URL+"/rest/v1/annotations?id=eq."+id,{method:'PATCH',headers:Object.assign({Prefer:'return=minimal'},JH),body:JSON.stringify({type:toType})});
+      if(toType==='annotation'){p=p.then(function(){return fetch(SB_URL+"/rest/v1/replies?annotation_id=eq."+id,{method:'DELETE',headers:JH});});}
+      return p.then(function(){closePop();return load();});
+    }
+    // Annotations get a tiny action menu (no thread, no replies, no text bubble).
+    function openAnnoMenu(a,ev,mine){
+      closePop();
+      if(!mine)return;
+      var pop=document.createElement('div');pop.className='anno-pop anno-annomenu';
+      pop.innerHTML='<button class="anno-annomenu-item" data-act="tocomment" data-id="'+a.id+'">Convert to comment</button><button class="anno-annomenu-item danger" data-act="delanno" data-id="'+a.id+'">Delete annotation</button>';
+      pop.addEventListener('click',actHandler);
+      positionPop(pop,ev);curThreadId=null;
+    }
     function confirmModal(msg,okLabel,onok){
       var bg=document.createElement('div');bg.className='anno-modal-bg';
       bg.innerHTML='<div class="anno-modal"><h3>'+esc(msg)+'</h3><div class="anno-modal-actions"><button class="anno-btn anno-btn-ghost" data-x>Cancel</button><button class="anno-btn anno-btn-primary" data-ok>'+esc(okLabel)+'</button></div></div>';
@@ -581,6 +597,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     }
 
     function attachAnno(el,a,mine){
+      var isAnn=(a.type==='annotation');
       if(mine){
         el.style.cursor='grab';
         el.addEventListener('pointerdown',function(e){
@@ -596,11 +613,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
           }
           function up(ev){
             el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.style.cursor='grab';
-            if(moved){moveAnno(a.id,el._nx,el._ny);}else{openThreadPopup(a,ev);}
+            if(moved){moveAnno(a.id,el._nx,el._ny);}else{if(isAnn){openAnnoMenu(a,ev,true);}else{openThreadPopup(a,ev);}}
           }
           el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);
         });
-      }else{el.style.cursor='pointer';el.onclick=function(ev){ev.stopPropagation();openThreadPopup(a,ev);};}
+      }else{el.style.cursor=isAnn?'default':'pointer';el.onclick=function(ev){ev.stopPropagation();if(isAnn)return;openThreadPopup(a,ev);};}
     }
 
     function sendReply(id,inp){
@@ -635,11 +652,30 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       var myName=getName();
       var dk=devKey();
       var scoped=annos.filter(function(a){return (a.device||'desktop')===dk;});
-      var open=scoped.filter(function(a){return !a.resolved;});
-      var done=scoped.filter(function(a){return a.resolved;});
-      countEl.textContent=open.length;numById={};
+      var anns=scoped.filter(function(a){return a.type==='annotation';});
+      var cmts=scoped.filter(function(a){return a.type!=='annotation';});
+      var open=cmts.filter(function(a){return !a.resolved;});
+      var done=cmts.filter(function(a){return a.resolved;});
+      countEl.textContent=open.length;numById={};   // annotations excluded from counts
       var titleEl=document.getElementById('anno-panel-title');if(titleEl)titleEl.textContent='All Comments ('+(open.length+done.length)+')';
       var old=layer.querySelectorAll('.anno-pin:not(.anno-pending),.anno-area:not(.anno-pending)');for(var k=0;k<old.length;k++)old[k].remove();
+      anns.forEach(function(a){
+        var mine=(!!myName&&a.author===myName);var col=avatarColor(a.author);
+        if(a.w&&a.h){
+          // annotation that kept its selection area: same rectangle, circle avatar at the corner
+          var el=document.createElement('div');el.className='anno-area anno-annotation';el.setAttribute('data-id',a.id);
+          el.style.left=(a.x*100)+'%';el.style.top=(a.y*100)+'%';el.style.width=(a.w*100)+'%';el.style.height=(a.h*100)+'%';
+          el.style.borderColor=col;el.style.background=tint(col,0.12);
+          el.innerHTML='<div class="anno-pin anno-area-num anno-avatar anno-annotation" style="background:'+col+'">'+avatarLetter(a.author)+'</div>';
+          if(a.comment)el.setAttribute('data-tip',a.comment);
+          attachAnno(el,a,mine);layer.appendChild(el);
+        }else{
+          var pin=document.createElement('div');pin.className='anno-pin anno-avatar anno-annotation';pin.setAttribute('data-id',a.id);
+          pin.style.left=(a.x*100)+'%';pin.style.top=(a.y*100)+'%';pin.style.background=col;pin.textContent=avatarLetter(a.author);
+          if(a.comment)pin.setAttribute('data-tip',a.comment);
+          attachAnno(pin,a,mine);layer.appendChild(pin);
+        }
+      });
       open.forEach(function(a,i){
         var num=i+1,mine=(!!myName&&a.author===myName),read=isRead(a);numById[a.id]=num;
         var col=read?GREY:(mine?MINE:OTHER);
@@ -647,11 +683,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
           var el=document.createElement('div');el.className='anno-area';el.setAttribute('data-id',a.id);
           el.style.left=(a.x*100)+'%';el.style.top=(a.y*100)+'%';el.style.width=((a.w||0)*100)+'%';el.style.height=((a.h||0)*100)+'%';
           el.style.borderColor=col;el.style.background=tint(col,0.12);
-          el.innerHTML='<div class="anno-pin anno-area-num" style="background:'+col+'">'+num+'</div>';
+          el.innerHTML='<div class="anno-pin anno-area-num anno-avatar'+(read?' is-read':'')+'" style="background:'+avatarColor(a.author)+'">'+avatarLetter(a.author)+'</div>';
           attachAnno(el,a,mine);layer.appendChild(el);
         }else{
-          var pin=document.createElement('div');pin.className='anno-pin';pin.setAttribute('data-id',a.id);
-          pin.style.left=(a.x*100)+'%';pin.style.top=(a.y*100)+'%';pin.style.background=col;pin.textContent=num;
+          var pin=document.createElement('div');pin.className='anno-pin anno-avatar'+(read?' is-read':'');pin.setAttribute('data-id',a.id);
+          pin.style.left=(a.x*100)+'%';pin.style.top=(a.y*100)+'%';pin.style.background=avatarColor(a.author);pin.textContent=avatarLetter(a.author);
           attachAnno(pin,a,mine);layer.appendChild(pin);
         }
       });
@@ -679,6 +715,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
         else if(act==='saveedit'){var kk=btn.getAttribute('data-kind');var ta=curPop&&curPop.querySelector('[data-edit-input]');var tx=ta?ta.value:'';patchComment(kk,id,tx).then(function(){editState=null;return load();}).then(function(){showToast('Comment updated');}).catch(function(err){if(err&&err.message==='empty')return;showToast('Could not update');});}
         else if(act==='delmsg'){var kd=btn.getAttribute('data-kind');closeMenus();confirmModal('Delete this comment?','Delete',function(){deleteComment(kd,id).then(function(){if(kd!=='reply')closePop();editState=null;return load();}).then(function(){showToast('Deleted');}).catch(function(){showToast('Could not delete');});});}
         else if(act==='sendpop'){var inp=curPop&&curPop.querySelector('[data-reply-input]');if(inp)sendReply(id,inp);}
+        else if(act==='toannotation'){closeMenus();convertAnno(id,'annotation').then(function(){showToast('Converted to annotation');}).catch(function(){showToast('Could not convert');});}
+        else if(act==='tocomment'){closePop();convertAnno(id,'pin').then(function(){showToast('Converted to comment');}).catch(function(){showToast('Could not convert');});}
+        else if(act==='delanno'){closePop();confirmModal('Delete this annotation?','Delete',function(){deleteComment('anno',id).then(function(){return load();}).then(function(){showToast('Deleted');}).catch(function(){showToast('Could not delete');});});}
         return;
       }
       if(e.target.closest('.anno-panel')){
@@ -750,6 +789,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     if(!pvLeft||document.getElementById('iter-dd'))return;
     var SCREEN='My Stuff New Home';
     var PAGE='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/></svg>';
+    var FORK='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M21 3l-7.536 7.536a5 5 0 0 0 -1.464 3.534v6.93"/><path d="M8 3h-5v5"/><path d="M3 3l7.536 7.536a5 5 0 0 1 1.464 3.534v6.93"/></svg>';
     var CHEV='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6"/></svg>';
     var CHECK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5l10 -10"/></svg>';
     var PLUS='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>';
@@ -759,7 +799,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     var SBU="https://oglajrkysripzcyahlux.supabase.co",SBK="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbGFqcmt5c3JpcHpjeWFobHV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3NjUyMDUsImV4cCI6MjA5NzM0MTIwNX0.2Fjx1ugopkUP_QaHGFVIH49vQi5ck0k93oUsSPOMWoo",SBH={apikey:SBK,Authorization:"Bearer "+SBK};
     var namesMap={};
     function mid(f){return f.replace('.html','');}
-    function nameFor(it){return namesMap[mid(it.file)]||('Iteration '+it.n);}
+    function nameFor(it){return namesMap['iter:'+mid(it.file)]||('Iteration '+it.n);}
     function branchName(it){return namesMap[mid(it.file)]||it.name||'New Lofi';}
     function renameModal(it){
       var curN=nameFor(it);
@@ -769,8 +809,8 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       var inp=bg.querySelector('#iter-ren-input');inp.focus();inp.select();
       function close(){bg.remove();}
       function save(){var v=inp.value.trim();if(!v){inp.focus();return;}
-        fetch(SBU+'/rest/v1/iteration_names',{method:'POST',headers:Object.assign({'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},SBH),body:JSON.stringify({mockup:mid(it.file),name:v})})
-        .then(function(){namesMap[mid(it.file)]=v;close();var el=menu.querySelector('.pv-dd-item[data-file="'+it.file+'"] .pv-dd-name');if(el)el.textContent=v;nbToast('Renamed to “'+v+'”.');})
+        fetch(SBU+'/rest/v1/iteration_names',{method:'POST',headers:Object.assign({'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},SBH),body:JSON.stringify({mockup:'iter:'+mid(it.file),name:v})})
+        .then(function(){namesMap['iter:'+mid(it.file)]=v;close();var el=document.querySelector('#iters-dd-menu .pv-dd-item[data-file="'+it.file+'"] .pv-dd-name');if(el)el.textContent=v;nbToast('Renamed to “'+v+'”.');})
         .catch(function(){nbToast('Could not rename.');});
       }
       bg.querySelector('[data-x]').onclick=close;
@@ -875,7 +915,23 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       ibtn.addEventListener('click',function(e){e.stopPropagation();dd.classList.remove('open');idd.classList.toggle('open');});
       btn.addEventListener('click',function(){idd.classList.remove('open');}); // opening branch selector closes iterations
       document.addEventListener('click',function(e){if(!idd.contains(e.target))idd.classList.remove('open');});
-      var iters=bes.map(function(it,i){var multi=bes.length>1;var acts=merged?'':'<span class="iter-actions">'+(multi?'<span class="iter-act del" data-file="'+it.file+'">'+TRASH+'</span>':'')+'<span class="iter-act ren" data-file="'+it.file+'">'+PENCIL+'</span><span class="iter-act dup" data-file="'+it.file+'">'+DUP+'</span></span>';return '<div class="pv-dd-item'+(it.file===cur?' active':'')+'" data-file="'+it.file+'"><span class="icon">'+PAGE+'</span><span class="pv-dd-name">Iteration '+(i+1)+'</span><span class="iter-sub">'+fmt(it.created)+'</span><span class="pv-dd-check">'+CHECK+'</span>'+acts+'</div>';}).join('');
+      // Iterations render as a nested tree (sub-iterations via the optional "parent" field = parent file). Up to 10 levels.
+      var byParent={};bes.forEach(function(it){var p=it.parent||'';(byParent[p]=byParent[p]||[]).push(it);});
+      var _seq=0;
+      function renderNodes(pf,depth){
+        return (byParent[pf]||[]).map(function(it){
+          _seq++;
+          var d=Math.min(depth,9);
+          var multi=bes.length>1;
+          var nm=namesMap['iter:'+mid(it.file)]||('Iteration '+(it.n||_seq));
+          var acts=merged?'':'<span class="iter-actions">'+(multi?'<span class="iter-act del" data-file="'+it.file+'" data-tip="Delete">'+TRASH+'</span>':'')+'<span class="iter-act sub" data-file="'+it.file+'" data-tip="Add sub-iteration">'+PLUS+'</span><span class="iter-act ren" data-file="'+it.file+'" data-tip="Rename">'+PENCIL+'</span><span class="iter-act dup" data-file="'+it.file+'" data-tip="Duplicate">'+DUP+'</span></span>';
+          var pad=12+(d>0?(d-1)*20:0);
+          var elbow=d>0?'<span class="iter-elbow"></span>':'';
+          var row='<div class="pv-dd-item iter-node'+(it.file===cur?' active':'')+'" data-file="'+it.file+'" style="padding-left:'+pad+'px;">'+elbow+'<span class="icon">'+FORK+'</span><span class="pv-dd-name">'+esc2(nm)+'</span><span class="iter-sub">'+fmt(it.created)+'</span><span class="pv-dd-check">'+CHECK+'</span>'+acts+'</div>';
+          return row+renderNodes(it.file,depth+1);
+        }).join('');
+      }
+      var iters=renderNodes('',0);
       var _isView=(document.body.getAttribute('data-role')==='view');
       var addBtnHTML=(_isView||merged)?'':'<div class="iter-menu-div"></div><button class="iter-add"><span class="icon">'+PLUS+'</span><span>Add iteration</span></button>';
       imenu.innerHTML=iters+addBtnHTML;
@@ -884,6 +940,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
       imenu.querySelectorAll('.iter-act.dup').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');idd.classList.remove('open');copyPrompt('Duplicate iteration ('+ff+') in the "'+_name+'" branch — create a new iteration that is a copy of it and register it in iterations.json.');});});
       imenu.querySelectorAll('.iter-act.del').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');idd.classList.remove('open');copyPrompt('Delete iteration ('+ff+') from the "'+_name+'" branch — remove it from iterations.json and delete the file.');});});
       imenu.querySelectorAll('.iter-act.ren').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');var it=list.filter(function(x){return x.file===ff;})[0];idd.classList.remove('open');if(it)renameModal(it);});});
+      imenu.querySelectorAll('.iter-act.sub').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var ff=b.getAttribute('data-file');idd.classList.remove('open');copyPrompt('Add a sub-iteration nested under iteration ('+ff+') in the "'+_name+'" branch — duplicate it as a new iteration file, register it in iterations.json with "parent":"'+ff+'" (same branch key), and open it.');});});
 
     }).catch(function(){});
   }
@@ -904,7 +961,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
   function addUI(mainFile){
     var center=document.querySelector('.preview-bar .pv-center');var dev=document.getElementById('device-toggle');if(!center||!dev)return;
     var btn=document.createElement('button');btn.className='anno-cbtn';btn.id='diff-btn';btn.setAttribute('data-tip','What changed?');
-    btn.innerHTML='<span class="icon" style="display:inline-flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M6 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M18 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M6 12v-2a6 6 0 1 1 12 0v2"/><path d="M15 9l3 3l3 -3"/></svg></span><span class="btn-label">What changed?</span>';
+    btn.innerHTML='<span class="icon" style="display:inline-flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path transform="rotate(-30 12 12)" d="M13 4v4c-6.575 1.028 -9.02 6.788 -10 12c-.037 .206 5.384 -5.962 10 -6v4l8 -7l-8 -7z"/></svg></span><span class="btn-label">What changed?</span>';
     center.insertBefore(btn,dev);
     var drawer=buildDrawer(mainFile);
     var on=false;
@@ -1388,7 +1445,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPops
     right.insertBefore(btn,right.firstChild);
     var openN=-1;
     function refresh(){
-      fetch(SB_URL+"/rest/v1/annotations?select=id&mockup=eq."+mid()+"&resolved=eq.false",{headers:H})
+      fetch(SB_URL+"/rest/v1/annotations?select=id&mockup=eq."+mid()+"&resolved=eq.false&type=neq.annotation",{headers:H})
         .then(function(r){return r.json();}).then(function(rows){
           openN=Array.isArray(rows)?rows.length:0;
           btn.classList.toggle('disabled',openN>0);
